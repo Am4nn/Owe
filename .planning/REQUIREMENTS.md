@@ -138,7 +138,7 @@ Explicitly excluded. Documented to prevent scope creep.
 
 ## Traceability
 
-Which phases cover which requirements. Updated during roadmap creation.
+Which phases cover which requirements. Confirmed during roadmap creation 2026-02-27.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
@@ -188,8 +188,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 **Coverage:**
 - v1 requirements: 42 total
 - Mapped to phases: 42
-- Unmapped: 0 ✓
+- Unmapped: 0
+
+Phase 1 (Foundation): 12 requirements — AUTH-01 through AUTH-05, GRUP-01 through GRUP-05, OFFL-01, UIUX-01
+Phase 2 (Core Expense Loop): 22 requirements — EXPN-01 through EXPN-09, BALS-01 through BALS-03, SETL-01 through SETL-03, ACTY-01 through ACTY-04, OFFL-02, UIUX-02, UIUX-03
+Phase 3 (Engagement Layer): 8 requirements — NOTF-01 through NOTF-03, CURR-01 through CURR-04, EXPT-01
 
 ---
 *Requirements defined: 2026-02-27*
-*Last updated: 2026-02-27 after initial definition*
+*Last updated: 2026-02-27 — traceability confirmed during roadmap creation*
