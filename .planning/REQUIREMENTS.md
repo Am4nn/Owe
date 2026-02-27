@@ -11,19 +11,19 @@ Requirements for initial release. Covers all table stakes (P1) features and core
 
 ### Authentication
 
-- [ ] **AUTH-01**: User can create an account with email and password
-- [ ] **AUTH-02**: User can sign in with email and password
-- [ ] **AUTH-03**: User session persists across app restarts without re-logging in
-- [ ] **AUTH-04**: User can sign out from any screen
-- [ ] **AUTH-05**: User can create a profile with a display name and avatar photo
+- [x] **AUTH-01**: User can create an account with email and password
+- [x] **AUTH-02**: User can sign in with email and password
+- [x] **AUTH-03**: User session persists across app restarts without re-logging in
+- [x] **AUTH-04**: User can sign out from any screen
+- [x] **AUTH-05**: User can create a profile with a display name and avatar photo
 
 ### Groups
 
-- [ ] **GRUP-01**: User can create a named group
-- [ ] **GRUP-02**: User can invite members to a group by email
-- [ ] **GRUP-03**: User can add named-only (non-app) members to represent friends who haven't installed the app
-- [ ] **GRUP-04**: User can view a list of all their groups from the dashboard
-- [ ] **GRUP-05**: User can leave a group (with balances resolved or outstanding)
+- [x] **GRUP-01**: User can create a named group
+- [x] **GRUP-02**: User can invite members to a group by email
+- [x] **GRUP-03**: User can add named-only (non-app) members to represent friends who haven't installed the app
+- [x] **GRUP-04**: User can view a list of all their groups from the dashboard
+- [x] **GRUP-05**: User can leave a group (with balances resolved or outstanding)
 
 ### Expenses
 
@@ -142,16 +142,16 @@ Which phases cover which requirements. Confirmed during roadmap creation 2026-02
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 1 | Pending |
-| AUTH-02 | Phase 1 | Pending |
-| AUTH-03 | Phase 1 | Pending |
-| AUTH-04 | Phase 1 | Pending |
-| AUTH-05 | Phase 1 | Pending |
-| GRUP-01 | Phase 1 | Pending |
-| GRUP-02 | Phase 1 | Pending |
-| GRUP-03 | Phase 1 | Pending |
-| GRUP-04 | Phase 1 | Pending |
-| GRUP-05 | Phase 1 | Pending |
+| AUTH-01 | Phase 1 | Complete |
+| AUTH-02 | Phase 1 | Complete |
+| AUTH-03 | Phase 1 | Complete |
+| AUTH-04 | Phase 1 | Complete |
+| AUTH-05 | Phase 1 | Complete |
+| GRUP-01 | Phase 1 | Complete |
+| GRUP-02 | Phase 1 | Complete |
+| GRUP-03 | Phase 1 | Complete |
+| GRUP-04 | Phase 1 | Complete |
+| GRUP-05 | Phase 1 | Complete |
 | EXPN-01 | Phase 2 | Pending |
 | EXPN-02 | Phase 2 | Pending |
 | EXPN-03 | Phase 2 | Pending |
