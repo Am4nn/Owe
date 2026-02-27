@@ -28,12 +28,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. User can create a profile with display name and avatar photo
   4. User can create a group, invite members by email, add named-only (non-app) members, view all their groups from the dashboard, and leave a group
   5. App launches in dark mode with neon accent colors, cached group data is visible with no connectivity, and the EAS dev client runs MMKV + native notification modules
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: Project scaffold — Expo SDK 55, EAS dev client, NativeWind dark mode baseline, MMKV persister wired to React Query
-- [ ] 01-02: Database schema — Supabase migrations with integer cent columns, RLS on all tables, version columns, fx_rate_at_creation, idempotency_key; service_role key CI guard
-- [ ] 01-03: Auth and groups — sign up / sign in / sign out / session persistence / profile creation; group CRUD with named-only members; offline read cache (OFFL-01)
+- [ ] 01-01-PLAN.md — Expo SDK 55 scaffold, EAS dev client, NativeWind dark mode, MMKV persister wired to React Query
+- [ ] 01-02-PLAN.md — Supabase migration with integer cent columns, RLS on all 7 tables, version/fx_rate/idempotency columns, CI service_role key guard
+- [ ] 01-03-PLAN.md — Auth feature (sign up/in/out/session/profile), groups feature (CRUD + named-only members + invite + leave), offline read cache
 
 ### Phase 2: Core Expense Loop
 **Goal**: A fully functional group expense tracker — users can add expenses with any split type, see who owes what in real-time, simplify debts, and settle up with confetti
@@ -74,6 +74,6 @@ Phases execute in numeric order: 1 → 2 → 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/3 | Not started | - |
+| 1. Foundation | 0/3 | Planned | - |
 | 2. Core Expense Loop | 0/3 | Not started | - |
 | 3. Engagement Layer | 0/2 | Not started | - |
