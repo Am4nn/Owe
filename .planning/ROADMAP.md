@@ -13,6 +13,7 @@ Owe ships in three phases that follow the hard dependency chain from the researc
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Secure schema, infrastructure, auth, and offline architecture
+- [ ] **Phase 1.5: Google OAuth** [INSERTED] - Additive social login alongside existing email/password flow
 - [ ] **Phase 2: Core Expense Loop** - Groups, expense entry, balances, debt simplification, settlement, activity feed
 - [ ] **Phase 3: Engagement Layer** - Push notifications, multi-currency, smart reminders, and export
 
@@ -35,6 +36,20 @@ Plans:
 - [x] 01-02-PLAN.md — Supabase migration with integer cent columns, RLS on all 7 tables, version/fx_rate/idempotency columns, CI service_role key guard
 - [x] 01-03-PLAN.md — Auth feature (sign up/in/out/session/profile), groups feature (CRUD + named-only members + invite + leave), offline read cache
 - [x] 01-04-PLAN.md — Gap closure: CI false-positive fix (supabase.ts comment) + EAS dev client build trigger
+
+### Phase 1.5: Google OAuth [INSERTED]
+**Goal**: Add Google OAuth as a sign-in option alongside the existing email/password flow — zero breaking changes, provider-agnostic architecture preserved
+**Depends on**: Phase 1
+**Requirements**: AUTH-06, AUTH-07
+**Success Criteria** (what must be TRUE):
+  1. User can tap "Continue with Google" on the sign-in or sign-up screen, complete the OAuth flow in a browser, and land back in the app fully authenticated
+  2. A Google sign-in using an email that already has an email/password account links to the existing account — no duplicate user, no data loss
+  3. All existing email/password flows (sign up, sign in, sign out, session persistence) continue to work exactly as before
+  4. `handle_new_user` DB trigger correctly populates `display_name` and `avatar_url` from Google metadata for new OAuth users
+**Plans**: 1 plan
+
+Plans:
+- [ ] 01.5-01-PLAN.md — Google OAuth: expo-web-browser setup, useSignInWithGoogle hook, deep-link callback handler, DB trigger patch for Google metadata, UI button on auth screens
 
 ### Phase 2: Core Expense Loop
 **Goal**: A fully functional group expense tracker — users can add expenses with any split type, see who owes what in real-time, simplify debts, and settle up with confetti
@@ -76,5 +91,6 @@ Phases execute in numeric order: 1 → 2 → 3
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete | 2026-02-28 |
+| 1.5. Google OAuth | 0/1 | Not started | - |
 | 2. Core Expense Loop | 0/3 | Not started | - |
 | 3. Engagement Layer | 0/2 | Not started | - |

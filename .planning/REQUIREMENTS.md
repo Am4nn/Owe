@@ -16,6 +16,8 @@ Requirements for initial release. Covers all table stakes (P1) features and core
 - [x] **AUTH-03**: User session persists across app restarts without re-logging in
 - [x] **AUTH-04**: User can sign out from any screen
 - [x] **AUTH-05**: User can create a profile with a display name and avatar photo
+- [ ] **AUTH-06**: User can sign in (or create an account) with Google OAuth — one tap, no password required
+- [ ] **AUTH-07**: A Google sign-in using an email that already exists as an email/password account is automatically linked to that account (no duplicate user created)
 
 ### Groups
 
@@ -125,7 +127,7 @@ Explicitly excluded. Documented to prevent scope creep.
 | WhatsApp / Telegram bot integration | External API dependency, approval processes, brittle integration. Phase 4+. |
 | Web dashboard | Mobile-first product. Add when user base shows desktop demand. Phase 4+. |
 | B2B team plans | Monetization milestone requiring separate pricing model. Phase 4+. |
-| OAuth login (Google/Apple) | Email/password sufficient for MVP. Adds native SDK complexity. Revisit in v1.x. |
+| Apple Sign-In | Requires Apple Developer account enrollment and entitlements. Revisit post-Google launch. |
 | Real-time group chat | High infrastructure cost, duplicates WhatsApp/iMessage. Comments on expenses cover dispute resolution. |
 | Ads or freemium feature gating | Against core philosophy. Any paywall or ad = trust destroyed. Tip jar only. |
 | Public social feed | Privacy risk — expense data is sensitive. All data stays private to group members. |
@@ -178,6 +180,8 @@ Which phases cover which requirements. Confirmed during roadmap creation 2026-02
 | CURR-02 | Phase 3 | Pending |
 | CURR-03 | Phase 3 | Pending |
 | CURR-04 | Phase 3 | Pending |
+| AUTH-06 | Phase 1.5 | Pending |
+| AUTH-07 | Phase 1.5 | Pending |
 | OFFL-01 | Phase 1 | Complete |
 | OFFL-02 | Phase 2 | Pending |
 | EXPT-01 | Phase 3 | Pending |
@@ -191,6 +195,7 @@ Which phases cover which requirements. Confirmed during roadmap creation 2026-02
 - Unmapped: 0
 
 Phase 1 (Foundation): 12 requirements — AUTH-01 through AUTH-05, GRUP-01 through GRUP-05, OFFL-01, UIUX-01
+Phase 1.5 (Google OAuth): 2 requirements — AUTH-06, AUTH-07
 Phase 2 (Core Expense Loop): 22 requirements — EXPN-01 through EXPN-09, BALS-01 through BALS-03, SETL-01 through SETL-03, ACTY-01 through ACTY-04, OFFL-02, UIUX-02, UIUX-03
 Phase 3 (Engagement Layer): 8 requirements — NOTF-01 through NOTF-03, CURR-01 through CURR-04, EXPT-01
 
