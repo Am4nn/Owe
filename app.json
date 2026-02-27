@@ -4,7 +4,6 @@
     "slug": "owe",
     "version": "1.0.0",
     "scheme": "nexus",
-    "newArchEnabled": true,
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
