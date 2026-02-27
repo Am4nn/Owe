@@ -12,7 +12,7 @@ Owe ships in three phases that follow the hard dependency chain from the researc
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [x] **Phase 1: Foundation** - Secure schema, infrastructure, auth, and offline architecture
+- [ ] **Phase 1: Foundation** - Secure schema, infrastructure, auth, and offline architecture
 - [ ] **Phase 2: Core Expense Loop** - Groups, expense entry, balances, debt simplification, settlement, activity feed
 - [ ] **Phase 3: Engagement Layer** - Push notifications, multi-currency, smart reminders, and export
 
@@ -28,12 +28,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. User can create a profile with display name and avatar photo
   4. User can create a group, invite members by email, add named-only (non-app) members, view all their groups from the dashboard, and leave a group
   5. App launches in dark mode with neon accent colors, cached group data is visible with no connectivity, and the EAS dev client runs MMKV + native notification modules
-**Plans**: 3 plans
+**Plans**: 4 plans
 
 Plans:
 - [x] 01-01-PLAN.md — Expo SDK 55 scaffold, EAS dev client, NativeWind dark mode, MMKV persister wired to React Query
 - [x] 01-02-PLAN.md — Supabase migration with integer cent columns, RLS on all 7 tables, version/fx_rate/idempotency columns, CI service_role key guard
 - [x] 01-03-PLAN.md — Auth feature (sign up/in/out/session/profile), groups feature (CRUD + named-only members + invite + leave), offline read cache
+- [ ] 01-04-PLAN.md — Gap closure: CI false-positive fix (supabase.ts comment) + EAS dev client build trigger
 
 ### Phase 2: Core Expense Loop
 **Goal**: A fully functional group expense tracker — users can add expenses with any split type, see who owes what in real-time, simplify debts, and settle up with confetti
