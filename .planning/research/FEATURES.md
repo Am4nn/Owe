@@ -59,7 +59,7 @@ Features users assume exist. Missing = product feels broken or incomplete. These
 
 ### Differentiators (Competitive Advantage)
 
-Features that set Nexus apart. These are the reasons users switch and stay.
+Features that set Owe apart. These are the reasons users switch and stay.
 
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
@@ -242,7 +242,7 @@ Features to defer until product-market fit established.
 
 ## Competitor Feature Analysis
 
-| Feature | Splitwise | Tricount | Settle Up | Splittr | **Nexus** |
+| Feature | Splitwise | Tricount | Settle Up | Splittr | **Owe** |
 |---------|-----------|----------|-----------|---------|-----------|
 | Expense entry | Yes (capped free) | Yes (unlimited) | Yes (unlimited) | Yes (unlimited) | Yes (unlimited, no cap) |
 | Equal/exact/% splits | Yes | Partial | Yes | Yes | Yes (all 4 types) |
@@ -300,5 +300,5 @@ Based on well-documented community sentiment (Reddit r/Splitwise, r/personalfina
 - Note: Web fetch not available during this research session. Claims above are MEDIUM confidence based on training data. Competitive feature table should be verified against current app store listings before shipping.
 
 ---
-*Feature research for: expense splitting mobile app (Nexus)*
+*Feature research for: expense splitting mobile app (Owe)*
 *Researched: 2026-02-27*

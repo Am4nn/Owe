@@ -1,8 +1,8 @@
-# Roadmap: Nexus
+# Roadmap: Owe
 
 ## Overview
 
-Nexus ships in three phases that follow the hard dependency chain from the research: secure foundation first (schema decisions that cannot be changed later), then the complete expense tracking loop that makes the app worth using, then engagement features that drive retention. Phase 1 installs the architectural guardrails — integer cents, RLS, offline persister, EAS dev client — before any user-facing work begins. Phase 2 delivers the full core product: groups, all four split types, real-time balances, debt simplification, and confetti settlement. Phase 3 adds the layer that turns a useful tool into a habit: push notifications, multi-currency, smart reminders, and export.
+Owe ships in three phases that follow the hard dependency chain from the research: secure foundation first (schema decisions that cannot be changed later), then the complete expense tracking loop that makes the app worth using, then engagement features that drive retention. Phase 1 installs the architectural guardrails — integer cents, RLS, offline persister, EAS dev client — before any user-facing work begins. Phase 2 delivers the full core product: groups, all four split types, real-time balances, debt simplification, and confetti settlement. Phase 3 adds the layer that turns a useful tool into a habit: push notifications, multi-currency, smart reminders, and export.
 
 ## Phases
 

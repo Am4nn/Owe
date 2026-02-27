@@ -1,13 +1,13 @@
 # Project Research Summary
 
-**Project:** Nexus — Expense Splitting Mobile App
+**Project:** Owe — Expense Splitting Mobile App
 **Domain:** Cross-platform fintech mobile app (expense splitting / personal finance)
 **Researched:** 2026-02-27
 **Confidence:** HIGH (stack verified against live npm registry; architecture patterns from official docs; feature research MEDIUM due to no live web fetch)
 
 ## Executive Summary
 
-Nexus is a free, unlimited expense-splitting mobile app built to capture users fleeing Splitwise's 2023-2025 monetization changes. The product occupies a clearly defined gap: every competitor either caps features behind a paywall (Splitwise), lacks persistence (Tricount), or has a dated UX. The recommended approach is React Native via Expo SDK 55 with Supabase as the BaaS layer — this combination delivers cross-platform iOS/Android parity, a relational database required for debt-graph math, RLS-enforced security, Realtime sync, and Edge Functions for server-side computation, all within a managed platform that eliminates ops overhead for an early-stage product.
+Owe is a free, unlimited expense-splitting mobile app built to capture users fleeing Splitwise's 2023-2025 monetization changes. The product occupies a clearly defined gap: every competitor either caps features behind a paywall (Splitwise), lacks persistence (Tricount), or has a dated UX. The recommended approach is React Native via Expo SDK 55 with Supabase as the BaaS layer — this combination delivers cross-platform iOS/Android parity, a relational database required for debt-graph math, RLS-enforced security, Realtime sync, and Edge Functions for server-side computation, all within a managed platform that eliminates ops overhead for an early-stage product.
 
 The core architecture is a feature-hook pattern where screens never touch the database directly: all server state flows through TanStack Query (with MMKV-persisted cache for offline-first) and all heavy computation (debt simplification, OCR, FX caching, push notifications) runs in Supabase Edge Functions rather than on the client device. This separation keeps the client performant and testable, and allows the debt-graph algorithm to produce a single authoritative result rather than inconsistent per-client computations. The offline-first requirement is non-negotiable as a differentiator and must be baked into the architecture from day one — it cannot be retrofitted.
 

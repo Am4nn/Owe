@@ -1,4 +1,4 @@
-# Requirements: Nexus
+# Requirements: Owe
 
 **Defined:** 2026-02-27
 **Core Value:** Users can split expenses, track shared debts, and settle up with friends without limits, ads, or paywalls — in a UI that feels like a modern bank app, not a spreadsheet.

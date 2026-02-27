@@ -1,8 +1,8 @@
-# Nexus — Next-Gen Expense Splitting App
+# Owe — Next-Gen Expense Splitting App
 
 ## What This Is
 
-Nexus is a free, cross-platform (iOS + Android) expense splitting app that targets travelers, housemates, couples, and friend groups. It aims to replace Splitwise by offering all the premium features for free — receipt scanning, unlimited expenses, multi-currency support, and charts — wrapped in a modern fintech UI with AI-powered intelligence. The core differentiator is making shared finances feel invisible, fair, and frictionless.
+Owe is a free, cross-platform (iOS + Android) expense splitting app that targets travelers, housemates, couples, and friend groups. It aims to replace Splitwise by offering all the premium features for free — receipt scanning, unlimited expenses, multi-currency support, and charts — wrapped in a modern fintech UI with AI-powered intelligence. The core differentiator is making shared finances feel invisible, fair, and frictionless.
 
 ## Core Value
 

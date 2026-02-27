@@ -95,7 +95,7 @@
 
 ```bash
 # Bootstrap Expo project (if not already created)
-pnpm dlx create-expo-app@latest nexus --template blank-typescript
+pnpm dlx create-expo-app@latest owe --template blank-typescript
 
 # Core runtime deps (all managed by Expo SDK 55 — use expo install for version pinning)
 pnpm expo install expo-router react-native-screens react-native-safe-area-context
@@ -251,5 +251,5 @@ NativeWind v5 (with Tailwind v4 support) is in active development but has no sta
 
 ---
 
-*Stack research for: Nexus — Cross-platform expense splitting fintech app (React Native + Expo + Supabase)*
+*Stack research for: Owe — Cross-platform expense splitting fintech app (React Native + Expo + Supabase)*
 *Researched: 2026-02-27*
