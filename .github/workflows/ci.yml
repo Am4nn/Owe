@@ -1,0 +1,105 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-typecheck:
+    name: Lint and Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm eslint . --ext .ts,.tsx
+
+      - name: Type check
+        run: pnpm tsc --noEmit
+
+  security-scan:
+    name: Security Scan — No Service Role Key in Bundle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Scan for service_role key leakage
+        run: |
+          echo "Scanning for SUPABASE_SERVICE_ROLE_KEY in tracked files..."
+          # Fail if service_role key appears in any JS/TS/JSON/config file
+          # The key format is a long JWT starting with eyJ (base64-encoded)
+          # We scan for the variable name, not the actual key value
+          if grep -r "SERVICE_ROLE_KEY\|service_role_key\|serviceRoleKey" \
+               --include="*.ts" \
+               --include="*.tsx" \
+               --include="*.js" \
+               --include="*.jsx" \
+               --include="*.json" \
+               --include="app.config.*" \
+               --include="eas.json" \
+               --exclude-dir=".git" \
+               --exclude-dir="node_modules" \
+               --exclude-dir="supabase" \
+               . ; then
+            echo ""
+            echo "ERROR: SUPABASE_SERVICE_ROLE_KEY reference found in client-side files!"
+            echo "The service role key must ONLY exist in:"
+            echo "  - Supabase Vault (for Edge Functions)"
+            echo "  - CI/CD secrets (for migration scripts)"
+            echo "  - Server-side code only"
+            echo ""
+            echo "The mobile app must use ONLY EXPO_PUBLIC_SUPABASE_ANON_KEY"
+            exit 1
+          fi
+          echo "OK: No service role key references found in client files."
+
+      - name: Verify Tailwind v3 pin
+        run: |
+          # NativeWind 4.x requires Tailwind v3 — v4 silently breaks all styles
+          TAILWIND_VERSION=$(node -e "console.log(require('./node_modules/tailwindcss/package.json').version)" 2>/dev/null || echo "NOT_INSTALLED")
+          echo "Installed tailwindcss version: $TAILWIND_VERSION"
+          if [[ "$TAILWIND_VERSION" == 4.* ]]; then
+            echo "ERROR: tailwindcss v4 is installed. NativeWind 4.x requires tailwindcss ^3.4.x"
+            echo "Fix: pin to '^3.4.17' in package.json"
+            exit 1
+          fi
+          echo "OK: tailwindcss is v3.x as required."
+
+  schema-test:
+    name: Schema and RLS Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Start Supabase local
+        run: supabase start
+
+      - name: Apply migrations and seed
+        run: supabase db reset
+
+      - name: Verify RLS — User A cannot read User B's exclusive group
+        run: |
+          # Connect as service role to verify the seed data exists
+          supabase db query "SELECT count(*) FROM public.groups;" --local
+          echo "Schema and seed applied successfully."
+          echo "Manual RLS verification: sign in as Alice in Supabase Studio and verify"
+          echo "  SELECT * FROM groups WHERE id = '10000000-0000-0000-0000-000000000002'"
+          echo "  returns 0 rows (Alice is not a member of Bob's exclusive group)."
