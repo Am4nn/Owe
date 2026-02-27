@@ -12,7 +12,7 @@ Owe ships in three phases that follow the hard dependency chain from the researc
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - Secure schema, infrastructure, auth, and offline architecture
+- [x] **Phase 1: Foundation** - Secure schema, infrastructure, auth, and offline architecture
 - [ ] **Phase 2: Core Expense Loop** - Groups, expense entry, balances, debt simplification, settlement, activity feed
 - [ ] **Phase 3: Engagement Layer** - Push notifications, multi-currency, smart reminders, and export
 
@@ -31,9 +31,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Expo SDK 55 scaffold, EAS dev client, NativeWind dark mode, MMKV persister wired to React Query
-- [ ] 01-02-PLAN.md — Supabase migration with integer cent columns, RLS on all 7 tables, version/fx_rate/idempotency columns, CI service_role key guard
-- [ ] 01-03-PLAN.md — Auth feature (sign up/in/out/session/profile), groups feature (CRUD + named-only members + invite + leave), offline read cache
+- [x] 01-01-PLAN.md — Expo SDK 55 scaffold, EAS dev client, NativeWind dark mode, MMKV persister wired to React Query
+- [x] 01-02-PLAN.md — Supabase migration with integer cent columns, RLS on all 7 tables, version/fx_rate/idempotency columns, CI service_role key guard
+- [x] 01-03-PLAN.md — Auth feature (sign up/in/out/session/profile), groups feature (CRUD + named-only members + invite + leave), offline read cache
 
 ### Phase 2: Core Expense Loop
 **Goal**: A fully functional group expense tracker — users can add expenses with any split type, see who owes what in real-time, simplify debts, and settle up with confetti
@@ -74,6 +74,6 @@ Phases execute in numeric order: 1 → 2 → 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 2/4 | In Progress|  |
+| 1. Foundation | 3/4 | In Progress|  |
 | 2. Core Expense Loop | 0/3 | Not started | - |
 | 3. Engagement Layer | 0/2 | Not started | - |

@@ -3,10 +3,10 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-last_updated: "2026-02-27T17:42:39Z"
+last_updated: "2026-02-27T17:57:58Z"
 progress:
   total_phases: 3
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 9
   completed_plans: 3
 ---
@@ -22,12 +22,12 @@ See: .planning/PROJECT.md (updated 2026-02-27)
 
 ## Current Position
 
-Phase: 1 of 3 (Foundation)
-Plan: 3 of 3 in current phase (next: 01-03 Auth)
-Status: In progress
-Last activity: 2026-02-27 — Completed 01-01-PLAN.md (scaffold, config, app structure, MMKV persister)
+Phase: 1 of 3 (Foundation) — COMPLETE
+Plan: 3 of 3 in phase 1 — COMPLETE (ready for Phase 2)
+Status: Phase 1 complete
+Last activity: 2026-02-27 — Completed 01-03-PLAN.md (auth hooks, groups hooks, all screens, offline cache)
 
-Progress: [████░░░░░░] 33%
+Progress: [███░░░░░░░] 33%
 
 ## Performance Metrics
 
@@ -40,14 +40,15 @@ Progress: [████░░░░░░] 33%
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1. Foundation | 3/3 | 8 min | 3 min |
+| 1. Foundation | 3/3 | 15 min | 5 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01, 01-02, 01-01 (retroactive)
-- Trend: Fast (scaffold, schema, and config work)
+- Last 5 plans: 01-01, 01-02, 01-03
+- Trend: Fast (scaffold, schema, auth, groups — all foundation complete)
 
 *Updated after each plan completion*
 | Phase 01-foundation P01 | 4 | 2 tasks | 22 files |
+| Phase 01-foundation P03 | 7 | 2 tasks | 13 files |
 
 ## Accumulated Context
 
@@ -68,6 +69,9 @@ Recent decisions affecting current work:
 - [Phase 01-foundation]: Pin tailwindcss@^3.4.19 (3.x, not 4.x) — NativeWind 4.x uses Tailwind v3 API; v4 silently breaks className handling
 - [Phase 01-foundation]: expo-sqlite localStorage polyfill for Supabase auth storage — avoids SecureStore 2048-byte limit on JWT tokens with claims
 - [Phase 01-foundation]: gcTime 24h aligned with persister maxAge 24h — misalignment silently defeats OFFL-01 offline cache persistence
+- [01-03]: useSignOut calls globalQueryClient.clear() on success — prevents stale user data from leaking into next user session on shared devices
+- [01-03]: Supabase Storage bucket 'avatars' must be created manually in dashboard — avatar upload will fail without it (no IaC for Storage buckets in migration)
+- [01-03]: Avatar upload accesses supabase directly in profile.tsx (not via hook) — one-off blob upload flow not suitable for a reusable mutation hook
 
 ### Pending Todos
 
@@ -83,5 +87,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-27
-Stopped at: Completed 01-01-PLAN.md — Expo scaffold, config files, app structure, MMKV persister committed
+Stopped at: Completed 01-03-PLAN.md — Auth and groups feature slices, all screens, OFFL-01 offline cache complete
 Resume file: None
