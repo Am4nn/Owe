@@ -1,3 +1,16 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: in_progress
+last_updated: "2026-02-27T17:42:39Z"
+progress:
+  total_phases: 3
+  completed_phases: 0
+  total_plans: 9
+  completed_plans: 3
+---
+
 # Project State
 
 ## Project Reference
@@ -10,30 +23,31 @@ See: .planning/PROJECT.md (updated 2026-02-27)
 ## Current Position
 
 Phase: 1 of 3 (Foundation)
-Plan: 2 of 3 in current phase
+Plan: 3 of 3 in current phase (next: 01-03 Auth)
 Status: In progress
-Last activity: 2026-02-27 — Completed 01-02-PLAN.md (schema migration, seed, CI)
+Last activity: 2026-02-27 — Completed 01-01-PLAN.md (scaffold, config, app structure, MMKV persister)
 
-Progress: [███░░░░░░░] 22%
+Progress: [████░░░░░░] 33%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
-- Average duration: 2 min
-- Total execution time: 0.1 hours
+- Total plans completed: 3
+- Average duration: 3 min
+- Total execution time: 0.2 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1. Foundation | 2/3 | 4 min | 2 min |
+| 1. Foundation | 3/3 | 8 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01, 01-02
-- Trend: Fast (schema and scaffold work)
+- Last 5 plans: 01-01, 01-02, 01-01 (retroactive)
+- Trend: Fast (scaffold, schema, and config work)
 
 *Updated after each plan completion*
+| Phase 01-foundation P01 | 4 | 2 tasks | 22 files |
 
 ## Accumulated Context
 
@@ -51,6 +65,9 @@ Recent decisions affecting current work:
 - [01-02]: idempotency_key UUID UNIQUE on expenses and settlements — makes mobile POST retries safe (offline-first requirement)
 - [01-02]: group_members.user_id nullable — NULL represents named-only (non-app) member per GRUP-03
 - [01-02]: SECURITY DEFINER + SET search_path = '' on profiles trigger — prevents privilege escalation via search path injection
+- [Phase 01-foundation]: Pin tailwindcss@^3.4.19 (3.x, not 4.x) — NativeWind 4.x uses Tailwind v3 API; v4 silently breaks className handling
+- [Phase 01-foundation]: expo-sqlite localStorage polyfill for Supabase auth storage — avoids SecureStore 2048-byte limit on JWT tokens with claims
+- [Phase 01-foundation]: gcTime 24h aligned with persister maxAge 24h — misalignment silently defeats OFFL-01 offline cache persistence
 
 ### Pending Todos
 
@@ -66,5 +83,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-27
-Stopped at: Completed 01-02-PLAN.md — schema migration, RLS seed, CI workflow committed
+Stopped at: Completed 01-01-PLAN.md — Expo scaffold, config files, app structure, MMKV persister committed
 Resume file: None

@@ -71,7 +71,7 @@ Requirements for initial release. Covers all table stakes (P1) features and core
 
 ### Offline
 
-- [ ] **OFFL-01**: User can view cached group data and balances when offline with no connectivity
+- [x] **OFFL-01**: User can view cached group data and balances when offline with no connectivity
 - [ ] **OFFL-02**: User can add an expense while offline; it queues locally and syncs automatically when connectivity returns
 
 ### Export
@@ -80,7 +80,7 @@ Requirements for initial release. Covers all table stakes (P1) features and core
 
 ### UI / UX
 
-- [ ] **UIUX-01**: App launches in dark mode by default with vibrant neon accent colors on deep dark backgrounds
+- [x] **UIUX-01**: App launches in dark mode by default with vibrant neon accent colors on deep dark backgrounds
 - [ ] **UIUX-02**: User can swipe an expense card to trigger quick-settle or quick-remind actions (gesture navigation)
 - [ ] **UIUX-03**: A floating action button (FAB) expands into: Scan Receipt, Manual Entry, Add Transfer
 
@@ -178,10 +178,10 @@ Which phases cover which requirements. Confirmed during roadmap creation 2026-02
 | CURR-02 | Phase 3 | Pending |
 | CURR-03 | Phase 3 | Pending |
 | CURR-04 | Phase 3 | Pending |
-| OFFL-01 | Phase 1 | Pending |
+| OFFL-01 | Phase 1 | Complete |
 | OFFL-02 | Phase 2 | Pending |
 | EXPT-01 | Phase 3 | Pending |
-| UIUX-01 | Phase 1 | Pending |
+| UIUX-01 | Phase 1 | Complete |
 | UIUX-02 | Phase 2 | Pending |
 | UIUX-03 | Phase 2 | Pending |
 
