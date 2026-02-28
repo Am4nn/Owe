@@ -49,7 +49,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 01.5-01-PLAN.md — Google OAuth: expo-web-browser setup, useSignInWithGoogle hook, deep-link callback handler, DB trigger patch for Google metadata, UI button on auth screens
+- [ ] 1.5-01-PLAN.md — Google OAuth: expo-auth-session + expo-web-browser install, useSignInWithGoogle hook, cold-start Linking handler, DB trigger migration for Google metadata, "Continue with Google" button on both auth screens
 
 ### Phase 2: Core Expense Loop
 **Goal**: A fully functional group expense tracker — users can add expenses with any split type, see who owes what in real-time, simplify debts, and settle up with confetti
