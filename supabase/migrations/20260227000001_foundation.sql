@@ -74,33 +74,13 @@ CREATE TABLE public.groups (
 );
 ALTER TABLE public.groups ENABLE ROW LEVEL SECURITY;
 
--- Members can read groups they belong to
-CREATE POLICY "members_can_read_groups"
-  ON public.groups FOR SELECT
-  USING (
-    id IN (
-      SELECT group_id FROM public.group_members WHERE user_id = auth.uid()
-    )
-  );
-
--- Members can update groups they belong to (admin check enforced in app layer for now)
-CREATE POLICY "members_can_update_groups"
-  ON public.groups FOR UPDATE
-  USING (
-    id IN (
-      SELECT group_id FROM public.group_members WHERE user_id = auth.uid()
-    )
-  )
-  WITH CHECK (
-    id IN (
-      SELECT group_id FROM public.group_members WHERE user_id = auth.uid()
-    )
-  );
-
 -- Any authenticated user can create a group (they auto-join as admin in the same operation)
 CREATE POLICY "authenticated_can_create_groups"
   ON public.groups FOR INSERT
   WITH CHECK (auth.uid() IS NOT NULL);
+
+-- NOTE: "members_can_read_groups" and "members_can_update_groups" are defined below,
+-- after public.group_members is created, to avoid a forward-reference error.
 
 -- ─────────────────────────────────────────────────────────────
 -- GROUP MEMBERS
@@ -167,6 +147,30 @@ CREATE POLICY "admins_can_delete_members"
     group_id IN (
       SELECT group_id FROM public.group_members
       WHERE user_id = auth.uid() AND role = 'admin'
+    )
+  );
+
+-- Defined here (after group_members exists) to avoid a forward-reference error.
+-- Members can read groups they belong to
+CREATE POLICY "members_can_read_groups"
+  ON public.groups FOR SELECT
+  USING (
+    id IN (
+      SELECT group_id FROM public.group_members WHERE user_id = auth.uid()
+    )
+  );
+
+-- Members can update groups they belong to (admin check enforced in app layer for now)
+CREATE POLICY "members_can_update_groups"
+  ON public.groups FOR UPDATE
+  USING (
+    id IN (
+      SELECT group_id FROM public.group_members WHERE user_id = auth.uid()
+    )
+  )
+  WITH CHECK (
+    id IN (
+      SELECT group_id FROM public.group_members WHERE user_id = auth.uid()
     )
   );
 
