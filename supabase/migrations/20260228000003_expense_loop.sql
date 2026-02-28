@@ -23,7 +23,7 @@ CREATE TABLE public.activities (
   created_at  TIMESTAMPTZ DEFAULT now() NOT NULL
 );
 
-ENABLE ROW LEVEL SECURITY ON public.activities;
+ALTER TABLE public.activities ENABLE ROW LEVEL SECURITY;
 
 -- SELECT: user must be a member of the activity's group
 CREATE POLICY "activities_select_group_member"
@@ -61,7 +61,7 @@ CREATE TABLE public.expense_comments (
   created_at  TIMESTAMPTZ DEFAULT now() NOT NULL
 );
 
-ENABLE ROW LEVEL SECURITY ON public.expense_comments;
+ALTER TABLE public.expense_comments ENABLE ROW LEVEL SECURITY;
 
 -- SELECT: user must be a member of the expense's group
 CREATE POLICY "expense_comments_select_group_member"
@@ -102,7 +102,7 @@ CREATE TABLE public.expense_reactions (
   UNIQUE (expense_id, user_id)
 );
 
-ENABLE ROW LEVEL SECURITY ON public.expense_reactions;
+ALTER TABLE public.expense_reactions ENABLE ROW LEVEL SECURITY;
 
 -- SELECT: user must be a member of the expense's group
 CREATE POLICY "expense_reactions_select_group_member"
