@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: phase_complete
-last_updated: "2026-02-28T20:30:00.000Z"
+last_updated: "2026-03-01T00:00:00.000Z"
 progress:
   total_phases: 4
   completed_phases: 2
-  total_plans: 11
-  completed_plans: 9
+  total_plans: 12
+  completed_plans: 10
 ---
 
 # Project State
@@ -22,10 +22,10 @@ See: .planning/PROJECT.md (updated 2026-02-27)
 
 ## Current Position
 
-Phase: 2 of 3 — Complete
-Plan: 3 of 3 in phase 2 complete
-Status: Phase 2 ALL PLANS COMPLETE — expense entry flow, balance layer, settlements, activity feed, offline queue all done.
-Last activity: 2026-02-28 — Phase 2 Plan 03 executed
+Phase: 2 of 3 — Complete (gap closure applied)
+Plan: 4 of 4 in phase 2 complete (02-04 gap closure)
+Status: Phase 2 ALL PLANS COMPLETE — expense entry flow, balance layer, settlements, activity feed, offline queue all done. Gap closure 02-04 fixed activities.actor_id FK (ACTY-01, ACTY-02, ACTY-03).
+Last activity: 2026-03-01 — Phase 2 Plan 04 (gap closure) executed
 
 Progress: [█████████░] 90%
 
@@ -54,6 +54,7 @@ Progress: [█████████░] 90%
 | Phase 02-core-expense-loop P01 | 9 | 2 tasks | 16 files |
 | Phase 02-core-expense-loop P02 | 4 | 2 tasks | 8 files |
 | Phase 02-core-expense-loop P03 | 7 | 2 tasks | 13 files |
+| Phase 02-core-expense-loop P04 | 1 | 1 task | 1 file |
 
 ## Accumulated Context
 
@@ -95,6 +96,8 @@ Recent decisions affecting current work:
 - [02-03]: onlineManager.setEventListener with NetInfo at module scope — must be outside React component to fire before any query executes
 - [02-03]: useActivityFeed two-step approach for all-groups feed — PostgREST cannot express GROUP IN (subquery) natively; fetch group_ids first, then use .in() filter
 - [02-03]: expense_reactions UPSERT on conflict (expense_id, user_id) — allows emoji change without delete+insert race condition
+- [02-04]: Use group_members(id) FK for activities.actor_id — matches existing hook code which inserts actorMember.id from group_members; avoids rewriting hooks
+- [02-04]: DROP CONSTRAINT IF EXISTS (not bare DROP) — safer in case migration is re-run or constraint was already dropped
 
 ### Pending Todos
 
@@ -109,6 +112,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-28
-Stopped at: Completed all 3 plans in Phase 2 — full core expense loop built. Awaiting verification before Phase 3.
+Last session: 2026-03-01
+Stopped at: Completed Phase 2 gap closure plan 02-04 — activities.actor_id FK fixed, ACTY-01/02/03 unblocked. Phase 2 fully complete. Ready for Phase 3.
 Resume file: None

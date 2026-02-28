@@ -53,9 +53,9 @@ Requirements for initial release. Covers all table stakes (P1) features and core
 
 ### Activity
 
-- [ ] **ACTY-01**: User can view a chronological activity feed of all expense actions in their groups
-- [ ] **ACTY-02**: User can filter the activity feed by group
-- [ ] **ACTY-03**: User can add a comment on an expense for clarification or dispute
+- [x] **ACTY-01**: User can view a chronological activity feed of all expense actions in their groups
+- [x] **ACTY-02**: User can filter the activity feed by group
+- [x] **ACTY-03**: User can add a comment on an expense for clarification or dispute
 - [ ] **ACTY-04**: User can add an emoji reaction to an expense in the activity feed
 
 ### Notifications
@@ -169,9 +169,9 @@ Which phases cover which requirements. Confirmed during roadmap creation 2026-02
 | SETL-01 | Phase 2 | Pending |
 | SETL-02 | Phase 2 | Pending |
 | SETL-03 | Phase 2 | Pending |
-| ACTY-01 | Phase 2 | Pending |
-| ACTY-02 | Phase 2 | Pending |
-| ACTY-03 | Phase 2 | Pending |
+| ACTY-01 | Phase 2 | Complete |
+| ACTY-02 | Phase 2 | Complete |
+| ACTY-03 | Phase 2 | Complete |
 | ACTY-04 | Phase 2 | Pending |
 | NOTF-01 | Phase 3 | Pending |
 | NOTF-02 | Phase 3 | Pending |
