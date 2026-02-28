@@ -46,6 +46,8 @@ Users can split expenses, track shared debts, and settle up with friends without
 
 - **Competitor:** Splitwise — users are frustrated by 3-4 expense/day cap, mandatory ads, paywalled receipt scanning ($5/month)
 - **Brand:** Modern fintech (Monzo/Revolut/Cash App meets social). Dark mode native, neon accents (electric blue / energetic purple), micro-animations, haptic feedback
+- **Design Reference:** We have a living Stitch design board (`https://stitch.withgoogle.com/projects/11301907081262369590`). **This is a look-and-feel template, NOT a strict wireframe.** Always check this link before building UI to align with evolving aesthetics (e.g., infinity logo, glassmorphism, dark mode) and you can propose changes if required.
+- **Design System Tooling:** We use the `ui-ux-pro-max` AI skill to generate consistent, professional design tokens that match our Stitch reference.
 - **Monetization:** Voluntary "tip jar" only — core philosophy is 100% free. No ads, no paywalls
 - **Target segments:** Travelers/backpackers, housemates/roomies, couples, friend groups
 - **UX direction:** Gestures over buttons (swipe to settle), glassmorphism & gradients, chat-like group view, FAB for quick add

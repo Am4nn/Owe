@@ -13,7 +13,7 @@ Owe ships in three phases that follow the hard dependency chain from the researc
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Secure schema, infrastructure, auth, and offline architecture
-- [ ] **Phase 1.5: Google OAuth** [INSERTED] - Additive social login alongside existing email/password flow
+- [x] **Phase 1.5: Google OAuth** [INSERTED] - Additive social login alongside existing email/password flow
 - [ ] **Phase 2: Core Expense Loop** - Groups, expense entry, balances, debt simplification, settlement, activity feed
 - [ ] **Phase 3: Engagement Layer** - Push notifications, multi-currency, smart reminders, and export
 
@@ -49,7 +49,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 1.5-01-PLAN.md — Google OAuth: expo-auth-session + expo-web-browser install, useSignInWithGoogle hook, cold-start Linking handler, DB trigger migration for Google metadata, "Continue with Google" button on both auth screens
+- [x] 1.5-01-PLAN.md — Google OAuth: expo-auth-session + expo-web-browser install, useSignInWithGoogle hook, cold-start Linking handler, DB trigger migration for Google metadata, "Continue with Google" button on both auth screens
 
 ### Phase 2: Core Expense Loop
 **Goal**: A fully functional group expense tracker — users can add expenses with any split type, see who owes what in real-time, simplify debts, and settle up with confetti
@@ -91,6 +91,6 @@ Phases execute in numeric order: 1 → 2 → 3
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete | 2026-02-28 |
-| 1.5. Google OAuth | 1/2 | In Progress|  |
+| 1.5. Google OAuth | 2/2 | Complete | 2026-02-28 |
 | 2. Core Expense Loop | 0/3 | Not started | - |
 | 3. Engagement Layer | 0/2 | Not started | - |
