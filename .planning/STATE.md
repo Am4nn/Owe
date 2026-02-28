@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-02-28T19:02:00.000Z"
+last_updated: "2026-02-28T19:11:00.000Z"
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 11
-  completed_plans: 7
+  completed_plans: 8
 ---
 
 # Project State
@@ -23,11 +23,11 @@ See: .planning/PROJECT.md (updated 2026-02-27)
 ## Current Position
 
 Phase: 2 of 3 — In progress
-Plan: 1 of 3 in phase 2 complete
-Status: Phase 2 Plan 01 COMPLETE — expense entry flow, split functions, hooks, screens, ExpandableFAB.
-Last activity: 2026-02-28 — Phase 2 Plan 01 executed
+Plan: 2 of 3 in phase 2 complete
+Status: Phase 2 Plan 02 COMPLETE — balance layer, Realtime sync, simplify-debts Edge Function, dashboard totals, simplified debts screen.
+Last activity: 2026-02-28 — Phase 2 Plan 02 executed
 
-Progress: [██████░░░░] 64%
+Progress: [███████░░░] 73%
 
 ## Performance Metrics
 
@@ -52,6 +52,7 @@ Progress: [██████░░░░] 64%
 | Phase 01-foundation P04 | 1 | 2 tasks | 5 files |
 | Phase 1.5-google-oauth-inserted P01 | 12 | 2 tasks | 6 files |
 | Phase 02-core-expense-loop P01 | 9 | 2 tasks | 16 files |
+| Phase 02-core-expense-loop P02 | 4 | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -86,6 +87,9 @@ Recent decisions affecting current work:
 - [02-01]: computeSharesSplits last-member remainder pattern — asserts sum === totalCents invariant; prevents penny-drift in balance calculations
 - [02-01]: is_direct virtual group pattern — created inline on first direct expense, filtered from dashboard via groups.filter(g => !g.is_direct)
 - [02-01]: @types/jest added to tsconfig types array — fixes TS2582 in test files without affecting expo-router typed routes
+- [02-02]: Exclude supabase/functions from tsconfig — Deno runtime types (Deno.serve, esm.sh) are incompatible with Expo/RN TS config
+- [02-02]: useRealtimeExpenseSync returns cleanup via useEffect — supabase.removeChannel prevents channel accumulation on screen unmount
+- [02-02]: Edge Function uses SUPABASE_ANON_KEY + forwarded Authorization header — RLS applies server-side, no service_role in function
 
 ### Pending Todos
 
@@ -93,7 +97,7 @@ None yet.
 
 ### Blockers/Concerns
 
-- [Phase 2]: Schulman's debt simplification algorithm in Deno Edge Function has implementation nuances — consider a brief research check before building the debt-simplify Edge Function
+- [Phase 2]: Schulman's debt simplification algorithm — RESOLVED in 02-02 via greedy algorithm (separate creditors/debtors, sort descending, emit min-payment)
 - [Phase 3]: EAS Push + OneSignal token lifecycle has integration gotchas around token expiry and reinstall — dedicated research pass recommended before building push-notify chain
 - [Phase 3]: Supabase Edge Function cron scheduling maturity for recurring expenses should be verified at Phase 3 planning time (v2 requirement, but affects fx-rates-cache design)
 - [Supabase Link]: supabase link --project-ref <ref> and supabase db push must be run manually to apply migration to hosted project
@@ -101,5 +105,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-28
-Stopped at: Completed 02-01-PLAN.md — expense entry flow complete. Phase 2 Plan 02 (settlements) is next.
+Stopped at: Completed 02-02-PLAN.md — balance layer complete. Phase 2 Plan 03 (settlements, activity feed, offline) is next.
 Resume file: None

@@ -41,9 +41,9 @@ Requirements for initial release. Covers all table stakes (P1) features and core
 
 ### Balances
 
-- [ ] **BALS-01**: User can see total "you owe" and "you are owed" summary on the dashboard
-- [ ] **BALS-02**: User can see per-group balance breakdown showing each member's net position
-- [ ] **BALS-03**: User can see simplified debt suggestions (debt graph algorithm reduces N bilateral debts to the minimum settlement path)
+- [x] **BALS-01**: User can see total "you owe" and "you are owed" summary on the dashboard
+- [x] **BALS-02**: User can see per-group balance breakdown showing each member's net position
+- [x] **BALS-03**: User can see simplified debt suggestions (debt graph algorithm reduces N bilateral debts to the minimum settlement path)
 
 ### Settlement
 
@@ -163,9 +163,9 @@ Which phases cover which requirements. Confirmed during roadmap creation 2026-02
 | EXPN-07 | Phase 2 | Complete |
 | EXPN-08 | Phase 2 | Complete |
 | EXPN-09 | Phase 2 | Complete |
-| BALS-01 | Phase 2 | Pending |
-| BALS-02 | Phase 2 | Pending |
-| BALS-03 | Phase 2 | Pending |
+| BALS-01 | Phase 2 | Complete |
+| BALS-02 | Phase 2 | Complete |
+| BALS-03 | Phase 2 | Complete |
 | SETL-01 | Phase 2 | Pending |
 | SETL-02 | Phase 2 | Pending |
 | SETL-03 | Phase 2 | Pending |
