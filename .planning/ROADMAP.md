@@ -61,12 +61,12 @@ Plans:
   3. User can see a dashboard summary of total owed and owed-to-them, a per-group balance breakdown by member, and simplified debt settlement suggestions produced by the server-side debt graph algorithm
   4. User can record a settlement payment, view settlement history for a group, and see a confetti animation with haptic feedback when a debt is fully cleared
   5. User can view a chronological activity feed filterable by group, leave a comment on an expense, and add an emoji reaction; a FAB expands to Scan Receipt / Manual Entry / Add Transfer and expense cards support swipe-to-settle and swipe-to-remind gestures
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 02-01: Expense entry — all four split types, category tagging, 1-on-1 splits, edit/delete flows, FAB with quick-add actions
-- [ ] 02-02: Balances and debt simplification — dashboard totals, per-group breakdown, debt-simplify Edge Function (Schulman's algorithm), Supabase Realtime invalidation
-- [ ] 02-03: Settlement, activity feed, and offline sync — settlement recording + confetti screen, activity feed with comments and reactions, OFFL-02 offline mutation queue, swipe gestures
+- [ ] 02-01-PLAN.md — Expense entry: DB migration (activities/comments/reactions tables), pure split functions (all 4 modes), expense CRUD hooks, SplitEditor component, expense form/edit/detail screens, ExpandableFAB
+- [ ] 02-02-PLAN.md — Balances and debt simplification: balance types and hooks, simplify-debts Edge Function (greedy algorithm), dashboard summary, group balances screen, simplified debts screen, Supabase Realtime invalidation
+- [ ] 02-03-PLAN.md — Settlement, activity feed, and offline sync: settlement form + confetti screen, activity feed with comments and reactions, OFFL-02 offline mutation queue (NetInfo + resumePausedMutations), swipe-to-settle wire-up
 
 ### Phase 3: Engagement Layer
 **Goal**: A retained user base — push notifications make the app active rather than passive, multi-currency covers the traveler use case, smart reminders close the debt loop, and CSV export builds power-user trust
