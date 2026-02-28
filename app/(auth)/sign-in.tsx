@@ -1,11 +1,14 @@
+import { useEffect } from 'react'
 import { View, Text, ScrollView, Alert } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Link } from 'expo-router'
+import * as Linking from 'expo-linking'
+import * as WebBrowser from 'expo-web-browser'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
-import { useSignIn } from '@/features/auth/hooks'
+import { useSignIn, useSignInWithGoogle, createSessionFromUrl } from '@/features/auth/hooks'
 
 const signInSchema = z.object({
   email: z.string().email('Please enter a valid email'),
@@ -19,6 +22,21 @@ export default function SignInScreen() {
   const { control, handleSubmit, formState: { errors } } = useForm<SignInForm>({
     resolver: zodResolver(signInSchema),
   })
+
+  // AUTH-06: WebBrowser warmup — pre-warms Chrome Custom Tabs on Android for faster open
+  useEffect(() => {
+    WebBrowser.warmUpAsync()
+    return () => { WebBrowser.coolDownAsync() }
+  }, [])
+
+  // AUTH-06: Cold-start deep link handler — catches OAuth redirect if Android cold-started the app
+  // WebBrowser.openAuthSessionAsync returns 'cancel' on cold-start; Linking.useURL() catches it
+  const url = Linking.useURL()
+  useEffect(() => {
+    if (url) createSessionFromUrl(url)
+  }, [url])
+
+  const { mutate: signInWithGoogle, isPending: isPendingGoogle } = useSignInWithGoogle()
 
   const onSubmit = (data: SignInForm) => {
     signIn(data, {
@@ -75,6 +93,23 @@ export default function SignInScreen() {
         onPress={handleSubmit(onSubmit)}
         disabled={isPending}
         className="mt-8"
+      />
+
+      {/* Divider */}
+      <View className="my-6 flex-row items-center gap-3">
+        <View className="flex-1 h-px bg-white/10" />
+        <Text className="text-white/40 text-sm">or</Text>
+        <View className="flex-1 h-px bg-white/10" />
+      </View>
+
+      {/* AUTH-06: Google OAuth sign-in button */}
+      <Button
+        title={isPendingGoogle ? 'Opening Google...' : 'Continue with Google'}
+        onPress={() => signInWithGoogle(undefined, {
+          onError: (error) => Alert.alert('Google Sign-In Failed', error.message),
+        })}
+        disabled={isPendingGoogle}
+        variant="secondary"
       />
 
       <View className="flex-row justify-center mt-6">
