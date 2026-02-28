@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-02-28T12:10:26.000Z"
+last_updated: "2026-02-28T19:02:00.000Z"
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 11
-  completed_plans: 6
+  completed_plans: 7
 ---
 
 # Project State
@@ -22,12 +22,12 @@ See: .planning/PROJECT.md (updated 2026-02-27)
 
 ## Current Position
 
-Phase: 2 of 3 — Not started
-Plan: 0 of 3 in phase 2
-Status: Phase 1.5 Google OAuth COMPLETE (user-verified working). Ready to begin Phase 2: Core Expense Loop.
-Last activity: 2026-02-28 — Phase 1.5 verified complete by user
+Phase: 2 of 3 — In progress
+Plan: 1 of 3 in phase 2 complete
+Status: Phase 2 Plan 01 COMPLETE — expense entry flow, split functions, hooks, screens, ExpandableFAB.
+Last activity: 2026-02-28 — Phase 2 Plan 01 executed
 
-Progress: [█████░░░░░] 55%
+Progress: [██████░░░░] 64%
 
 ## Performance Metrics
 
@@ -51,6 +51,7 @@ Progress: [█████░░░░░] 55%
 | Phase 01-foundation P03 | 7 | 2 tasks | 13 files |
 | Phase 01-foundation P04 | 1 | 2 tasks | 5 files |
 | Phase 1.5-google-oauth-inserted P01 | 12 | 2 tasks | 6 files |
+| Phase 02-core-expense-loop P01 | 9 | 2 tasks | 16 files |
 
 ## Accumulated Context
 
@@ -80,6 +81,11 @@ Recent decisions affecting current work:
 - [Phase 1.5-google-oauth-inserted]: makeRedirectUri() reads nexus scheme from app.json automatically — register nexus://** in Supabase Auth URL Configuration allowlist
 - [Phase 1.5-google-oauth-inserted]: skipBrowserRedirect:true required in signInWithOAuth when using WebBrowser.openAuthSessionAsync — omitting causes Supabase to auto-open browser bypassing Expo flow
 - [Phase 1.5-google-oauth-inserted]: CREATE OR REPLACE FUNCTION preserves on_auth_user_created trigger binding — no DROP/RECREATE needed for handle_new_user migration patch
+- [02-01]: useCreateExpense mutationKey ['expenses','create'] required for Plan 02-03 offline queue — omitting key prevents Tanstack Query from matching paused mutations on resume
+- [02-01]: Two-step expense insert with rollback — INSERT expense then splits; on splits failure DELETE orphaned expense to prevent ghost records
+- [02-01]: computeSharesSplits last-member remainder pattern — asserts sum === totalCents invariant; prevents penny-drift in balance calculations
+- [02-01]: is_direct virtual group pattern — created inline on first direct expense, filtered from dashboard via groups.filter(g => !g.is_direct)
+- [02-01]: @types/jest added to tsconfig types array — fixes TS2582 in test files without affecting expo-router typed routes
 
 ### Pending Todos
 
@@ -95,5 +101,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-28
-Stopped at: Phase 1.5 Google OAuth verified complete. Phase 2 (Core Expense Loop) is next — needs `/plan 2` or `/execute 2`.
+Stopped at: Completed 02-01-PLAN.md — expense entry flow complete. Phase 2 Plan 02 (settlements) is next.
 Resume file: None

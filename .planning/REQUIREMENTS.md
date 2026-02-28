@@ -29,15 +29,15 @@ Requirements for initial release. Covers all table stakes (P1) features and core
 
 ### Expenses
 
-- [ ] **EXPN-01**: User can add an expense with amount, description, payer, and date
-- [ ] **EXPN-02**: User can split an expense equally among all selected members (default)
-- [ ] **EXPN-03**: User can split an expense by exact amounts per member
-- [ ] **EXPN-04**: User can split an expense by percentage per member
-- [ ] **EXPN-05**: User can split an expense by shares (e.g., 1 share vs 2 shares)
-- [ ] **EXPN-06**: User can assign expense categories using built-in icons or tags
-- [ ] **EXPN-07**: User can edit an expense they created
-- [ ] **EXPN-08**: User can delete an expense they created
-- [ ] **EXPN-09**: User can add a 1-on-1 expense outside of a group (direct friend split)
+- [x] **EXPN-01**: User can add an expense with amount, description, payer, and date
+- [x] **EXPN-02**: User can split an expense equally among all selected members (default)
+- [x] **EXPN-03**: User can split an expense by exact amounts per member
+- [x] **EXPN-04**: User can split an expense by percentage per member
+- [x] **EXPN-05**: User can split an expense by shares (e.g., 1 share vs 2 shares)
+- [x] **EXPN-06**: User can assign expense categories using built-in icons or tags
+- [x] **EXPN-07**: User can edit an expense they created
+- [x] **EXPN-08**: User can delete an expense they created
+- [x] **EXPN-09**: User can add a 1-on-1 expense outside of a group (direct friend split)
 
 ### Balances
 
@@ -84,7 +84,7 @@ Requirements for initial release. Covers all table stakes (P1) features and core
 
 - [x] **UIUX-01**: App launches in dark mode by default with vibrant neon accent colors on deep dark backgrounds
 - [ ] **UIUX-02**: User can swipe an expense card to trigger quick-settle or quick-remind actions (gesture navigation)
-- [ ] **UIUX-03**: A floating action button (FAB) expands into: Scan Receipt, Manual Entry, Add Transfer
+- [x] **UIUX-03**: A floating action button (FAB) expands into: Scan Receipt, Manual Entry, Add Transfer
 
 ---
 
@@ -154,15 +154,15 @@ Which phases cover which requirements. Confirmed during roadmap creation 2026-02
 | GRUP-03 | Phase 1 | Complete |
 | GRUP-04 | Phase 1 | Complete |
 | GRUP-05 | Phase 1 | Complete |
-| EXPN-01 | Phase 2 | Pending |
-| EXPN-02 | Phase 2 | Pending |
-| EXPN-03 | Phase 2 | Pending |
-| EXPN-04 | Phase 2 | Pending |
-| EXPN-05 | Phase 2 | Pending |
-| EXPN-06 | Phase 2 | Pending |
-| EXPN-07 | Phase 2 | Pending |
-| EXPN-08 | Phase 2 | Pending |
-| EXPN-09 | Phase 2 | Pending |
+| EXPN-01 | Phase 2 | Complete |
+| EXPN-02 | Phase 2 | Complete |
+| EXPN-03 | Phase 2 | Complete |
+| EXPN-04 | Phase 2 | Complete |
+| EXPN-05 | Phase 2 | Complete |
+| EXPN-06 | Phase 2 | Complete |
+| EXPN-07 | Phase 2 | Complete |
+| EXPN-08 | Phase 2 | Complete |
+| EXPN-09 | Phase 2 | Complete |
 | BALS-01 | Phase 2 | Pending |
 | BALS-02 | Phase 2 | Pending |
 | BALS-03 | Phase 2 | Pending |
@@ -187,7 +187,7 @@ Which phases cover which requirements. Confirmed during roadmap creation 2026-02
 | EXPT-01 | Phase 3 | Pending |
 | UIUX-01 | Phase 1 | Complete |
 | UIUX-02 | Phase 2 | Pending |
-| UIUX-03 | Phase 2 | Pending |
+| UIUX-03 | Phase 2 | Complete |
 
 **Coverage:**
 - v1 requirements: 42 total
