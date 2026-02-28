@@ -78,11 +78,11 @@ Plans:
   2. User can configure smart reminders — a nudge dispatched after a configurable delay when a debt remains unpaid — and can disable or adjust the reminder schedule at any time
   3. User can set a base currency for a group, add an expense in a different currency, see the FX-converted amount alongside the original on every expense card, with rates snapshotted at creation time so balances never drift
   4. User can export a group's full expense history as a CSV file that opens correctly in a spreadsheet application
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 03-01: Push notifications and smart reminders — EAS Push + push-notify Edge Function, DB webhook trigger chain, token lifecycle, NOTF-01 / NOTF-02 / NOTF-03
-- [ ] 03-02: Multi-currency and export — fx-rates-cache Edge Function (hourly cron), CURR-01 through CURR-04, EXPT-01 CSV generation
+- [ ] 03-01-PLAN.md — Push notifications and smart reminders: DB migration (fx_rates + reminder_config tables + pg_cron jobs), expo-notifications token lifecycle, push-notify Edge Function (expenses/settlements webhooks → Expo Push API), process-reminders Edge Function (daily cron), deep-link navigation, NOTF-01/NOTF-02/NOTF-03
+- [ ] 03-02-PLAN.md — Multi-currency and export: fx-rates-cache Edge Function (hourly cron), currency types/hooks (useFxRates, computeBaseCents, COMMON_CURRENCIES), FX-aware expense creation, ExpenseCard dual-amount display, group base currency picker, CSV export via expo-sharing, CURR-01/CURR-02/CURR-03/CURR-04/EXPT-01
 
 ## Progress
 
