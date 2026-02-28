@@ -16,8 +16,8 @@ Requirements for initial release. Covers all table stakes (P1) features and core
 - [x] **AUTH-03**: User session persists across app restarts without re-logging in
 - [x] **AUTH-04**: User can sign out from any screen
 - [x] **AUTH-05**: User can create a profile with a display name and avatar photo
-- [ ] **AUTH-06**: User can sign in (or create an account) with Google OAuth — one tap, no password required
-- [ ] **AUTH-07**: A Google sign-in using an email that already exists as an email/password account is automatically linked to that account (no duplicate user created)
+- [x] **AUTH-06**: User can sign in (or create an account) with Google OAuth — one tap, no password required
+- [x] **AUTH-07**: A Google sign-in using an email that already exists as an email/password account is automatically linked to that account (no duplicate user created)
 
 ### Groups
 
@@ -180,8 +180,8 @@ Which phases cover which requirements. Confirmed during roadmap creation 2026-02
 | CURR-02 | Phase 3 | Pending |
 | CURR-03 | Phase 3 | Pending |
 | CURR-04 | Phase 3 | Pending |
-| AUTH-06 | Phase 1.5 | Pending |
-| AUTH-07 | Phase 1.5 | Pending |
+| AUTH-06 | Phase 1.5 | Complete |
+| AUTH-07 | Phase 1.5 | Complete |
 | OFFL-01 | Phase 1 | Complete |
 | OFFL-02 | Phase 2 | Pending |
 | EXPT-01 | Phase 3 | Pending |

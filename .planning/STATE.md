@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-02-27T22:05:08.790Z"
+last_updated: "2026-02-28T08:59:04.978Z"
 progress:
-  total_phases: 1
-  completed_phases: 1
-  total_plans: 4
-  completed_plans: 4
+  total_phases: 2
+  completed_phases: 2
+  total_plans: 5
+  completed_plans: 5
 ---
 
 # Project State
@@ -22,10 +22,10 @@ See: .planning/PROJECT.md (updated 2026-02-27)
 
 ## Current Position
 
-Phase: 1 of 3 (Foundation) — COMPLETE (all 4 plans done, verification 16/16)
-Plan: 4 of 4 in phase 1 — COMPLETE
-Status: Phase 1 fully verified. Ready to begin Phase 2 (Core Expense Loop).
-Last activity: 2026-02-28 — Completed 01-04-PLAN.md — CI fix + EAS Android build confirmed
+Phase: 1.5 of 3 (Google OAuth Inserted) — Plan 1 of 2 COMPLETE
+Plan: 1 of 2 in phase 1.5 — COMPLETE
+Status: Phase 1.5 Plan 01 complete. Google OAuth hooks and screens wired. DB migration written (manual supabase link + db push required before testing). Phase 1.5 Plan 02 remaining.
+Last activity: 2026-02-28 — Completed 1.5-01-PLAN.md — Google OAuth packages installed, hooks added, screens updated
 
 Progress: [████░░░░░░] 44%
 
@@ -50,6 +50,7 @@ Progress: [████░░░░░░] 44%
 | Phase 01-foundation P01 | 4 | 2 tasks | 22 files |
 | Phase 01-foundation P03 | 7 | 2 tasks | 13 files |
 | Phase 01-foundation P04 | 1 | 2 tasks | 5 files |
+| Phase 1.5-google-oauth-inserted P01 | 12 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -76,6 +77,9 @@ Recent decisions affecting current work:
 - [01-04]: Security comments must not contain exact CI grep pattern strings — use natural language equivalents to avoid false-positives without modifying the scan
 - [01-04]: react-native-reanimated 4.x requires react-native-worklets as explicit peer dependency — must be added together when upgrading from 3.x
 - [01-04]: EAS Android dev client build with withoutCredentials:true confirms native module linking without requiring signing credentials
+- [Phase 1.5-google-oauth-inserted]: makeRedirectUri() reads nexus scheme from app.json automatically — register nexus://** in Supabase Auth URL Configuration allowlist
+- [Phase 1.5-google-oauth-inserted]: skipBrowserRedirect:true required in signInWithOAuth when using WebBrowser.openAuthSessionAsync — omitting causes Supabase to auto-open browser bypassing Expo flow
+- [Phase 1.5-google-oauth-inserted]: CREATE OR REPLACE FUNCTION preserves on_auth_user_created trigger binding — no DROP/RECREATE needed for handle_new_user migration patch
 
 ### Pending Todos
 
@@ -91,5 +95,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-28
-Stopped at: Completed 01-04-PLAN.md — Phase 1 fully complete (16/16 verified). Ready for Phase 2.
+Stopped at: Completed 1.5-01-PLAN.md — Google OAuth hooks and screens wired. DB migration written. Manual supabase link + db push required. Checkpoint auto-approved (auto_advance:true). Phase 1.5 Plan 02 is next.
 Resume file: None
