@@ -3,7 +3,7 @@
     "name": "Owe",
     "slug": "owe",
     "version": "1.0.0",
-    "scheme": "nexus",
+    "scheme": "owe",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
