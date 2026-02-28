@@ -75,6 +75,7 @@ xcuserdata
 *.apk
 *.hprof
 ReactAndroid-temp.aar
+android/
 
 # Tools
 jarjar-rules.txt
@@ -147,6 +148,7 @@ docs/pages/versions/*/react-native/*.diff
 
 # iOS
 **/ios/.xcode.env.local
+ios/
 
 # TypeScript state
 tsconfig.tsbuildinfo
@@ -154,3 +156,6 @@ tsconfig.tsbuildinfo
 # Secrets - contains real secrets fetched from GCP
 /secrets/keys.json
 /secrets/expotools.env
+
+# Supabase
+supabase/.temp/
