@@ -61,12 +61,13 @@ Plans:
   3. User can see a dashboard summary of total owed and owed-to-them, a per-group balance breakdown by member, and simplified debt settlement suggestions produced by the server-side debt graph algorithm
   4. User can record a settlement payment, view settlement history for a group, and see a confetti animation with haptic feedback when a debt is fully cleared
   5. User can view a chronological activity feed filterable by group, leave a comment on an expense, and add an emoji reaction; a FAB expands to Scan Receipt / Manual Entry / Add Transfer and expense cards support swipe-to-settle and swipe-to-remind gestures
-**Plans**: 3 plans
+**Plans**: 4 plans
 
 Plans:
 - [x] 02-01-PLAN.md — Expense entry: DB migration (activities/comments/reactions tables), pure split functions (all 4 modes), expense CRUD hooks, SplitEditor component, expense form/edit/detail screens, ExpandableFAB
 - [x] 02-02-PLAN.md — Balances and debt simplification: balance types and hooks, simplify-debts Edge Function (greedy algorithm), dashboard summary, group balances screen, simplified debts screen, Supabase Realtime invalidation
 - [x] 02-03-PLAN.md — Settlement, activity feed, and offline sync: settlement form + confetti screen, activity feed with comments and reactions, OFFL-02 offline mutation queue (NetInfo + resumePausedMutations), swipe-to-settle wire-up
+- [ ] 02-04-PLAN.md — Gap closure: fix activities.actor_id FK (profiles -> group_members) to unblock ACTY-01, ACTY-02, ACTY-03
 
 ### Phase 3: Engagement Layer
 **Goal**: A retained user base — push notifications make the app active rather than passive, multi-currency covers the traveler use case, smart reminders close the debt loop, and CSV export builds power-user trust
@@ -92,5 +93,5 @@ Phases execute in numeric order: 1 → 2 → 3
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete | 2026-02-28 |
 | 1.5. Google OAuth | 2/2 | Complete | 2026-02-28 |
-| 2. Core Expense Loop | 3/3 | Complete | 2026-02-28 |
+| 2. Core Expense Loop | 3/4 | Gap closure in progress | 2026-02-28 |
 | 3. Engagement Layer | 0/2 | Not started | - |
