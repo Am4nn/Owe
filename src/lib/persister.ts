@@ -1,5 +1,6 @@
 import { Platform } from 'react-native'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
+import { createMMKV } from 'react-native-mmkv'
 
 // MMKV is native-only — use localStorage on web
 const buildStorage = () => {
@@ -19,9 +20,8 @@ const buildStorage = () => {
     }
   }
 
-  // Native: MMKV (fast synchronous storage)
-  const { MMKV } = require('react-native-mmkv')
-  const storage = new MMKV()
+  // Native: MMKV v4 uses createMMKV() factory instead of new MMKV()
+  const storage = createMMKV()
   return {
     setItem: (key: string, value: string): Promise<void> => {
       storage.set(key, value)

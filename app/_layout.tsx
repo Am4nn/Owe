@@ -4,6 +4,7 @@ import { ActivityIndicator, View } from 'react-native'
 import { queryClient } from '@/lib/queryClient'
 import { persister } from '@/lib/persister'
 import { useSession } from '@/features/auth/hooks'
+import '../global.css'
 import '@/stores/ui'
 
 function RootNavigator() {

@@ -11,8 +11,8 @@ import * as WebBrowser from 'expo-web-browser'
 WebBrowser.maybeCompleteAuthSession()
 
 const redirectTo = makeRedirectUri()
-// Reads "nexus" scheme from app.json automatically.
-// Produces "nexus://..." on EAS dev client. Register "nexus://**" in Supabase dashboard.
+// Reads "owe" scheme from app.json automatically.
+// Produces "owe://..." on EAS dev client. Register "owe://**" in Supabase dashboard.
 
 // AUTH-03: Session persistence — reads from expo-sqlite localStorage on mount
 export function useSession() {
