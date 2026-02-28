@@ -12,5 +12,5 @@ node_modules
 expo-env.d.ts
 # @end expo-cli
 
-# Ignore for-developer files
-useful-links.txt
+# Ignore developer-test files
+*.dev.txt
