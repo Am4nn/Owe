@@ -35,19 +35,8 @@ CREATE POLICY "users_can_update_own_profile"
   USING (id = auth.uid())
   WITH CHECK (id = auth.uid());
 
--- Group members can read each other's profiles (needed to display names in group views)
-CREATE POLICY "group_members_can_read_profiles"
-  ON public.profiles FOR SELECT
-  USING (
-    id IN (
-      SELECT gm.user_id
-      FROM public.group_members gm
-      WHERE gm.group_id IN (
-        SELECT group_id FROM public.group_members WHERE user_id = auth.uid()
-      )
-      AND gm.user_id IS NOT NULL
-    )
-  );
+-- NOTE: "group_members_can_read_profiles" policy is defined below, after
+-- public.group_members is created, to avoid a forward-reference error.
 
 -- Auto-create profile on auth.users INSERT
 -- SECURITY DEFINER required to write to public.profiles from auth schema trigger
@@ -155,6 +144,21 @@ CREATE POLICY "admins_can_insert_members"
 CREATE POLICY "members_can_delete_own_membership"
   ON public.group_members FOR DELETE
   USING (user_id = auth.uid());
+
+-- Group members can read each other's profiles (needed to display names in group views).
+-- Defined here (after group_members exists) to avoid a forward-reference error in db reset.
+CREATE POLICY "group_members_can_read_profiles"
+  ON public.profiles FOR SELECT
+  USING (
+    id IN (
+      SELECT gm.user_id
+      FROM public.group_members gm
+      WHERE gm.group_id IN (
+        SELECT group_id FROM public.group_members WHERE user_id = auth.uid()
+      )
+      AND gm.user_id IS NOT NULL
+    )
+  );
 
 -- Admins can remove other members
 CREATE POLICY "admins_can_delete_members"
