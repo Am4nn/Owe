@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Secure schema, infrastructure, auth, and offline architecture
 - [x] **Phase 1.5: Google OAuth** [INSERTED] - Additive social login alongside existing email/password flow
-- [ ] **Phase 2: Core Expense Loop** - Groups, expense entry, balances, debt simplification, settlement, activity feed
+- [x] **Phase 2: Core Expense Loop** - Groups, expense entry, balances, debt simplification, settlement, activity feed
 - [ ] **Phase 3: Engagement Layer** - Push notifications, multi-currency, smart reminders, and export
 
 ## Phase Details
@@ -65,8 +65,8 @@ Plans:
 
 Plans:
 - [x] 02-01-PLAN.md — Expense entry: DB migration (activities/comments/reactions tables), pure split functions (all 4 modes), expense CRUD hooks, SplitEditor component, expense form/edit/detail screens, ExpandableFAB
-- [ ] 02-02-PLAN.md — Balances and debt simplification: balance types and hooks, simplify-debts Edge Function (greedy algorithm), dashboard summary, group balances screen, simplified debts screen, Supabase Realtime invalidation
-- [ ] 02-03-PLAN.md — Settlement, activity feed, and offline sync: settlement form + confetti screen, activity feed with comments and reactions, OFFL-02 offline mutation queue (NetInfo + resumePausedMutations), swipe-to-settle wire-up
+- [x] 02-02-PLAN.md — Balances and debt simplification: balance types and hooks, simplify-debts Edge Function (greedy algorithm), dashboard summary, group balances screen, simplified debts screen, Supabase Realtime invalidation
+- [x] 02-03-PLAN.md — Settlement, activity feed, and offline sync: settlement form + confetti screen, activity feed with comments and reactions, OFFL-02 offline mutation queue (NetInfo + resumePausedMutations), swipe-to-settle wire-up
 
 ### Phase 3: Engagement Layer
 **Goal**: A retained user base — push notifications make the app active rather than passive, multi-currency covers the traveler use case, smart reminders close the debt loop, and CSV export builds power-user trust
@@ -92,5 +92,5 @@ Phases execute in numeric order: 1 → 2 → 3
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete | 2026-02-28 |
 | 1.5. Google OAuth | 2/2 | Complete | 2026-02-28 |
-| 2. Core Expense Loop | 2/3 | In Progress|  |
+| 2. Core Expense Loop | 3/3 | Complete | 2026-02-28 |
 | 3. Engagement Layer | 0/2 | Not started | - |

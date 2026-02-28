@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
-last_updated: "2026-02-28T19:11:00.000Z"
+status: phase_complete
+last_updated: "2026-02-28T20:30:00.000Z"
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 11
-  completed_plans: 8
+  completed_plans: 9
 ---
 
 # Project State
@@ -22,12 +22,12 @@ See: .planning/PROJECT.md (updated 2026-02-27)
 
 ## Current Position
 
-Phase: 2 of 3 — In progress
-Plan: 2 of 3 in phase 2 complete
-Status: Phase 2 Plan 02 COMPLETE — balance layer, Realtime sync, simplify-debts Edge Function, dashboard totals, simplified debts screen.
-Last activity: 2026-02-28 — Phase 2 Plan 02 executed
+Phase: 2 of 3 — Complete
+Plan: 3 of 3 in phase 2 complete
+Status: Phase 2 ALL PLANS COMPLETE — expense entry flow, balance layer, settlements, activity feed, offline queue all done.
+Last activity: 2026-02-28 — Phase 2 Plan 03 executed
 
-Progress: [███████░░░] 73%
+Progress: [█████████░] 90%
 
 ## Performance Metrics
 
@@ -53,6 +53,7 @@ Progress: [███████░░░] 73%
 | Phase 1.5-google-oauth-inserted P01 | 12 | 2 tasks | 6 files |
 | Phase 02-core-expense-loop P01 | 9 | 2 tasks | 16 files |
 | Phase 02-core-expense-loop P02 | 4 | 2 tasks | 8 files |
+| Phase 02-core-expense-loop P03 | 7 | 2 tasks | 13 files |
 
 ## Accumulated Context
 
@@ -90,6 +91,10 @@ Recent decisions affecting current work:
 - [02-02]: Exclude supabase/functions from tsconfig — Deno runtime types (Deno.serve, esm.sh) are incompatible with Expo/RN TS config
 - [02-02]: useRealtimeExpenseSync returns cleanup via useEffect — supabase.removeChannel prevents channel accumulation on screen unmount
 - [02-02]: Edge Function uses SUPABASE_ANON_KEY + forwarded Authorization header — RLS applies server-side, no service_role in function
+- [02-03]: createExpenseMutationFn extracted as named export — required for setMutationDefaults to serialize/deserialize paused mutations across app restarts
+- [02-03]: onlineManager.setEventListener with NetInfo at module scope — must be outside React component to fire before any query executes
+- [02-03]: useActivityFeed two-step approach for all-groups feed — PostgREST cannot express GROUP IN (subquery) natively; fetch group_ids first, then use .in() filter
+- [02-03]: expense_reactions UPSERT on conflict (expense_id, user_id) — allows emoji change without delete+insert race condition
 
 ### Pending Todos
 
@@ -105,5 +110,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-28
-Stopped at: Completed 02-02-PLAN.md — balance layer complete. Phase 2 Plan 03 (settlements, activity feed, offline) is next.
+Stopped at: Completed all 3 plans in Phase 2 — full core expense loop built. Awaiting verification before Phase 3.
 Resume file: None
