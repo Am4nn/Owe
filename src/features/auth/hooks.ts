@@ -4,6 +4,15 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import { queryClient as globalQueryClient } from '@/lib/queryClient'
 import type { Profile, SignInInput, SignUpInput, UpdateProfileInput } from './types'
+import { makeRedirectUri } from 'expo-auth-session'
+import * as QueryParams from 'expo-auth-session/build/QueryParams'
+import * as WebBrowser from 'expo-web-browser'
+
+WebBrowser.maybeCompleteAuthSession()
+
+const redirectTo = makeRedirectUri()
+// Reads "nexus" scheme from app.json automatically.
+// Produces "nexus://..." on EAS dev client. Register "nexus://**" in Supabase dashboard.
 
 // AUTH-03: Session persistence — reads from expo-sqlite localStorage on mount
 export function useSession() {
@@ -111,6 +120,50 @@ export function useUpdateProfile() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['profile'] })
+    },
+  })
+}
+
+// Helper: extract tokens from OAuth redirect URL and call setSession
+// Exported so auth screens can use it for cold-start deep link handling
+export const createSessionFromUrl = async (url: string) => {
+  const { params, errorCode } = QueryParams.getQueryParams(url)
+  if (errorCode) throw new Error(errorCode)
+  const { access_token, refresh_token } = params
+  if (!access_token) return  // User cancelled OAuth — URL has no tokens
+  const { data, error } = await supabase.auth.setSession({
+    access_token,
+    refresh_token: refresh_token ?? '',
+  })
+  if (error) throw error
+  return data.session
+  // onAuthStateChange in useSession fires automatically after setSession,
+  // routing the user into the (app) stack. No manual navigation needed.
+}
+
+// AUTH-06: Google OAuth sign-in (also creates account for new Google users)
+// AUTH-07: Account linking is handled server-side by Supabase — no client code needed
+export function useSignInWithGoogle() {
+  return useMutation({
+    mutationFn: async () => {
+      // Step 1: Get the Google authorization URL from Supabase
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo,
+          skipBrowserRedirect: true,  // Required: we open the browser manually below
+        },
+      })
+      if (error) throw error
+
+      // Step 2: Open Google auth in the system browser and wait for redirect back
+      const res = await WebBrowser.openAuthSessionAsync(data?.url ?? '', redirectTo)
+
+      // Step 3: Extract tokens and establish session if browser returned successfully
+      if (res.type === 'success') {
+        await createSessionFromUrl(res.url)
+      }
+      // res.type === 'cancel' or 'dismiss': user closed the browser — do nothing
     },
   })
 }
