@@ -2,6 +2,7 @@ import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react
 import { Stack, router } from 'expo-router'
 import { useGroups } from '@/features/groups/hooks'
 import type { Group } from '@/features/groups/types'
+import { ExpandableFAB } from '@/components/ui/ExpandableFAB'
 
 function GroupCard({ group }: { group: Group }) {
   return (
@@ -16,7 +17,10 @@ function GroupCard({ group }: { group: Group }) {
 }
 
 export default function DashboardScreen() {
-  const { data: groups, isLoading, isError } = useGroups()
+  const { data: allGroups, isLoading } = useGroups()
+
+  // Filter out virtual 1-on-1 (is_direct) groups from the main list (EXPN-09)
+  const groups = allGroups?.filter(g => !g.is_direct) ?? []
 
   return (
     <View className="flex-1 bg-dark-bg">
@@ -32,7 +36,7 @@ export default function DashboardScreen() {
       />
 
       <FlatList
-        data={groups ?? []}
+        data={groups}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <GroupCard group={item} />}
         contentContainerClassName="px-4 pt-4 pb-8"
@@ -53,14 +57,8 @@ export default function DashboardScreen() {
         }
       />
 
-      {/* FAB to create group */}
-      <TouchableOpacity
-        onPress={() => router.push('/(app)/groups/new')}
-        className="absolute bottom-8 right-6 bg-brand-primary w-14 h-14 rounded-full items-center justify-center"
-        style={{ elevation: 8 }}
-      >
-        <Text className="text-white text-2xl font-light">+</Text>
-      </TouchableOpacity>
+      {/* Expandable FAB: Manual Entry | Add Transfer | Scan Receipt */}
+      <ExpandableFAB />
     </View>
   )
 }

@@ -3,6 +3,7 @@ export interface Group {
   name: string
   base_currency: string
   created_by: string | null
+  is_direct: boolean
   version: number
   created_at: string
   updated_at: string

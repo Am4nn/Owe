@@ -32,7 +32,7 @@ export function useGroups() {
         `)
         .eq('user_id', await getCurrentUserId())
       if (error) throw error
-      return data?.map(row => row.groups as Group).filter(Boolean) ?? []
+      return data?.map(row => row.groups as unknown as Group).filter(Boolean) ?? []
     },
     staleTime: 30_000, // Show stale groups, refetch in background after 30s
     // gcTime defaults to 24h from queryClient.ts — keeps cache alive across sessions (OFFL-01)
