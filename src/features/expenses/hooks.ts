@@ -50,6 +50,67 @@ export function useExpense(expenseId: string) {
 }
 
 /**
+ * Standalone mutationFn extracted from useCreateExpense.
+ * Required for OFFL-02: queryClient.setMutationDefaults(['expenses','create'], { mutationFn })
+ * must receive a stable function reference (not an inline closure) to survive app restart.
+ */
+export async function createExpenseMutationFn(input: CreateExpenseInput): Promise<Expense> {
+  const {
+    group_id,
+    description,
+    amount_cents,
+    currency = 'USD',
+    split_type,
+    payer_member_id,
+    expense_date,
+    category,
+    splits,
+    idempotency_key,
+  } = input
+
+  // Step 1: Insert the expense
+  const { data: expense, error: expenseError } = await supabase
+    .from('expenses')
+    .insert({
+      group_id,
+      description,
+      amount_cents,
+      currency,
+      base_currency: currency,
+      fx_rate_at_creation: 1.0,
+      amount_base_cents: amount_cents,
+      split_type,
+      payer_id: payer_member_id,
+      expense_date,
+      category: category ?? null,
+      idempotency_key,
+      created_by: await getCurrentUserId(),
+    })
+    .select()
+    .single()
+  if (expenseError) throw expenseError
+
+  // Step 2: Insert all splits
+  const splitRows = splits.map(s => ({
+    expense_id: expense.id,
+    member_id: s.member_id,
+    amount_cents: s.amount_cents,
+  }))
+
+  const { error: splitsError } = await supabase
+    .from('expense_splits')
+    .insert(splitRows)
+
+  if (splitsError) {
+    // Rollback: delete the orphaned expense row
+    await supabase.from('expenses').delete().eq('id', expense.id)
+    throw splitsError
+  }
+
+  return expense as Expense
+}
+
+/**
  * Create an expense with splits.
  * Two-step insert: (a) INSERT into expenses, (b) INSERT all splits into expense_splits.
  * On split failure: DELETE the orphaned expense row, then throw.
@@ -59,61 +120,7 @@ export function useCreateExpense() {
   const qc = useQueryClient()
   return useMutation({
     mutationKey: ['expenses', 'create'],
-    mutationFn: async (input: CreateExpenseInput) => {
-      const {
-        group_id,
-        description,
-        amount_cents,
-        currency = 'USD',
-        split_type,
-        payer_member_id,
-        expense_date,
-        category,
-        splits,
-        idempotency_key,
-      } = input
-
-      // Step 1: Insert the expense
-      const { data: expense, error: expenseError } = await supabase
-        .from('expenses')
-        .insert({
-          group_id,
-          description,
-          amount_cents,
-          currency,
-          base_currency: currency,
-          fx_rate_at_creation: 1.0,
-          amount_base_cents: amount_cents,
-          split_type,
-          payer_id: payer_member_id,
-          expense_date,
-          category: category ?? null,
-          idempotency_key,
-          created_by: await getCurrentUserId(),
-        })
-        .select()
-        .single()
-      if (expenseError) throw expenseError
-
-      // Step 2: Insert all splits
-      const splitRows = splits.map(s => ({
-        expense_id: expense.id,
-        member_id: s.member_id,
-        amount_cents: s.amount_cents,
-      }))
-
-      const { error: splitsError } = await supabase
-        .from('expense_splits')
-        .insert(splitRows)
-
-      if (splitsError) {
-        // Rollback: delete the orphaned expense row
-        await supabase.from('expenses').delete().eq('id', expense.id)
-        throw splitsError
-      }
-
-      return expense as Expense
-    },
+    mutationFn: createExpenseMutationFn,
     onSuccess: (_data, input) => {
       qc.invalidateQueries({ queryKey: ['expenses', input.group_id] })
       qc.invalidateQueries({ queryKey: ['balances'] })
