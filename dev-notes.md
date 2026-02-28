@@ -4,11 +4,6 @@
 
 > **Agent Instruction:** Do not index, read, or summarize this file during normal operations or workflows.
 
-## Legend
-- `[ ]` [] **TODO:** Not started
-- `[/]` [/] **IN-PROGRESS:** Currently being worked on
-- `[x]` [x] **DONE:** Completed and verified
-
 ## Backlog / Next Up
 - [ ] Implement multi-currency support with real-time FX rate conversions
 - [ ] Achieve feature parity with Splitwise (ensure all core capabilities are covered)
