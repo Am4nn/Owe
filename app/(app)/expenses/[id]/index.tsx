@@ -1,8 +1,28 @@
-import React from 'react'
-import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native'
+import React, { useState } from 'react'
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+  Alert,
+  TextInput,
+  FlatList,
+} from 'react-native'
 import { Stack, router, useLocalSearchParams } from 'expo-router'
 import { useExpense, useDeleteExpense } from '@/features/expenses/hooks'
 import { CATEGORIES } from '@/features/expenses/categories'
+import {
+  useReactions,
+  useAddReaction,
+  useRemoveReaction,
+  useComments,
+  useAddComment,
+} from '@/features/activity/hooks'
+import { supabase } from '@/lib/supabase'
+import type { Reaction } from '@/features/activity/types'
+
+const EMOJI_OPTIONS = ['👍', '❤️', '😂', '😮', '😢', '🎉', '🙏', '💯']
 
 function formatCents(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`
@@ -13,12 +33,42 @@ function formatDate(dateStr: string): string {
   return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
 }
 
+function formatRelativeTime(dateStr: string): string {
+  const diffMs = Date.now() - new Date(dateStr).getTime()
+  const diffMin = Math.floor(diffMs / 60_000)
+  const diffHours = Math.floor(diffMs / 3_600_000)
+  if (diffMin < 60) return `${diffMin}m ago`
+  if (diffHours < 24) return `${diffHours}h ago`
+  return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}
+
 export default function ExpenseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const { data: expense, isLoading } = useExpense(id)
   const deleteExpense = useDeleteExpense()
 
+  const { data: reactions = [] } = useReactions(id)
+  const addReaction = useAddReaction()
+  const removeReaction = useRemoveReaction()
+
+  const { data: comments = [] } = useComments(id)
+  const addComment = useAddComment()
+
+  const [commentText, setCommentText] = useState('')
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null)
+
+  // Fetch current user id once for reaction highlight logic
+  React.useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setCurrentUserId(data.user?.id ?? null)
+    })
+  }, [])
+
   const category = expense?.category ? CATEGORIES.find(c => c.id === expense.category) : null
+
+  // Find the current user's reaction (if any) — reactions store user_id (auth.uid, not member_id)
+  const myReaction = reactions.find((r: Reaction) => r.user_id === currentUserId)
 
   function handleDelete() {
     Alert.alert(
@@ -40,6 +90,30 @@ export default function ExpenseDetailScreen() {
           },
         },
       ]
+    )
+  }
+
+  function handleEmojiTap(emoji: string) {
+    setShowEmojiPicker(false)
+    addReaction.mutate({ expense_id: id, emoji })
+  }
+
+  function handleReactionChipTap(reaction: Reaction) {
+    if (reaction.user_id === currentUserId) {
+      // Own reaction — remove it
+      removeReaction.mutate({ expense_id: id })
+    }
+  }
+
+  function handleSendComment() {
+    const trimmed = commentText.trim()
+    if (!trimmed) return
+    addComment.mutate(
+      { expense_id: id, body: trimmed },
+      {
+        onSuccess: () => setCommentText(''),
+        onError: (err) => Alert.alert('Error', err instanceof Error ? err.message : 'Failed to add comment'),
+      }
     )
   }
 
@@ -124,6 +198,101 @@ export default function ExpenseDetailScreen() {
             ))}
           </View>
         )}
+
+        {/* Reactions */}
+        <View className="bg-dark-surface border border-dark-border rounded-2xl px-4 py-4 mb-4">
+          <Text className="text-white/50 text-xs uppercase tracking-wide mb-3">Reactions</Text>
+          <View className="flex-row flex-wrap gap-2">
+            {reactions.map((reaction: Reaction) => {
+              const isOwn = reaction.user_id === currentUserId
+              return (
+                <TouchableOpacity
+                  key={reaction.id}
+                  onPress={() => handleReactionChipTap(reaction)}
+                  className={`px-3 py-1.5 rounded-full border ${
+                    isOwn
+                      ? 'bg-brand-primary/20 border-brand-primary'
+                      : 'bg-dark-border border-dark-border'
+                  }`}
+                >
+                  <Text className="text-base">{reaction.emoji}</Text>
+                </TouchableOpacity>
+              )
+            })}
+            {/* Add reaction button */}
+            {!myReaction && (
+              <TouchableOpacity
+                onPress={() => setShowEmojiPicker(!showEmojiPicker)}
+                className="px-3 py-1.5 rounded-full border border-dark-border bg-dark-border"
+              >
+                <Text className="text-white/50 text-base">+</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+
+          {/* Emoji picker */}
+          {showEmojiPicker && (
+            <View className="flex-row flex-wrap gap-3 mt-3 pt-3 border-t border-dark-border">
+              {EMOJI_OPTIONS.map(emoji => (
+                <TouchableOpacity key={emoji} onPress={() => handleEmojiTap(emoji)}>
+                  <Text className="text-2xl">{emoji}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
+        </View>
+
+        {/* Comments */}
+        <View className="bg-dark-surface border border-dark-border rounded-2xl px-4 py-4 mb-4">
+          <Text className="text-white/50 text-xs uppercase tracking-wide mb-3">Comments</Text>
+
+          {comments.length === 0 ? (
+            <Text className="text-white/30 text-sm mb-3">No comments yet</Text>
+          ) : (
+            <FlatList
+              data={comments}
+              keyExtractor={c => c.id}
+              scrollEnabled={false}
+              renderItem={({ item }) => (
+                <View className="mb-3">
+                  <View className="flex-row items-center justify-between mb-0.5">
+                    <Text className="text-brand-primary text-xs font-semibold">
+                      {item.author_display_name ?? 'Member'}
+                    </Text>
+                    <Text className="text-white/30 text-xs">
+                      {formatRelativeTime(item.created_at)}
+                    </Text>
+                  </View>
+                  <Text className="text-white text-sm">{item.body}</Text>
+                </View>
+              )}
+            />
+          )}
+
+          {/* Comment input */}
+          <View className="flex-row items-center gap-2 mt-2 pt-3 border-t border-dark-border">
+            <TextInput
+              value={commentText}
+              onChangeText={setCommentText}
+              placeholder="Add a comment..."
+              placeholderTextColor="rgba(255,255,255,0.3)"
+              className="flex-1 text-white text-sm"
+              multiline={false}
+              returnKeyType="send"
+              onSubmitEditing={handleSendComment}
+            />
+            <TouchableOpacity
+              onPress={handleSendComment}
+              disabled={addComment.isPending || !commentText.trim()}
+            >
+              {addComment.isPending ? (
+                <ActivityIndicator color="#6C63FF" size="small" />
+              ) : (
+                <Text className="text-brand-primary font-semibold text-sm">Send</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
 
         {/* Delete button */}
         <TouchableOpacity

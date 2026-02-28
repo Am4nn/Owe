@@ -31,13 +31,29 @@ export function ExpenseCard({ expense, members, onSettle, onRemind }: ExpenseCar
 
   function handleSettle() {
     swipeRef.current?.close()
-    if (onSettle) onSettle(expense)
+    if (onSettle) {
+      onSettle(expense)
+    } else {
+      // Default: navigate to settlement form with group_id pre-filled (SETL-01)
+      router.push({
+        pathname: '/(app)/settlement/new' as Parameters<typeof router.push>[0] extends { pathname: infer P } ? P : never,
+        params: {
+          group_id: expense.group_id,
+          payer_member_id: '',
+          payee_member_id: '',
+        },
+      } as unknown as Parameters<typeof router.push>[0])
+    }
   }
 
   function handleRemind() {
     swipeRef.current?.close()
-    if (onRemind) onRemind(expense)
-    Alert.alert('Reminder sent', `Reminder sent for "${expense.description}"`)
+    if (onRemind) {
+      onRemind(expense)
+    } else {
+      // Placeholder: push reminders are a Phase 3 feature
+      Alert.alert('Remind', 'Push reminders will be available in the next update.')
+    }
   }
 
   function renderRightAction() {
