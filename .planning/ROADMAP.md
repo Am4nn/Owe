@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation** - Secure schema, infrastructure, auth, and offline architecture
 - [x] **Phase 1.5: Google OAuth** [INSERTED] - Additive social login alongside existing email/password flow
 - [x] **Phase 2: Core Expense Loop** - Groups, expense entry, balances, debt simplification, settlement, activity feed
-- [ ] **Phase 3: Engagement Layer** - Push notifications, multi-currency, smart reminders, and export
+- [x] **Phase 3: Engagement Layer** - Push notifications, multi-currency, smart reminders, and export (completed 2026-03-01)
 
 ## Phase Details
 
@@ -94,4 +94,4 @@ Phases execute in numeric order: 1 → 2 → 3
 | 1. Foundation | 4/4 | Complete | 2026-02-28 |
 | 1.5. Google OAuth | 2/2 | Complete | 2026-02-28 |
 | 2. Core Expense Loop | 4/4 | Complete   | 2026-02-28 |
-| 3. Engagement Layer | 1/2 | In Progress|  |
+| 3. Engagement Layer | 2/2 | Complete   | 2026-03-01 |

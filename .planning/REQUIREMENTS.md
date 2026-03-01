@@ -66,10 +66,10 @@ Requirements for initial release. Covers all table stakes (P1) features and core
 
 ### Multi-Currency
 
-- [ ] **CURR-01**: User can set a base currency for a group
-- [ ] **CURR-02**: User can add an expense in a different currency from the group base currency
-- [ ] **CURR-03**: Expense amounts are converted to the group base currency using real-time FX rates at the time of expense creation
-- [ ] **CURR-04**: Both the original currency amount and the converted base currency amount are displayed on expense cards
+- [x] **CURR-01**: User can set a base currency for a group
+- [x] **CURR-02**: User can add an expense in a different currency from the group base currency
+- [x] **CURR-03**: Expense amounts are converted to the group base currency using real-time FX rates at the time of expense creation
+- [x] **CURR-04**: Both the original currency amount and the converted base currency amount are displayed on expense cards
 
 ### Offline
 
@@ -78,7 +78,7 @@ Requirements for initial release. Covers all table stakes (P1) features and core
 
 ### Export
 
-- [ ] **EXPT-01**: User can export a group's expense history as a CSV file
+- [x] **EXPT-01**: User can export a group's expense history as a CSV file
 
 ### UI / UX
 
@@ -176,15 +176,15 @@ Which phases cover which requirements. Confirmed during roadmap creation 2026-02
 | NOTF-01 | Phase 3 | Complete |
 | NOTF-02 | Phase 3 | Complete |
 | NOTF-03 | Phase 3 | Complete |
-| CURR-01 | Phase 3 | Pending |
-| CURR-02 | Phase 3 | Pending |
-| CURR-03 | Phase 3 | Pending |
-| CURR-04 | Phase 3 | Pending |
+| CURR-01 | Phase 3 | Complete |
+| CURR-02 | Phase 3 | Complete |
+| CURR-03 | Phase 3 | Complete |
+| CURR-04 | Phase 3 | Complete |
 | AUTH-06 | Phase 1.5 | Complete |
 | AUTH-07 | Phase 1.5 | Complete |
 | OFFL-01 | Phase 1 | Complete |
 | OFFL-02 | Phase 2 | Pending |
-| EXPT-01 | Phase 3 | Pending |
+| EXPT-01 | Phase 3 | Complete |
 | UIUX-01 | Phase 1 | Complete |
 | UIUX-02 | Phase 2 | Pending |
 | UIUX-03 | Phase 2 | Complete |

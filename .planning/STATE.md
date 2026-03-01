@@ -3,6 +3,19 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
+last_updated: "2026-03-01T00:40:39.974Z"
+progress:
+  total_phases: 5
+  completed_phases: 3
+  total_plans: 11
+  completed_plans: 11
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: unknown
 last_updated: "2026-03-01T00:31:42.406Z"
 progress:
   total_phases: 5
@@ -31,16 +44,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-27)
 
 **Core value:** Users can split expenses, track shared debts, and settle up with friends without limits, ads, or paywalls — in a UI that feels like a modern bank app, not a spreadsheet.
-**Current focus:** Phase 2 — Core Expense Loop
+**Current focus:** Phase 3 complete — ready for Phase 4 (Polish)
 
 ## Current Position
 
-Phase: 3 of 4 — In Progress
-Plan: 1 of 2 in phase 3 complete (03-01 push notifications)
-Status: Phase 3 Plan 1 COMPLETE — push notification chain built: DB migration (fx_rates + reminder_config), token lifecycle hooks, push-notify + process-reminders Edge Functions. NOTF-01, NOTF-02, NOTF-03 implemented.
-Last activity: 2026-03-01 — Phase 3 Plan 01 (push notification chain) executed
+Phase: 3 of 4 — COMPLETE
+Plan: 2 of 2 in phase 3 complete (03-02 multi-currency FX + CSV export)
+Status: Phase 3 COMPLETE — multi-currency FX support + CSV export delivered: fx-rates-cache Edge Function, currency hooks (COMMON_CURRENCIES, useFxRates, computeBaseCents), expense form currency picker, ExpenseCard dual amounts, group currency picker, CSV export via native share sheet. CURR-01-04 + EXPT-01 implemented.
+Last activity: 2026-03-01 — Phase 3 Plan 02 (multi-currency FX + CSV export) executed
 
-Progress: [█████████░] 90%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -69,6 +82,7 @@ Progress: [█████████░] 90%
 | Phase 02-core-expense-loop P03 | 7 | 2 tasks | 13 files |
 | Phase 02-core-expense-loop P04 | 1 | 1 task | 1 file |
 | Phase 03-engagement-layer P01 | 4 | 3 tasks | 8 files |
+| Phase 03-engagement-layer P02 | 6 | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -115,6 +129,8 @@ Recent decisions affecting current work:
 - [Phase 03-01]: expo-notifications plugin added to app.json plugins — required for EAS native build push notification support
 - [Phase 03-01]: push-notify Edge Function uses service_role key — webhook context is server-only; anon key + RLS blocks cross-user profile reads for push dispatch
 - [Phase 03-01]: pg_cron scheduling in migration wrapped in extension check DO block — avoids migration failure on environments without pg_cron enabled
+- [Phase 03-02]: expo-file-system v2 uses File + Paths.cache class API — legacy writeAsStringAsync and cacheDirectory removed at runtime; use new File(Paths.cache, filename).write(content) and file.uri for sharing
+- [Phase 03-02]: computeBaseCents exported as pure function (not hook) — can be called inside onSubmit event handlers without violating React rules; fxRate=1.0 identity when currencies match or rates table is empty
 
 ### Pending Todos
 
@@ -130,5 +146,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-01
-Stopped at: Completed Phase 3 Plan 01 — push notification chain (NOTF-01, NOTF-02, NOTF-03). Next: Phase 3 Plan 02 (multi-currency FX).
+Stopped at: Completed Phase 3 Plan 02 — multi-currency FX + CSV export (CURR-01-04, EXPT-01). Phase 3 complete. Next: Phase 4 (Polish).
 Resume file: None
