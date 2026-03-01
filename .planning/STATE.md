@@ -155,6 +155,10 @@ Progress: [███████░░░] 71%
 
 ## Accumulated Context
 
+### Roadmap Evolution
+
+- Phase 8 added (inserted): Code Review, Refactor & Best Practices — former Phase 8 (UI/UX Upgrade) shifted to Phase 9; Phases 9–13 renumbered to 10–14
+
 ### Decisions
 
 Decisions are logged in PROJECT.md Key Decisions table.

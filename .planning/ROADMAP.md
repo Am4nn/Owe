@@ -3,8 +3,8 @@
 ## Milestones
 
 - ✅ **v1.0 MVP** — Phases 1–6 (shipped 2026-03-01) — [archive](milestones/v1.0-ROADMAP.md)
-- 🚧 **v1.1 Polish** — Phases 7–8 (in progress)
-- 📋 **v2.0 Engagement & Insights** — Phases 9+ (planned)
+- 🚧 **v1.1 Polish** — Phases 7–9 (in progress)
+- 📋 **v2.0 Engagement & Insights** — Phases 10+ (planned)
 
 ## Phases
 
@@ -26,15 +26,16 @@
 ### 🚧 v1.1 Polish (In Progress)
 
 - [ ] **Phase 7: Bug Fixes**
-- [ ] **Phase 8: UI/UX Upgrade**
+- [ ] **Phase 8: Code Review, Refactor & Best Practices**
+- [ ] **Phase 9: UI/UX Upgrade**
 
 ### 📋 v2.0 Engagement & Insights (Planned)
 
-- [ ] Phase 9: Receipt Scanning (AI itemization + multi-payer) — RCPT-01–05
-- [ ] Phase 10: Recurring Expenses (subscriptions tab) — RECR-01–03
-- [ ] Phase 11: Spending Insights & Charts (fairness score) — INSI-01–02
-- [ ] Phase 12: PDF Export + Apple Sign-In — EXPE-01
-- [ ] Phase 13: Email Invite Delivery (Supabase Edge Function) — send actual invite emails when a user is added to `group_invites`; notify existing members of new expenses
+- [ ] Phase 10: Receipt Scanning (AI itemization + multi-payer) — RCPT-01–05
+- [ ] Phase 11: Recurring Expenses (subscriptions tab) — RECR-01–03
+- [ ] Phase 12: Spending Insights & Charts (fairness score) — INSI-01–02
+- [ ] Phase 13: PDF Export + Apple Sign-In — EXPE-01
+- [ ] Phase 14: Email Invite Delivery (Supabase Edge Function) — send actual invite emails when a user is added to `group_invites`; notify existing members of new expenses
 
 ## Phase Details
 
@@ -52,9 +53,28 @@ Plans:
 
 ---
 
-### Phase 8: UI/UX Upgrade
-**Goal**: Align every screen with the Stitch design reference — cohesive dark fintech aesthetic, glassmorphism cards, redesigned group cards, Stitch-accurate navigation, and polished micro-interactions across the full app
+### Phase 8: Code Review, Refactor & Best Practices
+**Goal**: Systematically review and refactor the entire codebase for correctness, maintainability, and scalability — covering architecture, DRY principle, cross-platform abstraction strategy, and general code quality — before the major UI/UX overhaul begins
 **Depends on**: Phase 7
+**Requirements**: Internal quality (no user-facing requirement IDs — this phase improves developer experience and long-term maintainability)
+**Success Criteria** (what must be TRUE):
+  1. Architecture is correctly layered: `features/` owns domain logic, `components/` is purely presentational, `lib/` holds infra utilities — no cross-layer leakage
+  2. DRY audit complete: all duplicated modal patterns, error handlers, and platform guards consolidated into shared hooks or utilities
+  3. Cross-platform strategy implemented: `Platform.OS` if-else removed from call-sites; replaced with a structured adapter pattern (platform-specific file extensions `.web.ts` / `.native.ts`, a `usePlatformAlert` hook, etc.) — approach determined during research
+  4. Dead code removed, naming conventions consistent across features, all React Query hooks have explicit loading and error states
+  5. No regressions: all Phase 7 success criteria still pass after refactor
+**Plans**: TBD (split per focus area during planning)
+
+Plans:
+- [ ] 08-01-PLAN.md — Architecture audit + cross-platform strategy research & implementation
+- [ ] 08-02-PLAN.md — DRY refactor: modals, error handlers, shared hooks
+- [ ] 08-03-PLAN.md — Code quality pass: dead code, naming, React Query, loading/error states
+
+---
+
+### Phase 9: UI/UX Upgrade
+**Goal**: Align every screen with the Stitch design reference — cohesive dark fintech aesthetic, glassmorphism cards, redesigned group cards, Stitch-accurate navigation, and polished micro-interactions across the full app
+**Depends on**: Phase 8
 **Design Reference**: `artifacts/stitch_owe_design/` (27 screens with screen.png + code.html per screen)
 **Requirements**: UIUX-01 (enhanced), visual parity with Stitch design board
 **Success Criteria** (what must be TRUE):
@@ -69,11 +89,11 @@ Plans:
 **Plans**: TBD (will be split per screen group during planning)
 
 Plans:
-- [ ] 08-01-PLAN.md — Design tokens + navigation shell (colors, typography, bottom tabs, FAB)
-- [ ] 08-02-PLAN.md — Auth screens (sign-in, sign-up, splash/onboarding)
-- [ ] 08-03-PLAN.md — Dashboard + group cards
-- [ ] 08-04-PLAN.md — Group detail + add expense screen
-- [ ] 08-05-PLAN.md — Activity feed + settlement success screen
+- [ ] 09-01-PLAN.md — Design tokens + navigation shell (colors, typography, bottom tabs, FAB)
+- [ ] 09-02-PLAN.md — Auth screens (sign-in, sign-up, splash/onboarding)
+- [ ] 09-03-PLAN.md — Dashboard + group cards
+- [ ] 09-04-PLAN.md — Group detail + add expense screen
+- [ ] 09-05-PLAN.md — Activity feed + settlement success screen
 
 ---
 
@@ -88,10 +108,11 @@ Plans:
 | 4. Expense Activity Events | v1.0 | 1/1 | Complete | 2026-03-01 |
 | 5. Schema & Notification Fixes | v1.0 | 1/1 | Complete | 2026-03-01 |
 | 6. Google OAuth Verification | v1.0 | 1/1 | Complete | 2026-03-01 |
-| 7. Bug Fixes | v1.1 | 0/? | Not started | — |
-| 8. UI/UX Upgrade | v1.1 | 0/5 | Not started | — |
-| 9. Receipt Scanning | v2.0 | 0/? | Not started | — |
-| 10. Recurring Expenses | v2.0 | 0/? | Not started | — |
-| 11. Spending Insights | v2.0 | 0/? | Not started | — |
-| 12. PDF Export + Apple Sign-In | v2.0 | 0/? | Not started | — |
-| 13. Email Invite Delivery | v2.0 | 0/? | Not started | — |
+| 7. Bug Fixes | v1.1 | 0/? | In progress | — |
+| 8. Code Review, Refactor & Best Practices | v1.1 | 0/3 | Not started | — |
+| 9. UI/UX Upgrade | v1.1 | 0/5 | Not started | — |
+| 10. Receipt Scanning | v2.0 | 0/? | Not started | — |
+| 11. Recurring Expenses | v2.0 | 0/? | Not started | — |
+| 12. Spending Insights | v2.0 | 0/? | Not started | — |
+| 13. PDF Export + Apple Sign-In | v2.0 | 0/? | Not started | — |
+| 14. Email Invite Delivery | v2.0 | 0/? | Not started | — |
