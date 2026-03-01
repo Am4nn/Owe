@@ -60,9 +60,9 @@ Requirements for initial release. Covers all table stakes (P1) features and core
 
 ### Notifications
 
-- [ ] **NOTF-01**: User receives a push notification when someone adds an expense to a shared group
-- [ ] **NOTF-02**: User receives a push notification when a group member records a settlement with them
-- [ ] **NOTF-03**: User can configure smart reminders — a nudge sent after a configurable delay if a debt is unpaid
+- [x] **NOTF-01**: User receives a push notification when someone adds an expense to a shared group
+- [x] **NOTF-02**: User receives a push notification when a group member records a settlement with them
+- [x] **NOTF-03**: User can configure smart reminders — a nudge sent after a configurable delay if a debt is unpaid
 
 ### Multi-Currency
 
@@ -173,9 +173,9 @@ Which phases cover which requirements. Confirmed during roadmap creation 2026-02
 | ACTY-02 | Phase 2 | Complete |
 | ACTY-03 | Phase 2 | Complete |
 | ACTY-04 | Phase 2 | Pending |
-| NOTF-01 | Phase 3 | Pending |
-| NOTF-02 | Phase 3 | Pending |
-| NOTF-03 | Phase 3 | Pending |
+| NOTF-01 | Phase 3 | Complete |
+| NOTF-02 | Phase 3 | Complete |
+| NOTF-03 | Phase 3 | Complete |
 | CURR-01 | Phase 3 | Pending |
 | CURR-02 | Phase 3 | Pending |
 | CURR-03 | Phase 3 | Pending |

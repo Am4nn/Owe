@@ -94,4 +94,4 @@ Phases execute in numeric order: 1 → 2 → 3
 | 1. Foundation | 4/4 | Complete | 2026-02-28 |
 | 1.5. Google OAuth | 2/2 | Complete | 2026-02-28 |
 | 2. Core Expense Loop | 4/4 | Complete   | 2026-02-28 |
-| 3. Engagement Layer | 0/2 | Not started | - |
+| 3. Engagement Layer | 1/2 | In Progress|  |

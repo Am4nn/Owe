@@ -2,6 +2,19 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
+status: unknown
+last_updated: "2026-03-01T00:31:42.406Z"
+progress:
+  total_phases: 5
+  completed_phases: 2
+  total_plans: 11
+  completed_plans: 10
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
 status: phase_complete
 last_updated: "2026-03-01T00:00:00.000Z"
 progress:
@@ -22,10 +35,10 @@ See: .planning/PROJECT.md (updated 2026-02-27)
 
 ## Current Position
 
-Phase: 2 of 3 — Complete (gap closure applied)
-Plan: 4 of 4 in phase 2 complete (02-04 gap closure)
-Status: Phase 2 ALL PLANS COMPLETE — expense entry flow, balance layer, settlements, activity feed, offline queue all done. Gap closure 02-04 fixed activities.actor_id FK (ACTY-01, ACTY-02, ACTY-03).
-Last activity: 2026-03-01 — Phase 2 Plan 04 (gap closure) executed
+Phase: 3 of 4 — In Progress
+Plan: 1 of 2 in phase 3 complete (03-01 push notifications)
+Status: Phase 3 Plan 1 COMPLETE — push notification chain built: DB migration (fx_rates + reminder_config), token lifecycle hooks, push-notify + process-reminders Edge Functions. NOTF-01, NOTF-02, NOTF-03 implemented.
+Last activity: 2026-03-01 — Phase 3 Plan 01 (push notification chain) executed
 
 Progress: [█████████░] 90%
 
@@ -55,6 +68,7 @@ Progress: [█████████░] 90%
 | Phase 02-core-expense-loop P02 | 4 | 2 tasks | 8 files |
 | Phase 02-core-expense-loop P03 | 7 | 2 tasks | 13 files |
 | Phase 02-core-expense-loop P04 | 1 | 1 task | 1 file |
+| Phase 03-engagement-layer P01 | 4 | 3 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -98,6 +112,9 @@ Recent decisions affecting current work:
 - [02-03]: expense_reactions UPSERT on conflict (expense_id, user_id) — allows emoji change without delete+insert race condition
 - [02-04]: Use group_members(id) FK for activities.actor_id — matches existing hook code which inserts actorMember.id from group_members; avoids rewriting hooks
 - [02-04]: DROP CONSTRAINT IF EXISTS (not bare DROP) — safer in case migration is re-run or constraint was already dropped
+- [Phase 03-01]: expo-notifications plugin added to app.json plugins — required for EAS native build push notification support
+- [Phase 03-01]: push-notify Edge Function uses service_role key — webhook context is server-only; anon key + RLS blocks cross-user profile reads for push dispatch
+- [Phase 03-01]: pg_cron scheduling in migration wrapped in extension check DO block — avoids migration failure on environments without pg_cron enabled
 
 ### Pending Todos
 
@@ -113,5 +130,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-01
-Stopped at: Completed Phase 2 gap closure plan 02-04 — activities.actor_id FK fixed, ACTY-01/02/03 unblocked. Phase 2 fully complete. Ready for Phase 3.
+Stopped at: Completed Phase 3 Plan 01 — push notification chain (NOTF-01, NOTF-02, NOTF-03). Next: Phase 3 Plan 02 (multi-currency FX).
 Resume file: None
