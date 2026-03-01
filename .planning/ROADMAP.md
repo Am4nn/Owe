@@ -34,6 +34,7 @@
 - [ ] Phase 10: Recurring Expenses (subscriptions tab) — RECR-01–03
 - [ ] Phase 11: Spending Insights & Charts (fairness score) — INSI-01–02
 - [ ] Phase 12: PDF Export + Apple Sign-In — EXPE-01
+- [ ] Phase 13: Email Invite Delivery (Supabase Edge Function) — send actual invite emails when a user is added to `group_invites`; notify existing members of new expenses
 
 ## Phase Details
 
@@ -93,3 +94,4 @@ Plans:
 | 10. Recurring Expenses | v2.0 | 0/? | Not started | — |
 | 11. Spending Insights | v2.0 | 0/? | Not started | — |
 | 12. PDF Export + Apple Sign-In | v2.0 | 0/? | Not started | — |
+| 13. Email Invite Delivery | v2.0 | 0/? | Not started | — |

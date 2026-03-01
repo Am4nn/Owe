@@ -80,7 +80,9 @@ export default function GroupDetailScreen() {
   const handleConfirmLeave = () => {
     setShowLeaveModal(false)
     leaveGroup(id, {
-      onSuccess: () => router.back(),
+      // router.back() throws "GO_BACK not handled" on web when there is no history stack.
+      // Fallback to replacing with the app root so the group detail is removed from history.
+      onSuccess: () => router.canGoBack() ? router.back() : router.replace('/(app)'),
       onError: (e) => Alert.alert('Error', e.message),
     })
   }
