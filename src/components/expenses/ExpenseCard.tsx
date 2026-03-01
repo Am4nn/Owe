@@ -14,8 +14,11 @@ interface ExpenseCardProps {
   onRemind?: (expense: Expense) => void
 }
 
-function formatCents(cents: number): string {
-  return `$${(cents / 100).toFixed(2)}`
+function formatAmount(cents: number, currencyCode: string): string {
+  // Simple formatting: use currency code prefix for non-USD, $ for USD
+  // For a production app we'd use Intl.NumberFormat — for MVP, code prefix is clear enough
+  const amount = (cents / 100).toFixed(2)
+  return currencyCode === 'USD' ? `$${amount}` : `${currencyCode} ${amount}`
 }
 
 function formatDate(dateStr: string): string {
@@ -106,9 +109,16 @@ export function ExpenseCard({ expense, members, onSettle, onRemind }: ExpenseCar
               )}
             </View>
           </View>
-          <Text className="text-white font-bold text-base">
-            {formatCents(expense.amount_cents)}
-          </Text>
+          <View className="items-end">
+            <Text className="text-white font-bold text-base">
+              {formatAmount(expense.amount_cents, expense.currency)}
+            </Text>
+            {expense.currency !== expense.base_currency && (
+              <Text className="text-white/40 text-xs mt-0.5">
+                {'≈'} {formatAmount(expense.amount_base_cents, expense.base_currency)}
+              </Text>
+            )}
+          </View>
         </View>
       </TouchableOpacity>
     </Swipeable>

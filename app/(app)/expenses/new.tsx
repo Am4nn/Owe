@@ -7,6 +7,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Alert,
+  Modal,
 } from 'react-native'
 import { Stack, router, useLocalSearchParams } from 'expo-router'
 import { useForm, Controller } from 'react-hook-form'
@@ -17,6 +18,7 @@ import { useGroup } from '@/features/groups/hooks'
 import { useCreateExpense } from '@/features/expenses/hooks'
 import { SplitEditor } from '@/components/expenses/SplitEditor'
 import { CATEGORIES } from '@/features/expenses/categories'
+import { useFxRates, COMMON_CURRENCIES, computeBaseCents } from '@/features/currency/hooks'
 import type { SplitType, SplitInput } from '@/features/expenses/types'
 
 const schema = z.object({
@@ -75,6 +77,16 @@ export default function NewExpenseScreen() {
   const [splitType, setSplitType] = useState<SplitType>('equal')
   const [splits, setSplits] = useState<SplitInput[]>([])
 
+  // CURR-02: Currency picker state
+  const [expenseCurrency, setExpenseCurrency] = useState<string>(
+    groupData?.group?.base_currency ?? 'USD'
+  )
+  const [showCurrencyPicker, setShowCurrencyPicker] = useState(false)
+  const [currencySearch, setCurrencySearch] = useState('')
+
+  // CURR-03: Fetch FX rates from fx_rates table (stale 30 min)
+  const { data: fxRates } = useFxRates()
+
   const {
     control,
     handleSubmit,
@@ -99,6 +111,14 @@ export default function NewExpenseScreen() {
     : 0
 
   const members = groupData?.members ?? []
+
+  const filteredCurrencies = currencySearch.trim()
+    ? COMMON_CURRENCIES.filter(
+        (c) =>
+          c.code.toLowerCase().includes(currencySearch.toLowerCase()) ||
+          c.name.toLowerCase().includes(currencySearch.toLowerCase())
+      )
+    : COMMON_CURRENCIES
 
   async function onSubmit(values: FormValues) {
     try {
@@ -126,10 +146,28 @@ export default function NewExpenseScreen() {
         finalSplits = equalSplits
       }
 
+      // CURR-03: Compute FX values at submission time (snapshot at INSERT)
+      // In direct mode or when groupData is undefined, use expenseCurrency as both currencies (fxRate = 1.0)
+      const baseCurrency = isDirectMode
+        ? expenseCurrency
+        : (groupData?.group?.base_currency ?? expenseCurrency)
+
+      const rates = fxRates ?? {}
+      const { amountBaseCents, fxRate } = computeBaseCents(
+        amountCents,
+        expenseCurrency,
+        baseCurrency,
+        rates
+      )
+
       await createExpense.mutateAsync({
         group_id: finalGroupId,
         description: values.description,
         amount_cents: amountCents,
+        currency: expenseCurrency,
+        base_currency: baseCurrency,
+        fx_rate_at_creation: fxRate,
+        amount_base_cents: amountBaseCents,
         split_type: splitType,
         payer_member_id: finalPayerId,
         expense_date: values.expense_date,
@@ -231,6 +269,43 @@ export default function NewExpenseScreen() {
             </View>
           )}
         />
+
+        {/* CURR-02: Currency picker */}
+        <View className="mb-4">
+          <Text className="text-white/70 text-sm mb-2">Currency</Text>
+          <TouchableOpacity
+            onPress={() => setShowCurrencyPicker(true)}
+            className="bg-dark-surface rounded-xl px-4 py-3 border border-dark-border flex-row items-center justify-between"
+          >
+            <Text className="text-white font-medium">
+              {COMMON_CURRENCIES.find((c) => c.code === expenseCurrency)?.symbol ?? ''}{' '}
+              {expenseCurrency}
+            </Text>
+            <Text className="text-white/40 text-sm">Change</Text>
+          </TouchableOpacity>
+          {/* Show converted amount preview when currencies differ */}
+          {!isDirectMode &&
+            groupData?.group?.base_currency &&
+            expenseCurrency !== groupData.group.base_currency &&
+            amountCents > 0 &&
+            fxRates && (
+              <Text className="text-white/40 text-xs mt-1">
+                {'≈'}{' '}
+                {(() => {
+                  const { amountBaseCents } = computeBaseCents(
+                    amountCents,
+                    expenseCurrency,
+                    groupData.group.base_currency,
+                    fxRates
+                  )
+                  const baseCurr = groupData.group.base_currency
+                  const baseAmt = (amountBaseCents / 100).toFixed(2)
+                  return baseCurr === 'USD' ? `$${baseAmt}` : `${baseCurr} ${baseAmt}`
+                })()}{' '}
+                {groupData.group.base_currency}
+              </Text>
+            )}
+        </View>
 
         {/* Payer picker (group mode only) */}
         {!isDirectMode && members.length > 0 && (
@@ -341,6 +416,64 @@ export default function NewExpenseScreen() {
           )}
         </TouchableOpacity>
       </View>
+
+      {/* CURR-02: Currency picker modal */}
+      <Modal
+        visible={showCurrencyPicker}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => {
+          setShowCurrencyPicker(false)
+          setCurrencySearch('')
+        }}
+      >
+        <View className="flex-1 bg-dark-bg">
+          <View className="px-4 pt-6 pb-3">
+            <View className="flex-row items-center justify-between mb-4">
+              <Text className="text-white font-bold text-xl">Select Currency</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  setShowCurrencyPicker(false)
+                  setCurrencySearch('')
+                }}
+              >
+                <Text className="text-brand-primary font-medium">Cancel</Text>
+              </TouchableOpacity>
+            </View>
+            <TextInput
+              value={currencySearch}
+              onChangeText={setCurrencySearch}
+              placeholder="Search currencies..."
+              placeholderTextColor="rgba(255,255,255,0.3)"
+              className="bg-dark-surface rounded-xl px-4 py-3 text-white border border-dark-border"
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
+          </View>
+          <ScrollView>
+            {filteredCurrencies.map((currency) => (
+              <TouchableOpacity
+                key={currency.code}
+                onPress={() => {
+                  setExpenseCurrency(currency.code)
+                  setShowCurrencyPicker(false)
+                  setCurrencySearch('')
+                }}
+                className={`flex-row items-center px-4 py-4 border-b border-dark-border ${
+                  currency.code === expenseCurrency ? 'bg-brand-primary/10' : ''
+                }`}
+              >
+                <Text className="text-white font-medium w-10 text-base">{currency.symbol}</Text>
+                <Text className="text-white font-semibold text-base mr-2">{currency.code}</Text>
+                <Text className="text-white/60 text-sm flex-1">{currency.name}</Text>
+                {currency.code === expenseCurrency && (
+                  <Text className="text-brand-primary text-sm font-medium">Selected</Text>
+                )}
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+      </Modal>
     </ScrollView>
   )
 }

@@ -166,6 +166,24 @@ export function useInviteMember() {
   })
 }
 
+// CURR-01: Update the base currency for a group
+export function useUpdateGroupCurrency() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ groupId, currency }: { groupId: string; currency: string }) => {
+      const { error } = await supabase
+        .from('groups')
+        .update({ base_currency: currency })
+        .eq('id', groupId)
+      if (error) throw error
+    },
+    onSuccess: (_data, { groupId }) => {
+      queryClient.invalidateQueries({ queryKey: ['groups', groupId] })
+      queryClient.invalidateQueries({ queryKey: ['groups'] })
+    },
+  })
+}
+
 // GRUP-05: Leave a group
 export function useLeaveGroup() {
   const qc = useQueryClient()
