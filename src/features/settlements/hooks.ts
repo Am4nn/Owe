@@ -68,6 +68,7 @@ export function useCreateSettlement() {
       qc.invalidateQueries({ queryKey: ['settlements', input.group_id] })
       qc.invalidateQueries({ queryKey: ['balances'] })
       qc.invalidateQueries({ queryKey: ['activity', input.group_id] })
+      qc.invalidateQueries({ queryKey: ['activity', 'all'] })
     },
   })
 }
