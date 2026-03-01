@@ -79,14 +79,19 @@ export default function ExpenseDetailScreen() {
         {
           text: 'Delete',
           style: 'destructive',
-          onPress: async () => {
+          onPress: () => {
             if (!expense) return
-            try {
-              await deleteExpense.mutateAsync({ id: expense.id, group_id: expense.group_id })
-              router.back()
-            } catch (err) {
-              Alert.alert('Error', err instanceof Error ? err.message : 'Failed to delete expense')
-            }
+            deleteExpense.mutate(
+              { id: expense.id, group_id: expense.group_id },
+              {
+                onSuccess: () => {
+                  router.canGoBack() ? router.back() : router.replace('/(app)')
+                },
+                onError: (err) => {
+                  Alert.alert('Error', err instanceof Error ? err.message : 'Failed to delete expense')
+                },
+              }
+            )
           },
         },
       ]
@@ -209,11 +214,10 @@ export default function ExpenseDetailScreen() {
                 <TouchableOpacity
                   key={reaction.id}
                   onPress={() => handleReactionChipTap(reaction)}
-                  className={`px-3 py-1.5 rounded-full border ${
-                    isOwn
+                  className={`px-3 py-1.5 rounded-full border ${isOwn
                       ? 'bg-brand-primary/20 border-brand-primary'
                       : 'bg-dark-border border-dark-border'
-                  }`}
+                    }`}
                 >
                   <Text className="text-base">{reaction.emoji}</Text>
                 </TouchableOpacity>

@@ -115,10 +115,10 @@ export default function NewExpenseScreen() {
 
   const filteredCurrencies = currencySearch.trim()
     ? COMMON_CURRENCIES.filter(
-        (c) =>
-          c.code.toLowerCase().includes(currencySearch.toLowerCase()) ||
-          c.name.toLowerCase().includes(currencySearch.toLowerCase())
-      )
+      (c) =>
+        c.code.toLowerCase().includes(currencySearch.toLowerCase()) ||
+        c.name.toLowerCase().includes(currencySearch.toLowerCase())
+    )
     : COMMON_CURRENCIES
 
   async function onSubmit(values: FormValues) {
@@ -170,14 +170,17 @@ export default function NewExpenseScreen() {
         fx_rate_at_creation: fxRate,
         amount_base_cents: amountBaseCents,
         split_type: splitType,
-        payer_member_id: finalPayerId,
+        payer_member_id: finalPayerId as string,
         expense_date: values.expense_date,
         category: values.category,
         splits: finalSplits,
         idempotency_key: ExpoCrypto.randomUUID(),
+      }, {
+        onSuccess: () => {
+          // reset() -> not exposed unless we explicitly useFormContext or similar, ignoring.
+          router.canGoBack() ? router.back() : router.replace('/(app)')
+        },
       })
-
-      router.back()
     } catch (err) {
       Alert.alert('Error', err instanceof Error ? err.message : 'Failed to create expense')
     }
@@ -322,11 +325,10 @@ export default function NewExpenseScreen() {
                       <TouchableOpacity
                         key={member.id}
                         onPress={() => onChange(member.id)}
-                        className={`px-4 py-2 rounded-full border ${
-                          value === member.id
-                            ? 'bg-brand-primary border-brand-primary'
-                            : 'bg-dark-surface border-dark-border'
-                        }`}
+                        className={`px-4 py-2 rounded-full border ${value === member.id
+                          ? 'bg-brand-primary border-brand-primary'
+                          : 'bg-dark-surface border-dark-border'
+                          }`}
                       >
                         <Text
                           className={`text-sm ${value === member.id ? 'text-white font-medium' : 'text-white/60'}`}
@@ -376,11 +378,10 @@ export default function NewExpenseScreen() {
                     <TouchableOpacity
                       key={cat.id}
                       onPress={() => onChange(value === cat.id ? undefined : cat.id)}
-                      className={`px-3 py-2 rounded-full border ${
-                        value === cat.id
-                          ? 'bg-brand-primary border-brand-primary'
-                          : 'bg-dark-surface border-dark-border'
-                      }`}
+                      className={`px-3 py-2 rounded-full border ${value === cat.id
+                        ? 'bg-brand-primary border-brand-primary'
+                        : 'bg-dark-surface border-dark-border'
+                        }`}
                     >
                       <Text className="text-sm">
                         {cat.icon} {cat.label}
@@ -460,9 +461,8 @@ export default function NewExpenseScreen() {
                   setShowCurrencyPicker(false)
                   setCurrencySearch('')
                 }}
-                className={`flex-row items-center px-4 py-4 border-b border-dark-border ${
-                  currency.code === expenseCurrency ? 'bg-brand-primary/10' : ''
-                }`}
+                className={`flex-row items-center px-4 py-4 border-b border-dark-border ${currency.code === expenseCurrency ? 'bg-brand-primary/10' : ''
+                  }`}
               >
                 <Text className="text-white font-medium w-10 text-base">{currency.symbol}</Text>
                 <Text className="text-white font-semibold text-base mr-2">{currency.code}</Text>

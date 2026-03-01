@@ -74,9 +74,9 @@ test-results/2026-03-01T05-42-13_a1b2c3/
   - password: AdminHuMe
 
 - PERFORMANCE_THRESHOLDS:
-  - login_max_ms: 5000
-  - navigation_max_ms: 5000
-  - create_expense_max_ms: 5000
+  - login_max_ms: 1000
+  - navigation_max_ms: 500
+  - create_expense_max_ms: 1500
 
 Regression memory is ALWAYS enabled.
 
@@ -98,6 +98,111 @@ Regression memory is ALWAYS enabled.
 5. None"
 
 Do not continue until confirmation.
+
+---
+
+# POST-FIX VERIFICATION PROTOCOL
+
+If AUTO_IMPLEMENT_FIXES = true
+OR
+If user selects an implementation option after report generation:
+
+You must initiate a controlled re-test cycle.
+
+---
+
+## RETEST RULES
+
+1. Do NOT overwrite original test-results folder.
+
+2. Create a new subfolder inside the same run directory:
+
+   test-results/<timestamp>_<commit_sha>/verification_<new_timestamp>/
+
+Example:
+
+   test-results/2026-03-01T05-42-13_a1b2c3/
+      ├── context/
+      ├── spec/
+      ├── functional/
+      ├── performance/
+      ├── regression/
+      ├── debug/
+      ├── report/
+      └── verification_2026-03-01T06-15-42/
+
+3. Only re-test:
+
+   - Affected flows
+   - Previously failing test cases
+   - Dependent flows that may be impacted
+
+4. Re-measure performance for affected areas.
+
+---
+
+## STATUS TRANSITIONS
+
+For previously reported issues:
+
+- FAILED → VERIFIED FIXED
+- FAILED → STILL FAILING
+- PERFORMANCE ISSUE → RESOLVED
+- REGRESSION → PERSISTING REGRESSION
+
+All status changes must be documented.
+
+---
+
+## REPORT UPDATE RULES
+
+Do NOT modify original TEST_EXECUTION_SUMMARY file.
+
+Instead:
+
+1. Append verification section inside:
+
+   verification/VERIFICATION_SUMMARY.md
+
+2. Include:
+
+   # Fix Verification Summary
+
+   - Issues Verified Fixed
+   - Issues Still Failing
+   - New Issues Introduced
+   - Performance Changes
+   - Regression Status After Fix
+
+3. Provide stability assessment:
+
+   - Stable
+   - Partially Stable
+   - Unstable
+
+---
+
+## REGRESSION MEMORY UPDATE
+
+Verification results must be included in future regression comparisons.
+
+Regression-Analyser must consider:
+
+- Original failure
+- Fix attempt
+- Verification result
+
+---
+
+## LOOP CONTROL
+
+After verification completes:
+
+If new failures appear:
+- Return to Debugging-Protocol stage.
+
+If all selected issues are verified fixed:
+- Mark run as SUCCESSFULLY VERIFIED.
 
 ---
 

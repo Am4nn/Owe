@@ -180,11 +180,10 @@ export default function EditExpenseScreen() {
                       <TouchableOpacity
                         key={member.id}
                         onPress={() => onChange(member.id)}
-                        className={`px-4 py-2 rounded-full border ${
-                          value === member.id
+                        className={`px-4 py-2 rounded-full border ${value === member.id
                             ? 'bg-brand-primary border-brand-primary'
                             : 'bg-dark-surface border-dark-border'
-                        }`}
+                          }`}
                       >
                         <Text
                           className={`text-sm ${value === member.id ? 'text-white font-medium' : 'text-white/60'}`}
@@ -234,11 +233,10 @@ export default function EditExpenseScreen() {
                     <TouchableOpacity
                       key={cat.id}
                       onPress={() => onChange(value === cat.id ? undefined : cat.id)}
-                      className={`px-3 py-2 rounded-full border ${
-                        value === cat.id
+                      className={`px-3 py-2 rounded-full border ${value === cat.id
                           ? 'bg-brand-primary border-brand-primary'
                           : 'bg-dark-surface border-dark-border'
-                      }`}
+                        }`}
                     >
                       <Text className="text-sm">
                         {cat.icon} {cat.label}
