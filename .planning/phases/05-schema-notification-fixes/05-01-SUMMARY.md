@@ -102,5 +102,13 @@ Then verify:
 - Remaining v1.0 gaps: human/device verification still required for push notifications (NOTF-01/02), confetti (ENGG-02), offline sync (OFFL-01/02), FX rates (CURR-01/02), CSV export (EXPR-01)
 
 ---
+## Self-Check: PASSED
+
+- FOUND: supabase/migrations/20260301000006_add_settlement_note.sql
+- FOUND: supabase/functions/push-notify/index.ts
+- FOUND: .planning/phases/05-schema-notification-fixes/05-01-SUMMARY.md
+- FOUND: commit 5916e2f (feat: add settlements.note migration)
+- FOUND: commit 7759a35 (fix: correct expense push notification deep-link)
+
 *Phase: 05-schema-notification-fixes*
 *Completed: 2026-03-01*
