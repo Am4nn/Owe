@@ -3,6 +3,19 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
+last_updated: "2026-03-01T00:59:05.582Z"
+progress:
+  total_phases: 5
+  completed_phases: 3
+  total_plans: 12
+  completed_plans: 12
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: unknown
 last_updated: "2026-03-01T00:40:39.974Z"
 progress:
   total_phases: 5
@@ -49,9 +62,9 @@ See: .planning/PROJECT.md (updated 2026-02-27)
 ## Current Position
 
 Phase: 3 of 4 — COMPLETE
-Plan: 2 of 2 in phase 3 complete (03-02 multi-currency FX + CSV export)
-Status: Phase 3 COMPLETE — multi-currency FX support + CSV export delivered: fx-rates-cache Edge Function, currency hooks (COMMON_CURRENCIES, useFxRates, computeBaseCents), expense form currency picker, ExpenseCard dual amounts, group currency picker, CSV export via native share sheet. CURR-01-04 + EXPT-01 implemented.
-Last activity: 2026-03-01 — Phase 3 Plan 02 (multi-currency FX + CSV export) executed
+Plan: 3 of 3 in phase 3 complete (03-03 Smart Reminders UI — NOTF-03 gap closed)
+Status: Phase 3 COMPLETE — all 3 plans delivered: push notifications + smart reminder backend (03-01), multi-currency FX + CSV export (03-02), Smart Reminders UI in group detail screen (03-03). NOTF-01-03, CURR-01-04, EXPT-01, NOTF-03 all implemented.
+Last activity: 2026-03-01 — Phase 3 Plan 03 (Smart Reminders UI) executed
 
 Progress: [██████████] 100%
 
@@ -83,6 +96,7 @@ Progress: [██████████] 100%
 | Phase 02-core-expense-loop P04 | 1 | 1 task | 1 file |
 | Phase 03-engagement-layer P01 | 4 | 3 tasks | 8 files |
 | Phase 03-engagement-layer P02 | 6 | 2 tasks | 10 files |
+| Phase 03-engagement-layer P03 | 2 | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -131,6 +145,7 @@ Recent decisions affecting current work:
 - [Phase 03-01]: pg_cron scheduling in migration wrapped in extension check DO block — avoids migration failure on environments without pg_cron enabled
 - [Phase 03-02]: expo-file-system v2 uses File + Paths.cache class API — legacy writeAsStringAsync and cacheDirectory removed at runtime; use new File(Paths.cache, filename).write(content) and file.uri for sharing
 - [Phase 03-02]: computeBaseCents exported as pure function (not hook) — can be called inside onSubmit event handlers without violating React rules; fxRate=1.0 identity when currencies match or rates table is empty
+- [Phase 03-engagement-layer]: Defaults for missing reminderConfig: enabled=true, delay_days=3 — consistent with backend defaults
 
 ### Pending Todos
 
@@ -146,5 +161,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-01
-Stopped at: Completed Phase 3 Plan 02 — multi-currency FX + CSV export (CURR-01-04, EXPT-01). Phase 3 complete. Next: Phase 4 (Polish).
+Stopped at: Completed Phase 3 Plan 03 — Smart Reminders UI (NOTF-03). Phase 3 engagement layer fully complete (3/3 plans). Next: Phase 4 (Polish).
 Resume file: None
