@@ -61,6 +61,7 @@ export default function GroupDetailScreen() {
   const [currencySearch, setCurrencySearch] = useState('')
   const [showInviteModal, setShowInviteModal] = useState(false)
   const [inviteEmail, setInviteEmail] = useState('')
+  const [showLeaveModal, setShowLeaveModal] = useState(false)
 
   // NOTF-03: Smart reminder configuration per group
   const { reminderConfig, upsertReminderConfig } = useReminderConfig(id)
@@ -71,25 +72,16 @@ export default function GroupDetailScreen() {
   // BALS-01 Realtime: subscribe to expense changes and invalidate balance/expense queries
   useRealtimeExpenseSync(id)
 
-  const handleLeave = () => {
-    // GRUP-05: Allow leaving even with outstanding balances (user decides)
-    Alert.alert(
-      'Leave group?',
-      'You can rejoin if invited again. Outstanding balances will remain visible to other members.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Leave',
-          style: 'destructive',
-          onPress: () => {
-            leaveGroup(id, {
-              onSuccess: () => router.back(),
-              onError: (e) => Alert.alert('Error', e.message),
-            })
-          },
-        },
-      ]
-    )
+  // GRUP-05: Alert.alert multi-button is unreliable on web (window.confirm is blocked)
+  // Use a cross-platform confirmation modal instead
+  const handleLeave = () => setShowLeaveModal(true)
+
+  const handleConfirmLeave = () => {
+    setShowLeaveModal(false)
+    leaveGroup(id, {
+      onSuccess: () => router.back(),
+      onError: (e) => Alert.alert('Error', e.message),
+    })
   }
 
   const handleInvite = () => {
@@ -307,6 +299,41 @@ export default function GroupDetailScreen() {
               </TouchableOpacity>
             ))}
           </ScrollView>
+        </View>
+      </Modal>
+
+      {/* GRUP-05: Leave group confirmation modal — Alert.alert multi-button unreliable on web */}
+      <Modal
+        visible={showLeaveModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowLeaveModal(false)}
+      >
+        <View className="flex-1 justify-center items-center bg-black/60 px-6">
+          <View className="bg-dark-surface rounded-2xl px-6 py-6 w-full">
+            <Text className="text-white font-bold text-lg mb-2">Leave group?</Text>
+            <Text className="text-white/60 text-sm mb-6">
+              You can rejoin if invited again. Outstanding balances will remain visible to other members.
+            </Text>
+            <View className="flex-row gap-3">
+              <TouchableOpacity
+                onPress={() => setShowLeaveModal(false)}
+                className="flex-1 border border-dark-border rounded-2xl py-3 items-center"
+              >
+                <Text className="text-white/70 font-medium">Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleConfirmLeave}
+                disabled={isLeaving}
+                className="flex-1 bg-brand-danger rounded-2xl py-3 items-center"
+              >
+                {isLeaving
+                  ? <ActivityIndicator color="#fff" />
+                  : <Text className="text-white font-semibold">Leave</Text>
+                }
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
       </Modal>
 
