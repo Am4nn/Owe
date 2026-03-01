@@ -41,6 +41,9 @@ export interface CreateExpenseInput {
   description: string
   amount_cents: number
   currency?: string
+  base_currency?: string          // group base currency; defaults to currency if omitted
+  fx_rate_at_creation?: number    // snapshotted FX rate; defaults to 1.0 if omitted
+  amount_base_cents?: number      // computed base amount; defaults to amount_cents if omitted
   split_type: SplitType
   payer_member_id: string
   expense_date: string
