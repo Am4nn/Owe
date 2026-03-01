@@ -59,6 +59,8 @@ export default function GroupDetailScreen() {
 
   const [showCurrencyPicker, setShowCurrencyPicker] = useState(false)
   const [currencySearch, setCurrencySearch] = useState('')
+  const [showInviteModal, setShowInviteModal] = useState(false)
+  const [inviteEmail, setInviteEmail] = useState('')
 
   // NOTF-03: Smart reminder configuration per group
   const { reminderConfig, upsertReminderConfig } = useReminderConfig(id)
@@ -91,22 +93,22 @@ export default function GroupDetailScreen() {
   }
 
   const handleInvite = () => {
-    Alert.prompt(
-      'Invite by email',
-      'Enter the email address to send an invite',
-      (email) => {
-        if (!email) return
-        inviteMember(
-          { group_id: id, email },
-          {
-            onSuccess: () => Alert.alert('Invite sent', `Invite sent to ${email}`),
-            onError: (e) => Alert.alert('Error', e.message),
-          }
-        )
-      },
-      'plain-text',
-      '',
-      'email-address'
+    setInviteEmail('')
+    setShowInviteModal(true)
+  }
+
+  const handleSendInvite = () => {
+    const email = inviteEmail.trim()
+    if (!email) return
+    inviteMember(
+      { group_id: id, email },
+      {
+        onSuccess: () => {
+          setShowInviteModal(false)
+          Alert.alert('Invite sent', `Invite sent to ${email}`)
+        },
+        onError: (e) => Alert.alert('Error', e.message),
+      }
     )
   }
 
@@ -305,6 +307,47 @@ export default function GroupDetailScreen() {
               </TouchableOpacity>
             ))}
           </ScrollView>
+        </View>
+      </Modal>
+
+      {/* GRUP-02: Invite by email modal — Alert.prompt is iOS-only */}
+      <Modal
+        visible={showInviteModal}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setShowInviteModal(false)}
+      >
+        <View className="flex-1 justify-end bg-black/60">
+          <View className="bg-dark-surface rounded-t-3xl px-4 pt-4 pb-10">
+            <Text className="text-white font-bold text-lg mb-1">Invite by email</Text>
+            <Text className="text-white/50 text-sm mb-4">Enter the email address to send an invite</Text>
+            <TextInput
+              value={inviteEmail}
+              onChangeText={setInviteEmail}
+              placeholder="friend@example.com"
+              placeholderTextColor="rgba(255,255,255,0.3)"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+              autoFocus
+              onSubmitEditing={handleSendInvite}
+              className="bg-dark-bg border border-dark-border rounded-xl px-4 py-3 text-white mb-4"
+            />
+            <View className="flex-row gap-3">
+              <TouchableOpacity
+                onPress={() => setShowInviteModal(false)}
+                className="flex-1 border border-dark-border rounded-2xl py-3 items-center"
+              >
+                <Text className="text-white/70 font-medium">Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleSendInvite}
+                className="flex-1 bg-brand-primary rounded-2xl py-3 items-center"
+              >
+                <Text className="text-white font-semibold">Send Invite</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
       </Modal>
 
