@@ -77,7 +77,7 @@ See: .planning/PROJECT.md (updated 2026-02-27)
 Phase: 3 of 4 — COMPLETE
 Plan: 3 of 3 in phase 3 complete (03-03 Smart Reminders UI — NOTF-03 gap closed)
 Status: Phase 3 COMPLETE — all 3 plans delivered: push notifications + smart reminder backend (03-01), multi-currency FX + CSV export (03-02), Smart Reminders UI in group detail screen (03-03). NOTF-01-03, CURR-01-04, EXPT-01, NOTF-03 all implemented.
-Last activity: 2026-03-01 — Phase 3 Plan 03 (Smart Reminders UI) executed
+Last activity: 2026-03-01 — Completed quick task 1: Fix all 3 known bugs (RLS recursion, MMKV v4, zodResolver)
 
 Progress: [██████████] 100%
 
@@ -170,6 +170,12 @@ None yet.
 - [Phase 3]: EAS Push + OneSignal token lifecycle has integration gotchas around token expiry and reinstall — dedicated research pass recommended before building push-notify chain
 - [Phase 3]: Supabase Edge Function cron scheduling maturity for recurring expenses should be verified at Phase 3 planning time (v2 requirement, but affects fx-rates-cache design)
 - [Supabase Link]: supabase link --project-ref <ref> and supabase db push must be run manually to apply migration to hosted project
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 1 | Fix all 3 known bugs: commit RLS recursion migration, fix persister.ts MMKV delete to remove, fix groups/new.tsx zodResolver type mismatch | 2026-03-01 | 68c7fbd | [1-fix-all-3-known-bugs-commit-rls-recursio](.planning/quick/1-fix-all-3-known-bugs-commit-rls-recursio/) |
 
 ## Session Continuity
 
