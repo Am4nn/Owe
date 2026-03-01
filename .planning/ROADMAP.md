@@ -142,5 +142,5 @@ Phases execute in numeric order: 1 → 2 → 3
 | 2. Core Expense Loop | 4/4 | Complete | 2026-02-28 |
 | 3. Engagement Layer | 3/3 | Complete | 2026-03-01 |
 | 4. Expense Activity Events | 1/1 | Complete    | 2026-03-01 |
-| 5. Schema & Notification Fixes | 1/1 | Complete   | 2026-03-01 |
-| 6. Google OAuth Verification | 1/1 | Complete   | 2026-03-01 |
+| 5. Schema & Notification Fixes | 1/1 | Complete    | 2026-03-01 |
+| 6. Google OAuth Verification | 1/1 | Complete    | 2026-03-01 |
