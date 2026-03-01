@@ -2,11 +2,13 @@ import { Stack } from 'expo-router'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { onlineManager } from '@tanstack/react-query'
 import { ActivityIndicator, View } from 'react-native'
+import { useEffect } from 'react'
 import NetInfo from '@react-native-community/netinfo'
 import { queryClient } from '@/lib/queryClient'
 import { persister } from '@/lib/persister'
 import { useSession } from '@/features/auth/hooks'
 import { createExpenseMutationFn } from '@/features/expenses/hooks'
+import { registerPushToken, useNotificationDeepLink } from '@/features/notifications/hooks'
 import '../global.css'
 import '@/stores/ui'
 
@@ -30,6 +32,17 @@ queryClient.setMutationDefaults(['expenses', 'create'], {
 
 function RootNavigator() {
   const { session, isLoading } = useSession()
+
+  // NOTF-01/02: Register push token when user is authenticated
+  // Never runs on simulators (expo-device guard inside registerPushToken)
+  useEffect(() => {
+    if (session) {
+      registerPushToken()
+    }
+  }, [session])
+
+  // NOTF-01/02: Handle deep-link navigation on notification tap (cold-start + foreground)
+  useNotificationDeepLink()
 
   if (isLoading) {
     return (
