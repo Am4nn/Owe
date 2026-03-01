@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-01T14:07:47.065Z"
+last_updated: "2026-03-01T14:12:03.758Z"
 progress:
   total_phases: 7
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 15
-  completed_plans: 13
+  completed_plans: 14
 ---
 
 ---
@@ -96,16 +96,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-27)
 
 **Core value:** Users can split expenses, track shared debts, and settle up with friends without limits, ads, or paywalls — in a UI that feels like a modern bank app, not a spreadsheet.
-**Current focus:** Phase 4 complete — expense activity events wired (ACTY-01, ACTY-02)
+**Current focus:** Phase 5 complete — schema and notification gaps closed (SETL-01, SETL-03, NOTF-01)
 
 ## Current Position
 
-Phase: 4 of 4 — COMPLETE
-Plan: 1 of 1 in phase 4 complete (04-01 Expense Activity Events — ACTY-01, ACTY-02 satisfied)
-Status: Phase 4 COMPLETE — expense CUD mutations (create/edit/delete) now write activity rows; activity feed shows expense events automatically.
-Last activity: 2026-03-01 — Completed Phase 4 Plan 01: Expense Activity Events
+Phase: 5 of 7 — COMPLETE
+Plan: 1 of 1 in phase 5 complete (05-01 Schema & Notification Fixes — SETL-01, SETL-03, NOTF-01 satisfied)
+Status: Phase 5 COMPLETE — settlements.note column added; expense push notification deep-link corrected from 404 to /expenses/:id.
+Last activity: 2026-03-01 — Completed Phase 5 Plan 01: Schema & Notification Fixes
 
-Progress: [██████████] 100%
+Progress: [███████░░░] 71%
 
 ## Performance Metrics
 
@@ -137,6 +137,7 @@ Progress: [██████████] 100%
 | Phase 03-engagement-layer P02 | 6 | 2 tasks | 10 files |
 | Phase 03-engagement-layer P03 | 2 | 1 tasks | 1 files |
 | Phase 04-expense-activity-events P01 | 2 | 2 tasks | 1 files |
+| Phase 05-schema-notification-fixes P01 | 5 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -189,6 +190,8 @@ Recent decisions affecting current work:
 - [Phase 04-expense-activity-events]: Activity INSERT inside mutationFn body (not onSuccess) ensures offline-resumed mutations also write activity rows
 - [Phase 04-expense-activity-events]: actor_id resolves to group_members.id (not auth UUID) — FK references group_members(id) per migration 20260301000004
 - [Phase 04-expense-activity-events]: createExpenseMutationFn: single getUser() call at top, user.id reused for both created_by and actor lookup
+- [Phase 05-schema-notification-fixes]: settlements.note column is nullable TEXT with no DEFAULT — NULL correctly represents no-note-provided, matching TS type string | null
+- [Phase 05-schema-notification-fixes]: Expo Router (app) group prefix must not appear in push notification dataUrl — useNotificationDeepLink uses router.push(url) verbatim, so deep-link URL must match Expo Router navigable path exactly
 
 ### Pending Todos
 
@@ -210,5 +213,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-01
-Stopped at: Completed Phase 3 Plan 03 — Smart Reminders UI (NOTF-03). Phase 3 engagement layer fully complete (3/3 plans). Next: Phase 4 (Polish).
+Stopped at: Completed Phase 5 Plan 01 — Schema & Notification Fixes (SETL-01, SETL-03, NOTF-01). Phase 5 complete. Awaiting supabase db push + functions deploy push-notify for fixes to take effect.
 Resume file: None

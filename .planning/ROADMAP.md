@@ -17,8 +17,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Core Expense Loop** - Groups, expense entry, balances, debt simplification, settlement, activity feed
 - [x] **Phase 3: Engagement Layer** - Push notifications, multi-currency, smart reminders, and export (completed 2026-03-01)
 - [x] **Phase 4: Expense Activity Events** - Wire expense CUD mutations to write activity rows; closes ACTY-01 FAIL gate (completed 2026-03-01)
-- [ ] **Phase 5: Schema & Notification Fixes** - Add settlements.note migration + fix push-notify deep-link URL; closes SETL-01, SETL-03, NOTF-01
-- [ ] **Phase 6: Google OAuth Verification** - Write Phase 1.5 VERIFICATION.md to complete audit trail; closes AUTH-06, AUTH-07 documentation gap
+- [x] **Phase 5: Schema & Notification Fixes** - Add settlements.note migration + fix push-notify deep-link URL; closes SETL-01, SETL-03, NOTF-01 (completed 2026-03-01)
+- [x] **Phase 6: Google OAuth Verification** - Write Phase 1.5 VERIFICATION.md to complete audit trail; closes AUTH-06, AUTH-07 documentation gap (completed 2026-03-01)
 
 ## Phase Details
 
@@ -114,7 +114,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 05-01-PLAN.md — DB migration ADD COLUMN note TEXT to settlements table; fix push-notify/index.ts line 50 deep-link URL from /groups//expenses/ to /expenses/
+- [x] 05-01-PLAN.md — DB migration ADD COLUMN note TEXT to settlements table; fix push-notify/index.ts line 50 deep-link URL from /groups//expenses/ to /expenses/ (completed 2026-03-01)
 
 ### Phase 6: Google OAuth Verification
 **Goal**: Write the missing VERIFICATION.md for Phase 1.5 to complete the audit trail — documentation gap only, all code is confirmed correct by the integration checker
@@ -127,7 +127,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 06-01-PLAN.md — Write 1.5-VERIFICATION.md verifying useSignInWithGoogle, createSessionFromUrl, migration 20260228000002_google_oauth.sql, and both auth screen integrations
+- [x] 06-01-PLAN.md — Write 1.5-VERIFICATION.md verifying useSignInWithGoogle, createSessionFromUrl, migration 20260228000002_google_oauth.sql, and both auth screen integrations
 
 ## Progress
 
@@ -142,5 +142,5 @@ Phases execute in numeric order: 1 → 2 → 3
 | 2. Core Expense Loop | 4/4 | Complete | 2026-02-28 |
 | 3. Engagement Layer | 3/3 | Complete | 2026-03-01 |
 | 4. Expense Activity Events | 1/1 | Complete    | 2026-03-01 |
-| 5. Schema & Notification Fixes | 0/1 | Pending | — |
-| 6. Google OAuth Verification | 0/1 | Pending | — |
+| 5. Schema & Notification Fixes | 1/1 | Complete   | 2026-03-01 |
+| 6. Google OAuth Verification | 1/1 | Complete   | 2026-03-01 |

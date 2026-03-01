@@ -47,9 +47,9 @@ Requirements for initial release. Covers all table stakes (P1) features and core
 
 ### Settlement
 
-- [ ] **SETL-01**: User can record a settlement payment between two members (cash or external)
+- [x] **SETL-01**: User can record a settlement payment between two members (cash or external)
 - [x] **SETL-02**: User sees a confetti animation with haptic feedback when a debt is fully cleared
-- [ ] **SETL-03**: User can view settlement history for a group
+- [x] **SETL-03**: User can view settlement history for a group
 
 ### Activity
 
@@ -166,22 +166,22 @@ Which phases cover which requirements. Confirmed during roadmap creation 2026-02
 | BALS-01 | Phase 2 | Complete |
 | BALS-02 | Phase 2 | Complete |
 | BALS-03 | Phase 2 | Complete |
-| SETL-01 | Phase 5 | Pending |
+| SETL-01 | Phase 5 | Complete |
 | SETL-02 | Phase 2 | Complete |
-| SETL-03 | Phase 5 | Pending |
+| SETL-03 | Phase 5 | Complete |
 | ACTY-01 | Phase 4 | Complete |
 | ACTY-02 | Phase 4 | Complete |
 | ACTY-03 | Phase 2 | Complete |
 | ACTY-04 | Phase 2 | Complete |
-| NOTF-01 | Phase 5 | Pending |
+| NOTF-01 | Phase 5 | Complete |
 | NOTF-02 | Phase 3 | Complete |
 | NOTF-03 | Phase 3 | Complete |
 | CURR-01 | Phase 3 | Complete |
 | CURR-02 | Phase 3 | Complete |
 | CURR-03 | Phase 3 | Complete |
 | CURR-04 | Phase 3 | Complete |
-| AUTH-06 | Phase 6 | Pending |
-| AUTH-07 | Phase 6 | Pending |
+| AUTH-06 | Phase 6 | Complete |
+| AUTH-07 | Phase 6 | Complete |
 | OFFL-01 | Phase 1 | Complete |
 | OFFL-02 | Phase 2 | Complete |
 | EXPT-01 | Phase 3 | Complete |
