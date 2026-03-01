@@ -7,7 +7,7 @@ import NetInfo from '@react-native-community/netinfo'
 import { queryClient } from '@/lib/queryClient'
 import { persister } from '@/lib/persister'
 import { useSession } from '@/features/auth/hooks'
-import { createExpenseMutationFn } from '@/features/expenses/hooks'
+import { createExpenseMutationFn, updateExpenseMutationFn, deleteExpenseMutationFn } from '@/features/expenses/hooks'
 import { registerPushToken, useNotificationDeepLink } from '@/features/notifications/hooks'
 import '../global.css'
 import '@/stores/ui'
@@ -24,10 +24,16 @@ onlineManager.setEventListener((setOnline) => {
   })
 })
 
-// Register mutationFn so paused mutations can resume after app restart (OFFL-02)
-// mutationKey MUST exactly match ['expenses', 'create'] in useCreateExpense
+// Register mutationFns so paused mutations can resume after app restart (OFFL-02)
+// mutationKey MUST exactly match the key used in each useMutation hook
 queryClient.setMutationDefaults(['expenses', 'create'], {
   mutationFn: createExpenseMutationFn,
+})
+queryClient.setMutationDefaults(['expenses', 'update'], {
+  mutationFn: updateExpenseMutationFn,
+})
+queryClient.setMutationDefaults(['expenses', 'delete'], {
+  mutationFn: deleteExpenseMutationFn,
 })
 
 function RootNavigator() {

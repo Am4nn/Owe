@@ -159,6 +159,75 @@ export function useCreateExpense() {
 }
 
 /**
+ * Standalone mutationFn extracted from useUpdateExpense.
+ * Required for offline queue replay: queryClient.setMutationDefaults(['expenses','update'], { mutationFn })
+ * must receive a stable function reference (not an inline closure) to survive app restart.
+ */
+export async function updateExpenseMutationFn(input: UpdateExpenseInput): Promise<Expense> {
+  const { id, description, amount_cents, split_type, payer_member_id, expense_date, category, splits } = input
+
+  // Update expense fields (only include provided fields)
+  const { data: updatedExpense, error: expenseError } = await supabase
+    .from('expenses')
+    .update({
+      ...(description !== undefined && { description }),
+      ...(amount_cents !== undefined && { amount_cents }),
+      ...(split_type !== undefined && { split_type }),
+      ...(payer_member_id !== undefined && { payer_id: payer_member_id }),
+      ...(expense_date !== undefined && { expense_date }),
+      ...(category !== undefined && { category }),
+    })
+    .eq('id', id)
+    .select()
+    .single()
+  if (expenseError) throw expenseError
+
+  // Replace splits if provided
+  if (splits && splits.length > 0) {
+    const { error: deleteError } = await supabase
+      .from('expense_splits')
+      .delete()
+      .eq('expense_id', id)
+    if (deleteError) throw deleteError
+
+    const splitRows = splits.map(s => ({
+      expense_id: id,
+      member_id: s.member_id,
+      amount_cents: s.amount_cents,
+    }))
+    const { error: insertError } = await supabase
+      .from('expense_splits')
+      .insert(splitRows)
+    if (insertError) throw insertError
+  }
+
+  // Resolve actor_id and insert expense_edited activity row
+  const { data: { user: actorUser } } = await supabase.auth.getUser()
+  if (!actorUser) throw new Error('Not authenticated')
+
+  const { data: actorMember, error: actorError } = await supabase
+    .from('group_members')
+    .select('id')
+    .eq('group_id', input.group_id)
+    .eq('user_id', actorUser.id)
+    .single()
+  if (actorError) throw actorError
+
+  const { error: activityError } = await supabase
+    .from('activities')
+    .insert({
+      action_type: 'expense_edited',
+      group_id: input.group_id,
+      actor_id: actorMember.id,
+      expense_id: input.id,
+      metadata: null,
+    })
+  if (activityError) throw activityError
+
+  return updatedExpense as Expense
+}
+
+/**
  * Update an existing expense and replace its splits.
  * Replaces splits by deleting existing ones and inserting new set.
  */
@@ -166,71 +235,7 @@ export function useUpdateExpense() {
   const qc = useQueryClient()
   return useMutation({
     mutationKey: ['expenses', 'update'],
-    mutationFn: async (input: UpdateExpenseInput) => {
-      const { id, description, amount_cents, split_type, payer_member_id, expense_date, category, splits } = input
-
-      // Update expense fields (only include provided fields)
-      const { data: updatedExpense, error: expenseError } = await supabase
-        .from('expenses')
-        .update({
-          ...(description !== undefined && { description }),
-          ...(amount_cents !== undefined && { amount_cents }),
-          ...(split_type !== undefined && { split_type }),
-          ...(payer_member_id !== undefined && { payer_id: payer_member_id }),
-          ...(expense_date !== undefined && { expense_date }),
-          ...(category !== undefined && { category }),
-        })
-        .eq('id', id)
-        .select()
-        .single()
-      if (expenseError) throw expenseError
-
-      // Replace splits if provided
-      if (splits && splits.length > 0) {
-        // Delete existing splits
-        const { error: deleteError } = await supabase
-          .from('expense_splits')
-          .delete()
-          .eq('expense_id', id)
-        if (deleteError) throw deleteError
-
-        // Insert new splits
-        const splitRows = splits.map(s => ({
-          expense_id: id,
-          member_id: s.member_id,
-          amount_cents: s.amount_cents,
-        }))
-        const { error: insertError } = await supabase
-          .from('expense_splits')
-          .insert(splitRows)
-        if (insertError) throw insertError
-      }
-
-      // Resolve actor_id and insert expense_edited activity row
-      const { data: { user: actorUser } } = await supabase.auth.getUser()
-      if (!actorUser) throw new Error('Not authenticated')
-
-      const { data: actorMember, error: actorError } = await supabase
-        .from('group_members')
-        .select('id')
-        .eq('group_id', input.group_id)
-        .eq('user_id', actorUser.id)
-        .single()
-      if (actorError) throw actorError
-
-      const { error: activityError } = await supabase
-        .from('activities')
-        .insert({
-          action_type: 'expense_edited',
-          group_id: input.group_id,
-          actor_id: actorMember.id,
-          expense_id: input.id,
-          metadata: null,
-        })
-      if (activityError) throw activityError
-
-      return updatedExpense as Expense
-    },
+    mutationFn: updateExpenseMutationFn,
     onSuccess: (_data, input) => {
       qc.invalidateQueries({ queryKey: ['expenses', input.group_id] })
       qc.invalidateQueries({ queryKey: ['expenses', 'detail', input.id] })
@@ -242,6 +247,43 @@ export function useUpdateExpense() {
 }
 
 /**
+ * Standalone mutationFn extracted from useDeleteExpense.
+ * Required for offline queue replay: queryClient.setMutationDefaults(['expenses','delete'], { mutationFn })
+ * must receive a stable function reference (not an inline closure) to survive app restart.
+ */
+export async function deleteExpenseMutationFn({ id, group_id }: { id: string; group_id: string }): Promise<{ id: string; group_id: string }> {
+  const userId = await getCurrentUserId()
+  const { error } = await supabase
+    .from('expenses')
+    .update({ deleted_at: new Date().toISOString() })
+    .eq('id', id)
+    .eq('created_by', userId)
+  if (error) throw error
+
+  // Resolve actor_id (reuse userId already fetched above)
+  const { data: actorMember, error: actorError } = await supabase
+    .from('group_members')
+    .select('id')
+    .eq('group_id', group_id)
+    .eq('user_id', userId)
+    .single()
+  if (actorError) throw actorError
+
+  const { error: activityError } = await supabase
+    .from('activities')
+    .insert({
+      action_type: 'expense_deleted',
+      group_id,
+      actor_id: actorMember.id,
+      expense_id: id,
+      metadata: null,
+    })
+  if (activityError) throw activityError
+
+  return { id, group_id }
+}
+
+/**
  * Soft-delete an expense: sets deleted_at = now().
  * Only the creator can delete their own expense.
  */
@@ -249,37 +291,7 @@ export function useDeleteExpense() {
   const qc = useQueryClient()
   return useMutation({
     mutationKey: ['expenses', 'delete'],
-    mutationFn: async ({ id, group_id }: { id: string; group_id: string }) => {
-      const userId = await getCurrentUserId()
-      const { error } = await supabase
-        .from('expenses')
-        .update({ deleted_at: new Date().toISOString() })
-        .eq('id', id)
-        .eq('created_by', userId)
-      if (error) throw error
-
-      // Resolve actor_id (reuse userId already fetched above)
-      const { data: actorMember, error: actorError } = await supabase
-        .from('group_members')
-        .select('id')
-        .eq('group_id', group_id)
-        .eq('user_id', userId)
-        .single()
-      if (actorError) throw actorError
-
-      const { error: activityError } = await supabase
-        .from('activities')
-        .insert({
-          action_type: 'expense_deleted',
-          group_id,
-          actor_id: actorMember.id,
-          expense_id: id,
-          metadata: null,
-        })
-      if (activityError) throw activityError
-
-      return { id, group_id }
-    },
+    mutationFn: deleteExpenseMutationFn,
     onSuccess: (_data, input) => {
       qc.invalidateQueries({ queryKey: ['expenses', input.group_id] })
       qc.invalidateQueries({ queryKey: ['expenses', 'detail', input.id] })
