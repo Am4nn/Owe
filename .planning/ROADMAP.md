@@ -67,7 +67,7 @@ Plans:
 - [x] 02-01-PLAN.md — Expense entry: DB migration (activities/comments/reactions tables), pure split functions (all 4 modes), expense CRUD hooks, SplitEditor component, expense form/edit/detail screens, ExpandableFAB
 - [x] 02-02-PLAN.md — Balances and debt simplification: balance types and hooks, simplify-debts Edge Function (greedy algorithm), dashboard summary, group balances screen, simplified debts screen, Supabase Realtime invalidation
 - [x] 02-03-PLAN.md — Settlement, activity feed, and offline sync: settlement form + confetti screen, activity feed with comments and reactions, OFFL-02 offline mutation queue (NetInfo + resumePausedMutations), swipe-to-settle wire-up
-- [ ] 02-04-PLAN.md — Gap closure: fix activities.actor_id FK (profiles -> group_members) to unblock ACTY-01, ACTY-02, ACTY-03
+- [x] 02-04-PLAN.md — Gap closure: fix activities.actor_id FK (profiles -> group_members) to unblock ACTY-01, ACTY-02, ACTY-03
 
 ### Phase 3: Engagement Layer
 **Goal**: A retained user base — push notifications make the app active rather than passive, multi-currency covers the traveler use case, smart reminders close the debt loop, and CSV export builds power-user trust
@@ -78,11 +78,12 @@ Plans:
   2. User can configure smart reminders — a nudge dispatched after a configurable delay when a debt remains unpaid — and can disable or adjust the reminder schedule at any time
   3. User can set a base currency for a group, add an expense in a different currency, see the FX-converted amount alongside the original on every expense card, with rates snapshotted at creation time so balances never drift
   4. User can export a group's full expense history as a CSV file that opens correctly in a spreadsheet application
-**Plans**: 2 plans
+**Plans**: 3 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Push notifications and smart reminders: DB migration (fx_rates + reminder_config tables + pg_cron jobs), expo-notifications token lifecycle, push-notify Edge Function (expenses/settlements webhooks → Expo Push API), process-reminders Edge Function (daily cron), deep-link navigation, NOTF-01/NOTF-02/NOTF-03
-- [ ] 03-02-PLAN.md — Multi-currency and export: fx-rates-cache Edge Function (hourly cron), currency types/hooks (useFxRates, computeBaseCents, COMMON_CURRENCIES), FX-aware expense creation, ExpenseCard dual-amount display, group base currency picker, CSV export via expo-sharing, CURR-01/CURR-02/CURR-03/CURR-04/EXPT-01
+- [x] 03-01-PLAN.md — Push notifications and smart reminders: DB migration (fx_rates + reminder_config tables + pg_cron jobs), expo-notifications token lifecycle, push-notify Edge Function (expenses/settlements webhooks → Expo Push API), process-reminders Edge Function (daily cron), deep-link navigation, NOTF-01/NOTF-02/NOTF-03
+- [x] 03-02-PLAN.md — Multi-currency and export: fx-rates-cache Edge Function (hourly cron), currency types/hooks (useFxRates, computeBaseCents, COMMON_CURRENCIES), FX-aware expense creation, ExpenseCard dual-amount display, group base currency picker, CSV export via expo-sharing, CURR-01/CURR-02/CURR-03/CURR-04/EXPT-01
+- [x] 03-03-PLAN.md — Gap closure: Smart Reminders UI — enable/disable per-group reminders and delay_days config in group detail screen, NOTF-03
 
 ## Progress
 
@@ -92,6 +93,6 @@ Phases execute in numeric order: 1 → 2 → 3
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete | 2026-02-28 |
-| 1.5. Google OAuth | 2/2 | Complete | 2026-02-28 |
+| 1.5. Google OAuth | 1/1 | Complete | 2026-02-28 |
 | 2. Core Expense Loop | 4/4 | Complete   | 2026-02-28 |
 | 3. Engagement Layer | 3/3 | Complete   | 2026-03-01 |
