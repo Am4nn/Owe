@@ -47,7 +47,7 @@ Deno.serve(async (req: Request) => {
     recipientUserIds = (members ?? []).map((m: { user_id: string }) => m.user_id)
     title = 'New expense added'
     body = record.description ?? 'An expense was added to your group'
-    dataUrl = `/groups/${record.group_id}/expenses/${record.id}`
+    dataUrl = `/expenses/${record.id}`
   } else if (table === 'settlements') {
     // NOTF-02: notify the payee (the group member who received the payment)
     const { data: payeeMember } = await supabase
