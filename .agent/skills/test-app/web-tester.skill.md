@@ -91,3 +91,8 @@ All such incidents must be included in FUNCTIONAL_RESULTS.
 
 FUNCTIONAL_RESULTS
 RAW_PERFORMANCE_METRICS
+
+## Cleanup:
+
+- Close browser which is tied to your chat
+- Stop dev server
