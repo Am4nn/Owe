@@ -11,6 +11,7 @@ import {
   ScrollView,
 } from 'react-native'
 import { Stack, router, useLocalSearchParams } from 'expo-router'
+import * as ExpoCrypto from 'expo-crypto'
 import { useGroup } from '@/features/groups/hooks'
 import { useCreateSettlement } from '@/features/settlements/hooks'
 import type { GroupMember } from '@/features/groups/types'
@@ -70,7 +71,7 @@ export default function NewSettlementScreen() {
         payee_member_id: selectedPayee.id,
         amount_cents,
         note: note.trim() || undefined,
-        idempotency_key: crypto.randomUUID(),
+        idempotency_key: ExpoCrypto.randomUUID(),
       },
       {
         onSuccess: () => {

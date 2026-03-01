@@ -10,6 +10,7 @@ import {
   Modal,
 } from 'react-native'
 import { Stack, router, useLocalSearchParams } from 'expo-router'
+import * as ExpoCrypto from 'expo-crypto'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -173,7 +174,7 @@ export default function NewExpenseScreen() {
         expense_date: values.expense_date,
         category: values.category,
         splits: finalSplits,
-        idempotency_key: crypto.randomUUID(),
+        idempotency_key: ExpoCrypto.randomUUID(),
       })
 
       router.back()

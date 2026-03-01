@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { View, Text, ScrollView, Alert } from 'react-native'
+import { View, Text, ScrollView, Alert, Platform } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -21,10 +21,13 @@ export default function SignInScreen() {
   const { mutate: signIn, isPending } = useSignIn()
   const { control, handleSubmit, formState: { errors } } = useForm<SignInForm>({
     resolver: zodResolver(signInSchema),
+    defaultValues: { email: '', password: '' },
   })
 
   // AUTH-06: WebBrowser warmup — pre-warms Chrome Custom Tabs on Android for faster open
+  // Not available on web
   useEffect(() => {
+    if (Platform.OS === 'web') return
     WebBrowser.warmUpAsync()
     return () => { WebBrowser.coolDownAsync() }
   }, [])
