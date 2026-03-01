@@ -66,28 +66,28 @@ BEGIN
     PERFORM cron.schedule(
       'fx-rates-hourly',
       '0 * * * *',
-      $$SELECT net.http_post(
+      $cron$SELECT net.http_post(
           url := (SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'project_url') || '/functions/v1/fx-rates-cache',
           headers := jsonb_build_object(
             'Content-Type', 'application/json',
             'Authorization', 'Bearer ' || (SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'anon_key')
           ),
           body := '{}'::jsonb
-        ) AS request_id;$$
+        ) AS request_id;$cron$
     );
 
     -- Job 2: process-reminders — daily at 08:00 UTC
     PERFORM cron.schedule(
       'process-reminders-daily',
       '0 8 * * *',
-      $$SELECT net.http_post(
+      $cron$SELECT net.http_post(
           url := (SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'project_url') || '/functions/v1/process-reminders',
           headers := jsonb_build_object(
             'Content-Type', 'application/json',
             'Authorization', 'Bearer ' || (SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'anon_key')
           ),
           body := '{}'::jsonb
-        ) AS request_id;$$
+        ) AS request_id;$cron$
     );
 
   END IF;
