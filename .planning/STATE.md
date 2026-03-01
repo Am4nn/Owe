@@ -3,6 +3,19 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
+last_updated: "2026-03-01T14:03:50.750Z"
+progress:
+  total_phases: 7
+  completed_phases: 5
+  total_plans: 15
+  completed_plans: 13
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: unknown
 last_updated: "2026-03-01T01:03:24.483Z"
 progress:
   total_phases: 5
@@ -70,14 +83,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-27)
 
 **Core value:** Users can split expenses, track shared debts, and settle up with friends without limits, ads, or paywalls — in a UI that feels like a modern bank app, not a spreadsheet.
-**Current focus:** Phase 3 complete — ready for Phase 4 (Polish)
+**Current focus:** Phase 4 complete — expense activity events wired (ACTY-01, ACTY-02)
 
 ## Current Position
 
-Phase: 3 of 4 — COMPLETE
-Plan: 3 of 3 in phase 3 complete (03-03 Smart Reminders UI — NOTF-03 gap closed)
-Status: Phase 3 COMPLETE — all 3 plans delivered: push notifications + smart reminder backend (03-01), multi-currency FX + CSV export (03-02), Smart Reminders UI in group detail screen (03-03). NOTF-01-03, CURR-01-04, EXPT-01, NOTF-03 all implemented.
-Last activity: 2026-03-01 — Completed quick task 1: Fix all 3 known bugs (RLS recursion, MMKV v4, zodResolver)
+Phase: 4 of 4 — COMPLETE
+Plan: 1 of 1 in phase 4 complete (04-01 Expense Activity Events — ACTY-01, ACTY-02 satisfied)
+Status: Phase 4 COMPLETE — expense CUD mutations (create/edit/delete) now write activity rows; activity feed shows expense events automatically.
+Last activity: 2026-03-01 — Completed Phase 4 Plan 01: Expense Activity Events
 
 Progress: [██████████] 100%
 
@@ -110,6 +123,7 @@ Progress: [██████████] 100%
 | Phase 03-engagement-layer P01 | 4 | 3 tasks | 8 files |
 | Phase 03-engagement-layer P02 | 6 | 2 tasks | 10 files |
 | Phase 03-engagement-layer P03 | 2 | 1 tasks | 1 files |
+| Phase 04-expense-activity-events P01 | 2 | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -159,6 +173,9 @@ Recent decisions affecting current work:
 - [Phase 03-02]: expo-file-system v2 uses File + Paths.cache class API — legacy writeAsStringAsync and cacheDirectory removed at runtime; use new File(Paths.cache, filename).write(content) and file.uri for sharing
 - [Phase 03-02]: computeBaseCents exported as pure function (not hook) — can be called inside onSubmit event handlers without violating React rules; fxRate=1.0 identity when currencies match or rates table is empty
 - [Phase 03-engagement-layer]: Defaults for missing reminderConfig: enabled=true, delay_days=3 — consistent with backend defaults
+- [Phase 04-expense-activity-events]: Activity INSERT inside mutationFn body (not onSuccess) ensures offline-resumed mutations also write activity rows
+- [Phase 04-expense-activity-events]: actor_id resolves to group_members.id (not auth UUID) — FK references group_members(id) per migration 20260301000004
+- [Phase 04-expense-activity-events]: createExpenseMutationFn: single getUser() call at top, user.id reused for both created_by and actor lookup
 
 ### Pending Todos
 

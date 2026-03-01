@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1.5: Google OAuth** [INSERTED] - Additive social login alongside existing email/password flow
 - [x] **Phase 2: Core Expense Loop** - Groups, expense entry, balances, debt simplification, settlement, activity feed
 - [x] **Phase 3: Engagement Layer** - Push notifications, multi-currency, smart reminders, and export (completed 2026-03-01)
-- [ ] **Phase 4: Expense Activity Events** - Wire expense CUD mutations to write activity rows; closes ACTY-01 FAIL gate
+- [x] **Phase 4: Expense Activity Events** - Wire expense CUD mutations to write activity rows; closes ACTY-01 FAIL gate (completed 2026-03-01)
 - [ ] **Phase 5: Schema & Notification Fixes** - Add settlements.note migration + fix push-notify deep-link URL; closes SETL-01, SETL-03, NOTF-01
 - [ ] **Phase 6: Google OAuth Verification** - Write Phase 1.5 VERIFICATION.md to complete audit trail; closes AUTH-06, AUTH-07 documentation gap
 
@@ -141,6 +141,6 @@ Phases execute in numeric order: 1 → 2 → 3
 | 1.5. Google OAuth | 1/1 | Complete | 2026-02-28 |
 | 2. Core Expense Loop | 4/4 | Complete | 2026-02-28 |
 | 3. Engagement Layer | 3/3 | Complete | 2026-03-01 |
-| 4. Expense Activity Events | 0/1 | Pending | — |
+| 4. Expense Activity Events | 1/1 | Complete   | 2026-03-01 |
 | 5. Schema & Notification Fixes | 0/1 | Pending | — |
 | 6. Google OAuth Verification | 0/1 | Pending | — |
