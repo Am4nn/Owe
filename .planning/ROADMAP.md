@@ -15,7 +15,10 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation** - Secure schema, infrastructure, auth, and offline architecture
 - [x] **Phase 1.5: Google OAuth** [INSERTED] - Additive social login alongside existing email/password flow
 - [x] **Phase 2: Core Expense Loop** - Groups, expense entry, balances, debt simplification, settlement, activity feed
-- [x] **Phase 3: Engagement Layer** - Push notifications, multi-currency, smart reminders, and export (completed 2026-03-01)
+- [x] **Phase 3: Engagement Layer** - Push notifications, multi-currency, smart reminders, and export (completed 2026-03-01)
+- [ ] **Phase 4: Expense Activity Events** - Wire expense CUD mutations to write activity rows; closes ACTY-01 FAIL gate
+- [ ] **Phase 5: Schema & Notification Fixes** - Add settlements.note migration + fix push-notify deep-link URL; closes SETL-01, SETL-03, NOTF-01
+- [ ] **Phase 6: Google OAuth Verification** - Write Phase 1.5 VERIFICATION.md to complete audit trail; closes AUTH-06, AUTH-07 documentation gap
 
 ## Phase Details
 
@@ -85,7 +88,49 @@ Plans:
 - [x] 03-02-PLAN.md — Multi-currency and export: fx-rates-cache Edge Function (hourly cron), currency types/hooks (useFxRates, computeBaseCents, COMMON_CURRENCIES), FX-aware expense creation, ExpenseCard dual-amount display, group base currency picker, CSV export via expo-sharing, CURR-01/CURR-02/CURR-03/CURR-04/EXPT-01
 - [x] 03-03-PLAN.md — Gap closure: Smart Reminders UI — enable/disable per-group reminders and delay_days config in group detail screen, NOTF-03
 
+### Phase 4: Expense Activity Events
+**Goal**: Wire all expense CUD mutations to write rows into the activities table so the activity feed shows expense_added, expense_edited, and expense_deleted events — closing the ACTY-01 FAIL gate from the v1.0 audit
+**Depends on**: Phase 2 (expenses/hooks.ts, activities table schema, group_members actor-id resolution pattern)
+**Requirements**: ACTY-01, ACTY-02
+**Gap Closure**: Closes ACTY-01 (unsatisfied), ACTY-02 (partial), integration gap MISSING-01
+**Success Criteria** (what must be TRUE):
+  1. Adding an expense in a group produces an activity row with action_type expense_added visible in the activity feed
+  2. Editing an expense produces an activity row with action_type expense_edited
+  3. Deleting an expense produces an activity row with action_type expense_deleted
+  4. All activity rows have a valid actor_id (group_members.id) and group_id so group-scoped filtering works correctly
+**Plans**: 1 plan
+
+Plans:
+- [ ] 04-01-PLAN.md — Activity write in createExpenseMutationFn (expense_added), useUpdateExpense (expense_edited), useDeleteExpense (expense_deleted); actor ID resolution via group_members lookup in each mutation
+
+### Phase 5: Schema & Notification Fixes
+**Goal**: Persist the settlement note field (currently silently dropped) and fix the push notification deep-link URL so tapping an expense notification opens the correct screen
+**Depends on**: Phase 2 (settlements schema), Phase 3 (push-notify Edge Function)
+**Requirements**: SETL-01, SETL-03, NOTF-01
+**Gap Closure**: Closes SETL-01 (partial), SETL-03 (partial), NOTF-01 (partial), integration gaps MISSING-02 and PARTIAL-01
+**Success Criteria** (what must be TRUE):
+  1. A note entered on the settlement form is saved to the database and displayed in settlement history
+  2. Tapping an expense push notification opens the expense detail screen (not a 404)
+**Plans**: 1 plan
+
+Plans:
+- [ ] 05-01-PLAN.md — DB migration ADD COLUMN note TEXT to settlements table; fix push-notify/index.ts line 50 deep-link URL from /groups//expenses/ to /expenses/
+
+### Phase 6: Google OAuth Verification
+**Goal**: Write the missing VERIFICATION.md for Phase 1.5 to complete the audit trail — documentation gap only, all code is confirmed correct by the integration checker
+**Depends on**: Phase 1.5 (Google OAuth code)
+**Requirements**: AUTH-06, AUTH-07
+**Gap Closure**: Closes AUTH-06 (partial — missing VERIFICATION.md), AUTH-07 (partial — missing VERIFICATION.md)
+**Success Criteria** (what must be TRUE):
+  1. 1.5-VERIFICATION.md exists with status: passed, covering AUTH-06 and AUTH-07 with code evidence from src/features/auth/hooks.ts and the two auth screens
+  2. All 4 phases now have a VERIFICATION.md — audit trail complete
+**Plans**: 1 plan
+
+Plans:
+- [ ] 06-01-PLAN.md — Write 1.5-VERIFICATION.md verifying useSignInWithGoogle, createSessionFromUrl, migration 20260228000002_google_oauth.sql, and both auth screen integrations
+
 ## Progress
+
 
 **Execution Order:**
 Phases execute in numeric order: 1 → 2 → 3
@@ -94,5 +139,8 @@ Phases execute in numeric order: 1 → 2 → 3
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete | 2026-02-28 |
 | 1.5. Google OAuth | 1/1 | Complete | 2026-02-28 |
-| 2. Core Expense Loop | 4/4 | Complete   | 2026-02-28 |
-| 3. Engagement Layer | 3/3 | Complete   | 2026-03-01 |
+| 2. Core Expense Loop | 4/4 | Complete | 2026-02-28 |
+| 3. Engagement Layer | 3/3 | Complete | 2026-03-01 |
+| 4. Expense Activity Events | 0/1 | Pending | — |
+| 5. Schema & Notification Fixes | 0/1 | Pending | — |
+| 6. Google OAuth Verification | 0/1 | Pending | — |

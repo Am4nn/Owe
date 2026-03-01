@@ -48,15 +48,15 @@ Requirements for initial release. Covers all table stakes (P1) features and core
 ### Settlement
 
 - [ ] **SETL-01**: User can record a settlement payment between two members (cash or external)
-- [ ] **SETL-02**: User sees a confetti animation with haptic feedback when a debt is fully cleared
+- [x] **SETL-02**: User sees a confetti animation with haptic feedback when a debt is fully cleared
 - [ ] **SETL-03**: User can view settlement history for a group
 
 ### Activity
 
-- [x] **ACTY-01**: User can view a chronological activity feed of all expense actions in their groups
-- [x] **ACTY-02**: User can filter the activity feed by group
+- [ ] **ACTY-01**: User can view a chronological activity feed of all expense actions in their groups
+- [ ] **ACTY-02**: User can filter the activity feed by group
 - [x] **ACTY-03**: User can add a comment on an expense for clarification or dispute
-- [ ] **ACTY-04**: User can add an emoji reaction to an expense in the activity feed
+- [x] **ACTY-04**: User can add an emoji reaction to an expense in the activity feed
 
 ### Notifications
 
@@ -74,7 +74,7 @@ Requirements for initial release. Covers all table stakes (P1) features and core
 ### Offline
 
 - [x] **OFFL-01**: User can view cached group data and balances when offline with no connectivity
-- [ ] **OFFL-02**: User can add an expense while offline; it queues locally and syncs automatically when connectivity returns
+- [x] **OFFL-02**: User can add an expense while offline; it queues locally and syncs automatically when connectivity returns
 
 ### Export
 
@@ -83,7 +83,7 @@ Requirements for initial release. Covers all table stakes (P1) features and core
 ### UI / UX
 
 - [x] **UIUX-01**: App launches in dark mode by default with vibrant neon accent colors on deep dark backgrounds
-- [ ] **UIUX-02**: User can swipe an expense card to trigger quick-settle or quick-remind actions (gesture navigation)
+- [x] **UIUX-02**: User can swipe an expense card to trigger quick-settle or quick-remind actions (gesture navigation)
 - [x] **UIUX-03**: A floating action button (FAB) expands into: Scan Receipt, Manual Entry, Add Transfer
 
 ---
@@ -166,27 +166,27 @@ Which phases cover which requirements. Confirmed during roadmap creation 2026-02
 | BALS-01 | Phase 2 | Complete |
 | BALS-02 | Phase 2 | Complete |
 | BALS-03 | Phase 2 | Complete |
-| SETL-01 | Phase 2 | Pending |
-| SETL-02 | Phase 2 | Pending |
-| SETL-03 | Phase 2 | Pending |
-| ACTY-01 | Phase 2 | Complete |
-| ACTY-02 | Phase 2 | Complete |
+| SETL-01 | Phase 5 | Pending |
+| SETL-02 | Phase 2 | Complete |
+| SETL-03 | Phase 5 | Pending |
+| ACTY-01 | Phase 4 | Pending |
+| ACTY-02 | Phase 4 | Pending |
 | ACTY-03 | Phase 2 | Complete |
-| ACTY-04 | Phase 2 | Pending |
-| NOTF-01 | Phase 3 | Complete |
+| ACTY-04 | Phase 2 | Complete |
+| NOTF-01 | Phase 5 | Pending |
 | NOTF-02 | Phase 3 | Complete |
 | NOTF-03 | Phase 3 | Complete |
 | CURR-01 | Phase 3 | Complete |
 | CURR-02 | Phase 3 | Complete |
 | CURR-03 | Phase 3 | Complete |
 | CURR-04 | Phase 3 | Complete |
-| AUTH-06 | Phase 1.5 | Complete |
-| AUTH-07 | Phase 1.5 | Complete |
+| AUTH-06 | Phase 6 | Pending |
+| AUTH-07 | Phase 6 | Pending |
 | OFFL-01 | Phase 1 | Complete |
-| OFFL-02 | Phase 2 | Pending |
+| OFFL-02 | Phase 2 | Complete |
 | EXPT-01 | Phase 3 | Complete |
 | UIUX-01 | Phase 1 | Complete |
-| UIUX-02 | Phase 2 | Pending |
+| UIUX-02 | Phase 2 | Complete |
 | UIUX-03 | Phase 2 | Complete |
 
 **Coverage:**
@@ -195,10 +195,13 @@ Which phases cover which requirements. Confirmed during roadmap creation 2026-02
 - Unmapped: 0
 
 Phase 1 (Foundation): 12 requirements — AUTH-01 through AUTH-05, GRUP-01 through GRUP-05, OFFL-01, UIUX-01
-Phase 1.5 (Google OAuth): 2 requirements — AUTH-06, AUTH-07
-Phase 2 (Core Expense Loop): 22 requirements — EXPN-01 through EXPN-09, BALS-01 through BALS-03, SETL-01 through SETL-03, ACTY-01 through ACTY-04, OFFL-02, UIUX-02, UIUX-03
-Phase 3 (Engagement Layer): 8 requirements — NOTF-01 through NOTF-03, CURR-01 through CURR-04, EXPT-01
+Phase 1.5 (Google OAuth): 2 requirements — AUTH-06, AUTH-07 (gap closure verification in Phase 6)
+Phase 2 (Core Expense Loop): 22 requirements — EXPN-01 through EXPN-09, BALS-01 through BALS-03, SETL-01 through SETL-03, ACTY-01 through ACTY-04, OFFL-02, UIUX-02, UIUX-03 (ACTY-01/02 gap closure in Phase 4; SETL-01/03 gap closure in Phase 5)
+Phase 3 (Engagement Layer): 8 requirements — NOTF-01 through NOTF-03, CURR-01 through CURR-04, EXPT-01 (NOTF-01 gap closure in Phase 5)
+Phase 4 (Expense Activity Events): 2 requirements — ACTY-01, ACTY-02
+Phase 5 (Schema & Notification Fixes): 3 requirements — SETL-01, SETL-03, NOTF-01
+Phase 6 (Google OAuth Verification): 2 requirements — AUTH-06, AUTH-07
 
 ---
 *Requirements defined: 2026-02-27*
-*Last updated: 2026-02-27 — traceability confirmed during roadmap creation*
+*Last updated: 2026-03-01 — traceability updated after v1.0 audit (gap closure phases 4-6 added)*
