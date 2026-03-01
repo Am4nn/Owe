@@ -33,13 +33,18 @@ export function ExpandableFAB() {
       onPress: () => closeAndNavigate(() => router.push('/(app)/expenses/new' as Parameters<typeof router.push>[0])),
     },
     {
-      label: 'Add Transfer',
+      label: 'New Group',
       offsetY: -160,
+      onPress: () => closeAndNavigate(() => router.push('/(app)/groups/new' as Parameters<typeof router.push>[0])),
+    },
+    {
+      label: 'Add Transfer',
+      offsetY: -240,
       onPress: () => closeAndNavigate(() => Alert.alert('Coming soon', 'Transfer recording coming soon')),
     },
     {
       label: 'Scan Receipt',
-      offsetY: -240,
+      offsetY: -320,
       onPress: () => closeAndNavigate(() => Alert.alert('Coming in v2', 'Receipt scanning arrives in v2')),
     },
   ]

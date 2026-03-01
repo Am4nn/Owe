@@ -60,6 +60,7 @@ export function useGroup(groupId: string) {
       return { group: group as Group, members: members as GroupMember[] }
     },
     staleTime: 30_000,
+    enabled: !!groupId,
   })
 }
 

@@ -24,7 +24,7 @@ import type { SplitType, SplitInput } from '@/features/expenses/types'
 const schema = z.object({
   description: z.string().min(1, 'Description required').max(200),
   amount: z.string().regex(/^\d+(\.\d{1,2})?$/, 'Enter a valid amount'),
-  payer_member_id: z.string().uuid('Select a payer'),
+  payer_member_id: z.string().optional(),
   expense_date: z.string(),
   category: z.string().optional(),
   group_id: z.string().uuid().optional(),
