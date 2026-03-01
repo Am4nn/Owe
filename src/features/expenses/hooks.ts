@@ -71,6 +71,10 @@ export async function createExpenseMutationFn(input: CreateExpenseInput): Promis
     idempotency_key,
   } = input
 
+  // Resolve authenticated user once — reused for created_by and actor resolution
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('Not authenticated')
+
   // Step 1: Insert the expense
   const { data: expense, error: expenseError } = await supabase
     .from('expenses')
@@ -87,7 +91,7 @@ export async function createExpenseMutationFn(input: CreateExpenseInput): Promis
       expense_date,
       category: category ?? null,
       idempotency_key,
-      created_by: await getCurrentUserId(),
+      created_by: user.id,
     })
     .select()
     .single()
@@ -110,6 +114,27 @@ export async function createExpenseMutationFn(input: CreateExpenseInput): Promis
     throw splitsError
   }
 
+  // Step 3: Resolve actor_id (current user's member_id in this group)
+  const { data: actorMember, error: actorError } = await supabase
+    .from('group_members')
+    .select('id')
+    .eq('group_id', group_id)
+    .eq('user_id', user.id)
+    .single()
+  if (actorError) throw actorError
+
+  // Step 4: Insert activity row
+  const { error: activityError } = await supabase
+    .from('activities')
+    .insert({
+      action_type: 'expense_added',
+      group_id,
+      actor_id: actorMember.id,
+      expense_id: expense.id,
+      metadata: { description },
+    })
+  if (activityError) throw activityError
+
   return expense as Expense
 }
 
@@ -127,6 +152,8 @@ export function useCreateExpense() {
     onSuccess: (_data, input) => {
       qc.invalidateQueries({ queryKey: ['expenses', input.group_id] })
       qc.invalidateQueries({ queryKey: ['balances'] })
+      qc.invalidateQueries({ queryKey: ['activity', input.group_id] })
+      qc.invalidateQueries({ queryKey: ['activity', 'all'] })
     },
   })
 }
