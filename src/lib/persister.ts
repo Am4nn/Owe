@@ -32,7 +32,7 @@ const buildStorage = () => {
       return Promise.resolve(value === undefined ? null : value)
     },
     removeItem: (key: string): Promise<void> => {
-      storage.delete(key)
+      storage.remove(key)
       return Promise.resolve()
     },
   }

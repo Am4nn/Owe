@@ -10,7 +10,7 @@ import { useCreateGroup } from '@/features/groups/hooks'
 
 const createGroupSchema = z.object({
   name: z.string().min(1, 'Group name is required').max(100),
-  base_currency: z.string().length(3, 'Use a 3-letter currency code').default('USD'),
+  base_currency: z.string().length(3, 'Use a 3-letter currency code'),
 })
 type CreateGroupForm = z.infer<typeof createGroupSchema>
 
@@ -20,7 +20,7 @@ export default function NewGroupScreen() {
   const [newMemberName, setNewMemberName] = useState('')
   const { control, handleSubmit, formState: { errors } } = useForm<CreateGroupForm>({
     resolver: zodResolver(createGroupSchema),
-    defaultValues: { base_currency: 'USD' },
+    defaultValues: { name: '', base_currency: 'USD' },
   })
 
   const addNamedMember = () => {
