@@ -140,6 +140,7 @@ export function useComments(expenseId: string) {
 
 /**
  * Add or update a reaction on an expense (upsert: one reaction per user per expense).
+ * Also inserts a reaction_added activity row so the action appears in the group feed.
  */
 export function useAddReaction() {
   const qc = useQueryClient()
@@ -147,6 +148,8 @@ export function useAddReaction() {
     mutationKey: ['reactions', 'create'],
     mutationFn: async ({ expense_id, emoji }: { expense_id: string; emoji: string }) => {
       const userId = await getCurrentUserId()
+
+      // Upsert the reaction
       const { data, error } = await supabase
         .from('expense_reactions')
         .upsert(
@@ -156,10 +159,42 @@ export function useAddReaction() {
         .select()
         .single()
       if (error) throw error
-      return data as Reaction
+
+      // Fetch expense to get group_id for activity row
+      const { data: expense, error: expenseError } = await supabase
+        .from('expenses')
+        .select('group_id')
+        .eq('id', expense_id)
+        .single()
+      if (expenseError) throw expenseError
+
+      // Resolve actor member_id
+      const { data: actorMember, error: actorError } = await supabase
+        .from('group_members')
+        .select('id')
+        .eq('group_id', expense.group_id)
+        .eq('user_id', userId)
+        .single()
+      if (actorError) throw actorError
+
+      // Insert activity row
+      const { error: activityError } = await supabase
+        .from('activities')
+        .insert({
+          action_type: 'reaction_added',
+          group_id: expense.group_id,
+          actor_id: actorMember.id,
+          expense_id,
+          metadata: { emoji },
+        })
+      if (activityError) throw activityError
+
+      return { ...(data as Reaction), group_id: expense.group_id }
     },
-    onSuccess: (_data, { expense_id }) => {
+    onSuccess: (data, { expense_id }) => {
       qc.invalidateQueries({ queryKey: ['reactions', expense_id] })
+      qc.invalidateQueries({ queryKey: ['activity', data.group_id] })
+      qc.invalidateQueries({ queryKey: ['activity', 'all'] })
     },
   })
 }
