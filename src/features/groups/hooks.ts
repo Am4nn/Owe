@@ -186,6 +186,8 @@ export function useUpdateGroupCurrency() {
 }
 
 // GRUP-05: Leave a group
+// Sets user_id = NULL (named-only) rather than deleting — preserves expense/split/settlement
+// history. DELETE would violate FK constraints on expenses, expense_splits, settlements.
 export function useLeaveGroup() {
   const qc = useQueryClient()
   return useMutation({
@@ -193,7 +195,7 @@ export function useLeaveGroup() {
       const userId = await getCurrentUserId()
       const { error } = await supabase
         .from('group_members')
-        .delete()
+        .update({ user_id: null })
         .eq('group_id', groupId)
         .eq('user_id', userId)
       if (error) throw error
