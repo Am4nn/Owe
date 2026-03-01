@@ -58,26 +58,26 @@ test-results/2026-03-01T05-42-13_a1b2c3/
 3. Store files as follows:
 
 Context-Analyser:
-  context/CONTEXT_MAP.json
+  context/CONTEXT_MAP.md
 
 Spec-Analyser:
-  spec/SPEC_ANALYSIS_REPORT.json
-  spec/SPEC_COVERAGE_MAP.json
+  spec/SPEC_ANALYSIS_REPORT.md
+  spec/SPEC_COVERAGE_MAP.md
 
 Web-Tester:
-  functional/FUNCTIONAL_RESULTS.json
-  functional/ERROR_LOGS.json
+  functional/FUNCTIONAL_RESULTS.md
+  functional/ERROR_LOGS.md
   functional/SCREENSHOTS/ (if any)
-  performance/RAW_PERFORMANCE_METRICS.json
+  performance/RAW_PERFORMANCE_METRICS.md
 
 Performance-Auditor:
-  performance/PERFORMANCE_REPORT.json
+  performance/PERFORMANCE_REPORT.md
 
 Regression-Analyser:
-  regression/REGRESSION_REPORT.json
+  regression/REGRESSION_REPORT.md
 
 Debugging-Protocol:
-  debug/DEBUG_REPORT.json
+  debug/DEBUG_REPORT.md
 
 Report-Compiler:
   report/TEST_EXECUTION_SUMMARY_<timestamp>.md
