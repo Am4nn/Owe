@@ -45,49 +45,12 @@ Example:
 
 test-results/2026-03-01T05-42-13_a1b2c3/
 
-2. Inside that folder create structured subfolders:
+2. No generated files may be written to project root.
 
-/context/
-/spec/
-/functional/
-/performance/
-/regression/
-/debug/
-/report/
+3. Previous test-results folders must NOT be modified.
 
-3. Store files as follows:
-
-Context-Analyser:
-  context/CONTEXT_MAP.md
-
-Spec-Analyser:
-  spec/SPEC_ANALYSIS_REPORT.md
-  spec/SPEC_COVERAGE_MAP.md
-
-Web-Tester:
-  functional/FUNCTIONAL_RESULTS.md
-  functional/ERROR_LOGS.md
-  functional/SCREENSHOTS/ (if any)
-  performance/RAW_PERFORMANCE_METRICS.md
-
-Performance-Auditor:
-  performance/PERFORMANCE_REPORT.md
-
-Regression-Analyser:
-  regression/REGRESSION_REPORT.md
-
-Debugging-Protocol:
-  debug/DEBUG_REPORT.md
-
-Report-Compiler:
-  report/TEST_EXECUTION_SUMMARY_<timestamp>.md
-
-4. No generated files may be written to project root.
-
-5. Previous test-results folders must NOT be modified.
-
-6. Regression-Analyser must read historical reports from:
-   /test-results/**/report/
+4. Regression-Analyser must read historical reports from:
+   /test-results/
 
 ---
 
