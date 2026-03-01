@@ -9,6 +9,7 @@ import {
   Modal,
   TextInput,
   ScrollView,
+  Switch,
 } from 'react-native'
 import { Stack, useLocalSearchParams, router } from 'expo-router'
 import { Button } from '@/components/ui/Button'
@@ -19,6 +20,7 @@ import { BalanceCard } from '@/components/balances/BalanceCard'
 import { ExpenseCard } from '@/components/expenses/ExpenseCard'
 import { useFxRates, COMMON_CURRENCIES } from '@/features/currency/hooks'
 import { exportGroupCsv } from '@/features/export/hooks'
+import { useReminderConfig } from '@/features/notifications/hooks'
 import type { GroupMember } from '@/features/groups/types'
 import type { Expense } from '@/features/expenses/types'
 
@@ -57,6 +59,12 @@ export default function GroupDetailScreen() {
 
   const [showCurrencyPicker, setShowCurrencyPicker] = useState(false)
   const [currencySearch, setCurrencySearch] = useState('')
+
+  // NOTF-03: Smart reminder configuration per group
+  const { reminderConfig, upsertReminderConfig } = useReminderConfig(id)
+  const [showDelayPicker, setShowDelayPicker] = useState(false)
+  const reminderEnabled = reminderConfig?.enabled ?? true
+  const reminderDelay = reminderConfig?.delay_days ?? 3
 
   // BALS-01 Realtime: subscribe to expense changes and invalidate balance/expense queries
   useRealtimeExpenseSync(id)
@@ -184,6 +192,32 @@ export default function GroupDetailScreen() {
               </TouchableOpacity>
             </View>
 
+            {/* NOTF-03: Smart Reminders Config */}
+            <View className="mt-4 mb-2">
+              <Text className="text-white/50 text-sm uppercase tracking-wide mb-2">Smart Reminders</Text>
+              <View className="bg-dark-surface border border-dark-border rounded-2xl px-4 py-3">
+                <View className="flex-row items-center justify-between">
+                  <View>
+                    <Text className="text-white font-medium text-base">Automatic Nudges</Text>
+                    <Text className="text-white/40 text-xs mt-1">Remind members of unpaid debts</Text>
+                  </View>
+                  <Switch
+                    value={reminderEnabled}
+                    onValueChange={(val) => upsertReminderConfig({ group_id: id, enabled: val, delay_days: reminderDelay })}
+                    trackColor={{ false: '#333', true: '#6C63FF' }}
+                  />
+                </View>
+                {reminderEnabled && (
+                  <View className="mt-4 pt-4 border-t border-dark-border flex-row items-center justify-between">
+                    <Text className="text-white font-medium">Delay</Text>
+                    <TouchableOpacity onPress={() => setShowDelayPicker(true)} className="bg-dark-bg px-3 py-1.5 rounded-lg border border-dark-border">
+                      <Text className="text-brand-primary">{reminderDelay} days</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </View>
+            </View>
+
             {/* Navigation buttons: Simplified Debts, Activity, Settlement History */}
             <View className="mt-4 gap-2">
               <TouchableOpacity
@@ -239,6 +273,40 @@ export default function GroupDetailScreen() {
           </View>
         }
       />
+
+      {/* NOTF-03: Reminder Delay picker modal */}
+      <Modal
+        visible={showDelayPicker}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setShowDelayPicker(false)}
+      >
+        <View className="flex-1 bg-dark-bg">
+          <View className="px-4 pt-6 pb-3">
+            <View className="flex-row items-center justify-between mb-4">
+              <Text className="text-white font-bold text-xl">Reminder Delay</Text>
+              <TouchableOpacity onPress={() => setShowDelayPicker(false)}>
+                <Text className="text-brand-primary font-medium">Done</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <ScrollView>
+            {[1, 2, 3, 5, 7, 14, 30].map(days => (
+              <TouchableOpacity
+                key={days}
+                onPress={() => {
+                  upsertReminderConfig({ group_id: id, enabled: reminderEnabled, delay_days: days })
+                  setShowDelayPicker(false)
+                }}
+                className={`flex-row items-center px-4 py-4 border-b border-dark-border ${reminderDelay === days ? 'bg-brand-primary/10' : ''}`}
+              >
+                <Text className="text-white font-medium text-base flex-1">{days} {days === 1 ? 'day' : 'days'}</Text>
+                {reminderDelay === days && <Text className="text-brand-primary text-sm font-medium">Selected</Text>}
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+      </Modal>
 
       {/* CURR-01: Currency picker modal */}
       <Modal
