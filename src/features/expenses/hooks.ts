@@ -206,12 +206,37 @@ export function useUpdateExpense() {
         if (insertError) throw insertError
       }
 
+      // Resolve actor_id and insert expense_edited activity row
+      const { data: { user: actorUser } } = await supabase.auth.getUser()
+      if (!actorUser) throw new Error('Not authenticated')
+
+      const { data: actorMember, error: actorError } = await supabase
+        .from('group_members')
+        .select('id')
+        .eq('group_id', input.group_id)
+        .eq('user_id', actorUser.id)
+        .single()
+      if (actorError) throw actorError
+
+      const { error: activityError } = await supabase
+        .from('activities')
+        .insert({
+          action_type: 'expense_edited',
+          group_id: input.group_id,
+          actor_id: actorMember.id,
+          expense_id: input.id,
+          metadata: null,
+        })
+      if (activityError) throw activityError
+
       return updatedExpense as Expense
     },
     onSuccess: (_data, input) => {
       qc.invalidateQueries({ queryKey: ['expenses', input.group_id] })
       qc.invalidateQueries({ queryKey: ['expenses', 'detail', input.id] })
       qc.invalidateQueries({ queryKey: ['balances'] })
+      qc.invalidateQueries({ queryKey: ['activity', input.group_id] })
+      qc.invalidateQueries({ queryKey: ['activity', 'all'] })
     },
   })
 }
@@ -232,12 +257,35 @@ export function useDeleteExpense() {
         .eq('id', id)
         .eq('created_by', userId)
       if (error) throw error
+
+      // Resolve actor_id (reuse userId already fetched above)
+      const { data: actorMember, error: actorError } = await supabase
+        .from('group_members')
+        .select('id')
+        .eq('group_id', group_id)
+        .eq('user_id', userId)
+        .single()
+      if (actorError) throw actorError
+
+      const { error: activityError } = await supabase
+        .from('activities')
+        .insert({
+          action_type: 'expense_deleted',
+          group_id,
+          actor_id: actorMember.id,
+          expense_id: id,
+          metadata: null,
+        })
+      if (activityError) throw activityError
+
       return { id, group_id }
     },
     onSuccess: (_data, input) => {
       qc.invalidateQueries({ queryKey: ['expenses', input.group_id] })
       qc.invalidateQueries({ queryKey: ['expenses', 'detail', input.id] })
       qc.invalidateQueries({ queryKey: ['balances'] })
+      qc.invalidateQueries({ queryKey: ['activity', input.group_id] })
+      qc.invalidateQueries({ queryKey: ['activity', 'all'] })
     },
   })
 }
