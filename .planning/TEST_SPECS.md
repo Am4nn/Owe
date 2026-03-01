@@ -129,7 +129,7 @@ Each test is mapped directly to the `REQUIREMENTS.md` traceability IDs.
 
 ### TEST-GRUP-05: Leave Group
 **Requirement:** `GRUP-05`
-**Pre-conditions:** User is in a group with all their debts settled.
+**Pre-conditions:** User is a member of a group (outstanding balances may or may not be present).
 **Steps:**
 1. Open the Group Detail screen.
 2. Tap "Leave group".
@@ -138,6 +138,7 @@ Each test is mapped directly to the `REQUIREMENTS.md` traceability IDs.
 - User's `group_members` record is removed.
 - User is safely redirected to the Dashboard.
 - The group is removed from the user's Dashboard list.
+- Outstanding balances, if any, remain visible to other group members.
 
 ---
 
@@ -247,7 +248,7 @@ Each test is mapped directly to the `REQUIREMENTS.md` traceability IDs.
 **Requirement:** `SETL-01`, `SETL-02`
 **Pre-conditions:** User owes a member \$20.
 **Steps:**
-1. From Simplified Debts or an Expense card right-swipe, select "Settle Up".
+1. From the Simplified Debts screen tap "Settle", or right-swipe an Expense card to reveal the green "Settle" action and tap it.
 2. Confirm the \$20 payment from User to the member.
 3. Tap "Record Settlement".
 **Expected Result:**
@@ -283,7 +284,7 @@ Each test is mapped directly to the `REQUIREMENTS.md` traceability IDs.
 3. Tap an emoji reaction chip.
 **Expected Result:**
 - The comment is immediately attached to the expense thread.
-- The emoji reaction increments and visibly highlights the associated member's profile.
+- The reaction chip updates to reflect the user's chosen emoji. Each user holds at most one reaction per expense — tapping a different emoji replaces the previous one (UPSERT on `expense_id + user_id`).
 
 ---
 
@@ -300,13 +301,13 @@ Each test is mapped directly to the `REQUIREMENTS.md` traceability IDs.
 
 ### TEST-NOTF-02: Smart Reminders Config
 **Requirement:** `NOTF-03`
-**Pre-conditions:** A group exists with debts.
+**Pre-conditions:** User is a member of a group (any member can configure reminders — no admin restriction).
 **Steps:**
-1. Group Admin navigates to Group Detail.
-2. Scrolls to "Smart Reminders" section.
-3. Toggles "Automatic Nudges" ON and sets delay to "7 days".
+1. Navigate to the Group Detail screen.
+2. Scroll to the "Smart Reminders" section.
+3. Toggle "Automatic Nudges" ON and select a delay of "7 days" from the picker.
 **Expected Result:**
-- Config persists to the database immediately.
+- Config persists to the `reminder_config` table immediately.
 - The daily `pg_cron` job will accurately filter and notify only on debts older than 7 days.
 
 ---
@@ -322,8 +323,8 @@ Each test is mapped directly to the `REQUIREMENTS.md` traceability IDs.
 3. Enter amount "50", then submit.
 4. View the expense in the feed.
 **Expected Result:**
-- The backend uses the live `fx_rates` table to lock the exchange rate at creation.
-- The Expense Card visually displays "50 GBP" as primary, and the equivalent converted base amount (e.g., "~$63.00 USD") directly beneath it.
+- The backend uses the live `fx_rates` table to lock the exchange rate at creation (`fx_rate_at_creation` snapshotted on INSERT — never recalculated).
+- The Expense Card visually displays "GBP 50.00" as the primary amount, and the equivalent converted base amount (e.g., "≈ USD 63.00") directly beneath it in a secondary label.
 
 ---
 
@@ -359,7 +360,7 @@ Each test is mapped directly to the `REQUIREMENTS.md` traceability IDs.
 1. On the Group Detail screen, tap "Export CSV".
 **Expected Result:**
 - A native OS share sheet pops up containing a `.csv` file attachment.
-- Upon opening, the CSV features UTF-8 headers perfectly aligning with Amount, Date, Split Type, Category, Payer, and Currency.
+- Upon opening, the CSV has a UTF-8 BOM for Excel/Numbers compatibility and the following columns in order: `Date`, `Description`, `Amount`, `Currency`, `Base Amount`, `Base Currency`, `Split Type`, `Category`. Fields containing commas or quotes are correctly RFC 4180 escaped.
 
 ---
 
@@ -380,8 +381,8 @@ Each test is mapped directly to the `REQUIREMENTS.md` traceability IDs.
 1. Right-swipe slowly on an expense card.
 2. Left-swipe slowly on an expense card.
 **Expected Result:**
-- Right swipe reveals the green "Settle" action triggering navigation.
-- Left swipe reveals the "Remind" action triggering an alert modal.
+- Right swipe reveals a green "Settle" button that navigates to the settlement form (pre-filled with the group).
+- Left swipe reveals a purple "Remind" button that shows an informational alert ("Push reminders will be available in the next update."). Note: the per-group Smart Reminders schedule is a separate configuration in Group Detail (NOTF-03).
 
 ### TEST-UIUX-03: Interactions
 **Requirement:** `UIUX-03`
@@ -389,4 +390,7 @@ Each test is mapped directly to the `REQUIREMENTS.md` traceability IDs.
 **Steps:**
 1. Tap the Floating Action Button (FAB).
 **Expected Result:**
-- Utilizing `react-native-reanimated`, the FAB smoothly expands, bouncing out child buttons "Manual Entry", "Add Transfer", and "Scan Receipt".
+- Utilizing `react-native-reanimated`, the FAB smoothly expands with a spring animation, revealing three child buttons:
+  - **"Manual Entry"** — navigates to the Add Expense form (fully functional).
+  - **"Add Transfer"** — shows a "Coming soon" placeholder alert (v2 feature).
+  - **"Scan Receipt"** — shows a "Coming in v2" placeholder alert (v2 feature).
