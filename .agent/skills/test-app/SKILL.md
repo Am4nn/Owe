@@ -31,7 +31,7 @@ You must:
 # GLOBAL CONFIGURATION
 
 PLATFORM_PREFERENCE: web
-VIEW_MODE: mobile - You must adjust web browser size to mobile view
+VIEW_MODE: mobile - You must adjust web browser size to mobile view using the dev-tools to select mobile view
 RUN_MODE: full
 AUTO_IMPLEMENT_FIXES: false
 
