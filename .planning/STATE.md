@@ -113,12 +113,12 @@ See: .planning/PROJECT.md (updated 2026-02-27)
 
 ## Current Position
 
-Phase: 5 of 7 — COMPLETE
-Plan: 1 of 1 in phase 5 complete (05-01 Schema & Notification Fixes — SETL-01, SETL-03, NOTF-01 satisfied)
-Status: Phase 5 COMPLETE — settlements.note column added; expense push notification deep-link corrected from 404 to /expenses/:id.
-Last activity: 2026-03-01 — Completed Phase 5 Plan 01: Schema & Notification Fixes
+Phase: 7 of 7 (v1.1) — COMPLETE
+Plan: 1 of 1 in phase 7 complete (07-01 Bug Fixes)
+Status: Phase 7 COMPLETE — all known bugs fixed and verified.
+Last activity: 2026-03-03 — Completed Phase 7: Bug Fixes
 
-Progress: [███████░░░] 71%
+Progress: [████████░░] 78% (8/14 total phases — v1.1: 1/3 phases complete)
 
 ## Performance Metrics
 
@@ -152,6 +152,7 @@ Progress: [███████░░░] 71%
 | Phase 04-expense-activity-events P01 | 2 | 2 tasks | 1 files |
 | Phase 05-schema-notification-fixes P01 | 5 | 2 tasks | 2 files |
 | Phase 06-google-oauth-verification P01 | 3 | 1 tasks | 1 files |
+| Phase 07-bug-fixes P01 | — | — | — |
 
 ## Accumulated Context
 
@@ -232,6 +233,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-01
-Stopped at: Completed Phase 5 Plan 01 — Schema & Notification Fixes (SETL-01, SETL-03, NOTF-01). Phase 5 complete. Awaiting supabase db push + functions deploy push-notify for fixes to take effect.
+Last session: 2026-03-03
+Stopped at: Completed Phase 7 — Bug Fixes. Phase 7 complete. Next: Phase 8 Code Review, Refactor & Best Practices.
 Resume file: None

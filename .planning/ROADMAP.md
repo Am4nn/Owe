@@ -3,7 +3,7 @@
 ## Milestones
 
 - ✅ **v1.0 MVP** — Phases 1–6 (shipped 2026-03-01) — [archive](milestones/v1.0-ROADMAP.md)
-- 🚧 **v1.1 Polish** — Phases 7–9 (in progress)
+- 🚧 **v1.1 Polish** — Phases 7–9 (in progress — Phase 7 complete)
 - 📋 **v2.0 Engagement & Insights** — Phases 10+ (planned)
 
 ## Phases
@@ -25,7 +25,7 @@
 
 ### 🚧 v1.1 Polish (In Progress)
 
-- [ ] **Phase 7: Bug Fixes**
+- [x] **Phase 7: Bug Fixes** — completed 2026-03-03
 - [ ] **Phase 8: Code Review, Refactor & Best Practices**
 - [ ] **Phase 9: UI/UX Upgrade**
 
@@ -108,7 +108,7 @@ Plans:
 | 4. Expense Activity Events | v1.0 | 1/1 | Complete | 2026-03-01 |
 | 5. Schema & Notification Fixes | v1.0 | 1/1 | Complete | 2026-03-01 |
 | 6. Google OAuth Verification | v1.0 | 1/1 | Complete | 2026-03-01 |
-| 7. Bug Fixes | v1.1 | 0/? | In progress | — |
+| 7. Bug Fixes | v1.1 | 1/1 | Complete | 2026-03-03 |
 | 8. Code Review, Refactor & Best Practices | v1.1 | 0/3 | Not started | — |
 | 9. UI/UX Upgrade | v1.1 | 0/5 | Not started | — |
 | 10. Receipt Scanning | v2.0 | 0/? | Not started | — |
