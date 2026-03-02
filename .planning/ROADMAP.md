@@ -115,4 +115,4 @@ Plans:
 | 11. Recurring Expenses | v2.0 | 0/? | Not started | — |
 | 12. Spending Insights | v2.0 | 0/? | Not started | — |
 | 13. PDF Export + Apple Sign-In | v2.0 | 0/? | Not started | — |
-| 14. Email Invite Delivery | v2.0 | 0/? | Not started | — |
+| 14. Email Invite Delivery | v2.0 | 0/1 | Not started | — |
