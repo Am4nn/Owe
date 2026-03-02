@@ -6,6 +6,7 @@
 .gsd
 .agent/skills/ui-ux-pro-max
 test-results
+.planning/GEMINI.md
 
 dist/
 
