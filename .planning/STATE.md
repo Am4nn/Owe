@@ -159,6 +159,8 @@ Progress: [█████████░] 90% (Phase 14 plan executed, pending 
 ### Roadmap Evolution
 
 - Phase 8 added (inserted): Code Review, Refactor & Best Practices — former Phase 8 (UI/UX Upgrade) shifted to Phase 9; Phases 9–13 renumbered to 10–14
+- Phase 14 completed: Email Invite Delivery via Resend — Edge Function + DB Webhook pipeline shipped
+- Phase 15 added: Email Invite E2E Completion — deep linking, invite claim on auth, pending invites UI, web landing page
 
 ### Decisions
 

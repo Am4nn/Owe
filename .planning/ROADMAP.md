@@ -35,7 +35,8 @@
 - [ ] Phase 11: Recurring Expenses (subscriptions tab) — RECR-01–03
 - [ ] Phase 12: Spending Insights & Charts (fairness score) — INSI-01–02
 - [ ] Phase 13: PDF Export + Apple Sign-In — EXPE-01
-- [ ] Phase 14: Email Invite Delivery (Supabase Edge Function) — send actual invite emails when a user is added to `group_invites`; notify existing members of new expenses
+- [x] Phase 14: Email Invite Delivery (Supabase Edge Function) — send actual invite emails when a user is added to `group_invites`; notify existing members of new expenses
+- [ ] Phase 15: Email Invite E2E Completion — deep link from email into app, invite claim/accept logic on sign-up & login, pending invites UI, web landing page for non-app users
 
 ## Phase Details
 
@@ -97,6 +98,26 @@ Plans:
 
 ---
 
+### Phase 15: Email Invite E2E Completion
+**Goal**: Complete the email invite flow end-to-end — from the moment a user clicks the CTA in the invite email to being a fully joined group member in the Owe app
+**Depends on**: Phase 14
+**Requirements**: INVT-E2E-01 (deep link handling), INVT-E2E-02 (invite claim on auth), INVT-E2E-03 (pending invites UI), INVT-E2E-04 (web landing/download page)
+**Success Criteria** (what must be TRUE):
+  1. Email CTA deep-links into the app (Android) or opens a web landing page with "Download App" / "Open in Browser" options
+  2. When a new user signs up with an invited email, all pending invites for that email are auto-claimed — user is added to groups and `accepted_at` is stamped
+  3. When an existing user logs in, any unclaimed pending invites for their email are surfaced and can be accepted/declined
+  4. Pending invites screen shows all outstanding invites with group name, inviter name, and expiry — accept adds user to group, decline deletes the invite
+  5. Expired invites are never shown and cannot be accepted
+  6. Web landing page at `you.owe.amanarya.com` shows branded download/open page with app store links and a "Continue in Browser" option for the web build
+**Plans**: TBD (split during planning)
+
+Plans:
+- [ ] 15-01-PLAN.md — Invite claim logic (DB function + auth trigger + RLS policies)
+- [ ] 15-02-PLAN.md — Pending invites UI + accept/decline flow
+- [ ] 15-03-PLAN.md — Deep linking from email + web landing page
+
+---
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -115,4 +136,5 @@ Plans:
 | 11. Recurring Expenses | v2.0 | 0/? | Not started | — |
 | 12. Spending Insights | v2.0 | 0/? | Not started | — |
 | 13. PDF Export + Apple Sign-In | v2.0 | 0/? | Not started | — |
-| 14. Email Invite Delivery | v2.0 | 0/1 | Not started | — |
+| 14. Email Invite Delivery | v2.0 | 1/1 | Complete | 2026-03-03 |
+| 15. Email Invite E2E Completion | v2.0 | 0/3 | Not started | — |

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Platform } from 'react-native'
 import { Session } from '@supabase/supabase-js'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
@@ -151,19 +152,25 @@ export function useSignInWithGoogle() {
         provider: 'google',
         options: {
           redirectTo,
-          skipBrowserRedirect: true,  // Required: we open the browser manually below
+          // Web doesn't need to skip the redirect; we want it to actually redirect the page
+          skipBrowserRedirect: Platform.OS !== 'web',
         },
       })
       if (error) throw error
 
-      // Step 2: Open Google auth in the system browser and wait for redirect back
+      if (Platform.OS === 'web') {
+        // On web, if skipBrowserRedirect was false (which it is now), Supabase already
+        // redirecting the window. But if we still need to, we can just return or do nothing.
+        // Supabase will handle the redirect.
+        return
+      }
+
+      // Step 2 & 3: Only for Native
       const res = await WebBrowser.openAuthSessionAsync(data?.url ?? '', redirectTo)
 
-      // Step 3: Extract tokens and establish session if browser returned successfully
       if (res.type === 'success') {
         await createSessionFromUrl(res.url)
       }
-      // res.type === 'cancel' or 'dismiss': user closed the browser — do nothing
     },
   })
 }
