@@ -4,8 +4,9 @@ import { useGroups } from '@/features/groups/hooks'
 import { useBalanceSummary } from '@/features/balances/hooks'
 import type { Group } from '@/features/groups/types'
 import { ExpandableFAB } from '@/components/ui/ExpandableFAB'
+import { memo } from 'react'
 
-function GroupCard({ group }: { group: Group }) {
+const GroupCard = memo(function GroupCard({ group }: { group: Group }) {
   return (
     <TouchableOpacity
       onPress={() => router.push(`/(app)/groups/${group.id}`)}
@@ -15,9 +16,9 @@ function GroupCard({ group }: { group: Group }) {
       <Text className="text-white/40 text-sm mt-1">{group.base_currency}</Text>
     </TouchableOpacity>
   )
-}
+})
 
-function BalanceSummaryBar() {
+const BalanceSummaryBar = memo(function BalanceSummaryBar() {
   const { data, isLoading } = useBalanceSummary()
 
   if (isLoading) {
@@ -43,7 +44,7 @@ function BalanceSummaryBar() {
       </View>
     </View>
   )
-}
+})
 
 export default function DashboardScreen() {
   const { data: allGroups, isLoading } = useGroups()
