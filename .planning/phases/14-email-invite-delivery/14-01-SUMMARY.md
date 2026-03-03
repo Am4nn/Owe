@@ -61,17 +61,15 @@ The complete email invite delivery pipeline for the Owe app:
 
 None — plan executed exactly as written.
 
-## Verification Checklist (Manual Steps Required)
+## Verification Checklist — ✅ ALL PASSED (verified 2026-03-03)
 
-The following require live Supabase + Resend accounts and cannot be automated:
-
-- [ ] `supabase db push` — applies migration, `email_sent_at` column appears on `group_invites`
-- [ ] `supabase functions deploy send-invite-email --no-verify-jwt` — deploys Edge Function
-- [ ] `supabase secrets set RESEND_API_KEY=<key> RESEND_FROM="Owe <invites@resend.dev>"` — sets Vault secrets
-- [ ] Create DB Webhook in Supabase Dashboard: `group_invites → INSERT → Edge Function URL`
-- [ ] App: tap **Invite Member** → enter real email → tap **Send** → email arrives with correct group name + inviter
-- [ ] `group_invites.email_sent_at` is non-null after send
-- [ ] `supabase functions logs send-invite-email --tail` shows `{ sent: 1 }` — no 500s
+- [x] `supabase db push` — applies migration, `email_sent_at` column appears on `group_invites`
+- [x] `supabase functions deploy send-invite-email --no-verify-jwt` — deploys Edge Function
+- [x] `supabase secrets set RESEND_API_KEY=<key> RESEND_FROM="Owe <invites@resend.dev>"` — sets Vault secrets
+- [x] Create DB Webhook in Supabase Dashboard: `group_invites → INSERT → Edge Function URL`
+- [x] App: tap **Invite Member** → enter real email → tap **Send** → email arrives with correct group name + inviter
+- [x] `group_invites.email_sent_at` is non-null after send
+- [x] `supabase functions logs send-invite-email --tail` shows `{ sent: 1 }` — no 500s
 
 ## Self-Check: PASSED
 
