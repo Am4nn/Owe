@@ -36,7 +36,7 @@
 - [ ] Phase 12: Spending Insights & Charts (fairness score) — INSI-01–02
 - [ ] Phase 13: PDF Export + Apple Sign-In — EXPE-01
 - [x] Phase 14: Email Invite Delivery (Supabase Edge Function) — send actual invite emails when a user is added to `group_invites`; notify existing members of new expenses
-- [ ] Phase 15: Email Invite E2E Completion — deep link from email into app, invite claim/accept logic on sign-up & login, pending invites UI, web landing page for non-app users
+- [x] Phase 15: Email Invite E2E Completion — deep link from email into app, invite claim/accept logic on sign-up & login, pending invites UI, web landing page for non-app users
 
 ## Phase Details
 
@@ -112,9 +112,9 @@ Plans:
 **Plans**: TBD (split during planning)
 
 Plans:
-- [ ] 15-01-PLAN.md — Invite claim logic (DB function + auth trigger + RLS policies)
-- [ ] 15-02-PLAN.md — Pending invites UI + accept/decline flow
-- [ ] 15-03-PLAN.md — Deep linking from email + web landing page
+- [x] 15-01-PLAN.md — Invite claim logic (DB function + auth trigger + RLS policies)
+- [x] 15-02-PLAN.md — Pending invites UI + accept/decline flow
+- [x] 15-03-PLAN.md — Deep linking from email + web landing page
 
 ---
 
@@ -137,4 +137,4 @@ Plans:
 | 12. Spending Insights | v2.0 | 0/? | Not started | — |
 | 13. PDF Export + Apple Sign-In | v2.0 | 0/? | Not started | — |
 | 14. Email Invite Delivery | v2.0 | 1/1 | Complete | 2026-03-03 |
-| 15. Email Invite E2E Completion | v2.0 | 0/3 | Not started | — |
+| 15. Email Invite E2E Completion | v2.0 | 3/3 | Complete | 2026-03-03 |

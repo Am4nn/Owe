@@ -113,12 +113,12 @@ See: .planning/PROJECT.md (updated 2026-02-27)
 
 ## Current Position
 
-Phase: 14 of 15 — COMPLETE (1/1 plan complete, verified by user)
-Plan: 1 of 1 in phase 14 complete (14-01 Email Invite Delivery via Resend)
-Status: Phase 14 COMPLETE — email invite delivery pipeline deployed and verified ✅
-Last activity: 2026-03-03 — Phase 14 verified: emails sent successfully, all checklist items passed
+Phase: 15 of 15 — COMPLETE (3/3 plans complete, verified by user)
+Plan: 3 of 3 in phase 15 complete (15-01 Invite Claim Logic, 15-02 Pending Invites UI, 15-03 Deep Linking)
+Status: Phase 15 COMPLETE — email invite E2E flow deployed and verified ✅
+Last activity: 2026-03-03 — Phase 15 verified: invite claim, accept/decline UI, deep linking all working
 
-Progress: [██████████] 100% (Phase 14 complete — Phase 15 next)
+Progress: [██████████] 100% (Phase 15 complete)
 
 ## Performance Metrics
 
@@ -160,7 +160,7 @@ Progress: [██████████] 100% (Phase 14 complete — Phase 15 
 
 - Phase 8 added (inserted): Code Review, Refactor & Best Practices — former Phase 8 (UI/UX Upgrade) shifted to Phase 9; Phases 9–13 renumbered to 10–14
 - Phase 14 completed: Email Invite Delivery via Resend — Edge Function + DB Webhook pipeline shipped
-- Phase 15 added: Email Invite E2E Completion — deep linking, invite claim on auth, pending invites UI, web landing page
+- Phase 15 completed: Email Invite E2E Completion — invite claim logic (DB functions + auth trigger), pending invites UI, deep linking from email CTA
 
 ### Decisions
 
@@ -236,5 +236,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-03
-Stopped at: Phase 14 COMPLETE and VERIFIED. Phase 15 (Email Invite E2E Completion) added to roadmap — ready for planning.
+Stopped at: Phase 15 COMPLETE and VERIFIED. All email invite E2E features deployed — claim logic, pending invites UI, deep linking.
 Resume file: None
