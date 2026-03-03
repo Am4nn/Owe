@@ -67,7 +67,7 @@ Deno.serve(async (req: Request) => {
       to: [record.invited_email],
       subject: `${inviterName} invited you to "${groupName}" on Owe`,
       html,
-      text: `Hey there,\n\n${inviterName} invited you to join "${groupName}" on Owe — the free expense splitting app.\n\nOpen Owe to Accept: https://you.owe.amanarya.com\n\nInvite details:\nGroup: ${groupName}\nInvited by: ${inviterName}\nExpires: ${expiresDate}\n\nDon't have the Owe app yet? Download it free — no ads, no paywalls, all split modes included.\n\nThis invite was sent to ${record.invited_email}. If you weren't expecting this, you can safely ignore it.`,
+      text: `Hey there,\n\n${inviterName} invited you to join "${groupName}" on Owe — the free expense splitting app.\n\nOpen Owe to Accept: https://you.owe.amanarya.com/invites?ref=email&email=${encodeURIComponent(record.invited_email)}\n\nInvite details:\nGroup: ${groupName}\nInvited by: ${inviterName}\nExpires: ${expiresDate}\n\nDon't have the Owe app yet? Download it free — no ads, no paywalls, all split modes included.\n\nThis invite was sent to ${record.invited_email}. If you weren't expecting this, you can safely ignore it.`,
     }),
   })
 
@@ -138,7 +138,7 @@ function buildInviteEmail({ groupName, inviterName, invitedEmail, expiresDate }:
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td align="center" style="padding:8px 0 24px;">
-                    <a href="https://you.owe.amanarya.com" style="display:inline-block;background:linear-gradient(135deg,#7B5CF6,#6D28D9);color:#ffffff;text-decoration:none;font-size:16px;font-weight:600;padding:14px 32px;border-radius:10px;letter-spacing:0.2px;">
+                    <a href="https://you.owe.amanarya.com/invites?ref=email&email=${encodeURIComponent(invitedEmail)}" style="display:inline-block;background:linear-gradient(135deg,#7B5CF6,#6D28D9);color:#ffffff;text-decoration:none;font-size:16px;font-weight:600;padding:14px 32px;border-radius:10px;letter-spacing:0.2px;">
                       Open Owe to Accept
                     </a>
                   </td>

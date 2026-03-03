@@ -10,6 +10,7 @@ import { persister } from '@/lib/persister'
 import { useSession } from '@/features/auth/hooks'
 import { createExpenseMutationFn, updateExpenseMutationFn, deleteExpenseMutationFn } from '@/features/expenses/hooks'
 import { registerPushToken, useNotificationDeepLink } from '@/features/notifications/hooks'
+import { useClaimInvites } from '@/features/groups/hooks'
 import '../global.css'
 import '@/stores/ui'
 
@@ -47,9 +48,12 @@ function RootNavigator() {
 
   // NOTF-01/02: Register push token when user is authenticated
   // Never runs on simulators (expo-device guard inside registerPushToken)
+  // INVT-E2E-02: Silently claim any pending invites on login
+  const { mutate: claimInvites } = useClaimInvites()
   useEffect(() => {
     if (session) {
       registerPushToken()
+      claimInvites() // Auto-claim pending invites matching user's email
     }
   }, [session])
 

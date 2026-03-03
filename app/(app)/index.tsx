@@ -1,6 +1,6 @@
 import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { Stack, router } from 'expo-router'
-import { useGroups } from '@/features/groups/hooks'
+import { useGroups, usePendingInvites } from '@/features/groups/hooks'
 import { useBalanceSummary } from '@/features/balances/hooks'
 import type { Group } from '@/features/groups/types'
 import { ExpandableFAB } from '@/components/ui/ExpandableFAB'
@@ -48,6 +48,8 @@ const BalanceSummaryBar = memo(function BalanceSummaryBar() {
 
 export default function DashboardScreen() {
   const { data: allGroups, isLoading } = useGroups()
+  const { data: pendingInvites } = usePendingInvites()
+  const inviteCount = pendingInvites?.length ?? 0
 
   // Filter out virtual 1-on-1 (is_direct) groups from the main list (EXPN-09)
   const groups = allGroups?.filter(g => !g.is_direct) ?? []
@@ -58,9 +60,21 @@ export default function DashboardScreen() {
         options={{
           title: 'Owe',
           headerRight: () => (
-            <TouchableOpacity onPress={() => router.push('/(app)/profile')} className="mr-2">
-              <Text className="text-brand-primary font-semibold">Profile</Text>
-            </TouchableOpacity>
+            <View className="flex-row items-center gap-3 mr-2">
+              {/* INVT-E2E-03: Pending invites badge */}
+              {inviteCount > 0 && (
+                <TouchableOpacity onPress={() => router.push('/(app)/invites')}>
+                  <View className="flex-row items-center bg-purple-600/20 rounded-full px-3 py-1">
+                    <Text className="text-purple-400 font-semibold text-sm">
+                      📩 {inviteCount}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity onPress={() => router.push('/(app)/profile')}>
+                <Text className="text-brand-primary font-semibold">Profile</Text>
+              </TouchableOpacity>
+            </View>
           ),
         }}
       />

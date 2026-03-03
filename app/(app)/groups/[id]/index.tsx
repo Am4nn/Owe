@@ -101,7 +101,7 @@ export default function GroupDetailScreen() {
       {
         onSuccess: () => {
           // Show inline success — Alert.alert is unreliable on web
-          // Note: no email is sent yet (no Edge Function) — invite is saved to DB only
+          // Note: email is sent via Edge Function (Phase 14) — invite is auto-claimed when they sign up
           setInviteSent(true)
           setTimeout(() => {
             setShowInviteModal(false)
@@ -145,10 +145,10 @@ export default function GroupDetailScreen() {
 
   const filteredCurrencies = currencySearch.trim()
     ? COMMON_CURRENCIES.filter(
-        (c) =>
-          c.code.toLowerCase().includes(currencySearch.toLowerCase()) ||
-          c.name.toLowerCase().includes(currencySearch.toLowerCase())
-      )
+      (c) =>
+        c.code.toLowerCase().includes(currencySearch.toLowerCase()) ||
+        c.name.toLowerCase().includes(currencySearch.toLowerCase())
+    )
     : COMMON_CURRENCIES
 
   return (
@@ -438,9 +438,8 @@ export default function GroupDetailScreen() {
               <TouchableOpacity
                 key={currency.code}
                 onPress={() => handleSelectCurrency(currency.code)}
-                className={`flex-row items-center px-4 py-4 border-b border-dark-border ${
-                  currency.code === baseCurrency ? 'bg-brand-primary/10' : ''
-                }`}
+                className={`flex-row items-center px-4 py-4 border-b border-dark-border ${currency.code === baseCurrency ? 'bg-brand-primary/10' : ''
+                  }`}
               >
                 <Text className="text-white font-medium w-10 text-base">{currency.symbol}</Text>
                 <Text className="text-white font-semibold text-base mr-2">{currency.code}</Text>
