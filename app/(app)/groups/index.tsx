@@ -1,4 +1,5 @@
 import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { COLORS } from '../_layout'
 import { Stack, router } from 'expo-router'
 import { useGroups } from '@/features/groups/hooks'
 
@@ -23,7 +24,7 @@ export default function GroupsListScreen() {
         contentContainerClassName="pt-4 pb-8"
         ListEmptyComponent={
           isLoading ? (
-            <ActivityIndicator color="#6C63FF" className="mt-12" />
+            <ActivityIndicator color={COLORS.brandPrimary} className="mt-12" />
           ) : (
             <View className="items-center py-12">
               <Text className="text-white/50">No groups yet</Text>

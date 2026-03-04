@@ -2,8 +2,9 @@ import React, { useRef } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
 import type { SwipeableMethods } from 'react-native-gesture-handler/ReanimatedSwipeable'
-import { router } from 'expo-router'
+import { Link, router } from 'expo-router'
 import { showAlert } from '@/lib/alert'
+import { formatMoney, formatDate } from '@/lib/format'
 import type { Expense } from '@/features/expenses/types'
 import type { GroupMember } from '@/features/groups/types'
 import { CATEGORIES } from '@/features/expenses/categories'
@@ -13,18 +14,6 @@ interface ExpenseCardProps {
   members: GroupMember[]
   onSettle?: (expense: Expense) => void
   onRemind?: (expense: Expense) => void
-}
-
-function formatAmount(cents: number, currencyCode: string): string {
-  // Simple formatting: use currency code prefix for non-USD, $ for USD
-  // For a production app we'd use Intl.NumberFormat — for MVP, code prefix is clear enough
-  const amount = (cents / 100).toFixed(2)
-  return currencyCode === 'USD' ? `$${amount} ` : `${currencyCode} ${amount} `
-}
-
-function formatDate(dateStr: string): string {
-  const date = new Date(dateStr)
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
 export function ExpenseCard({ expense, members, onSettle, onRemind }: ExpenseCardProps) {
@@ -90,7 +79,7 @@ export function ExpenseCard({ expense, members, onSettle, onRemind }: ExpenseCar
       overshootFriction={8}
     >
       <TouchableOpacity
-        onPress={() => router.push(`/ (app) / expenses / ${expense.id} ` as Parameters<typeof router.push>[0])}
+        onPress={() => router.push(`/(app)/expenses/${expense.id}` as Parameters<typeof router.push>[0])}
         className="bg-dark-surface border border-dark-border rounded-2xl px-4 py-4 mb-3"
       >
         <View className="flex-row items-start justify-between">
@@ -112,11 +101,11 @@ export function ExpenseCard({ expense, members, onSettle, onRemind }: ExpenseCar
           </View>
           <View className="items-end">
             <Text className="text-white font-bold text-base">
-              {formatAmount(expense.amount_cents, expense.currency)}
+              {formatMoney(expense.amount_cents, expense.currency)}
             </Text>
             {expense.currency !== expense.base_currency && (
               <Text className="text-white/40 text-xs mt-0.5">
-                {'≈'} {formatAmount(expense.amount_base_cents, expense.base_currency)}
+                {'≈'} {formatMoney(expense.amount_base_cents, expense.base_currency)}
               </Text>
             )}
           </View>

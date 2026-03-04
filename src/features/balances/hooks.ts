@@ -101,27 +101,37 @@ export function useBalanceSummary() {
       let total_owed_cents = 0
       let total_owing_cents = 0
 
+      const groupIds = memberships.map(m => m.group_id)
+
+      // Query 2: Batch fetch ALL splits for user's groups
+      const { data: allSplits } = await supabase
+        .from('expense_splits')
+        .select('member_id, amount_cents, expense:expenses!inner(payer_id, group_id, deleted_at)')
+        .in('expenses.group_id', groupIds)
+        .is('expenses.deleted_at', null)
+
+      // Query 3: Batch fetch ALL settlements for user's groups
+      const { data: allSettlements } = await supabase
+        .from('settlements')
+        .select('payer_id, payee_id, amount_cents, group_id')
+        .in('group_id', groupIds)
+
       // For each group the user is in, compute their net position
       for (const membership of memberships) {
         const memberId = membership.id
         const groupId = membership.group_id
-
-        // Splits where this member is involved (as payer or split recipient)
-        const { data: splits } = await supabase
-          .from('expense_splits')
-          .select('member_id, amount_cents, expense:expenses!inner(payer_id, group_id, deleted_at)')
-          .eq('expenses.group_id', groupId)
-          .is('expenses.deleted_at', null)
-
-        // Settlements for this group
-        const { data: settlements } = await supabase
-          .from('settlements')
-          .select('payer_id, payee_id, amount_cents')
-          .eq('group_id', groupId)
-
         let netCents = 0
 
-        for (const split of splits ?? []) {
+        // Filter splits for this group
+        const groupSplits = (allSplits ?? []).filter(split => {
+          const expense = (split.expense as unknown) as { payer_id: string; group_id: string; deleted_at: string | null }
+          return expense.group_id === groupId
+        })
+
+        // Filter settlements for this group
+        const groupSettlements = (allSettlements ?? []).filter(s => s.group_id === groupId)
+
+        for (const split of groupSplits) {
           const expense = (split.expense as unknown) as { payer_id: string; group_id: string; deleted_at: string | null }
           if (expense.payer_id === memberId) {
             netCents += split.amount_cents
@@ -131,7 +141,7 @@ export function useBalanceSummary() {
           }
         }
 
-        for (const s of settlements ?? []) {
+        for (const s of groupSettlements) {
           if (s.payer_id === memberId) {
             netCents += s.amount_cents
           }

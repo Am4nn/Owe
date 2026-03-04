@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
-import { onlineManager } from '@tanstack/react-query'
+import { onlineManager, QueryClientProvider } from '@tanstack/react-query'
+import { useFonts } from 'expo-font'
 import { ActivityIndicator, View, Platform, StyleSheet } from 'react-native'
 import { useEffect } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
@@ -11,6 +12,8 @@ import { useSession } from '@/features/auth/hooks'
 import { createExpenseMutationFn, updateExpenseMutationFn, deleteExpenseMutationFn } from '@/features/expenses/hooks'
 import { registerPushToken, useNotificationDeepLink } from '@/features/notifications/hooks'
 import { useClaimInvites } from '@/features/invites/hooks'
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
+import { COLORS } from './(app)/_layout'
 import '../global.css'
 import '@/stores/ui'
 
@@ -63,7 +66,7 @@ function RootNavigator() {
   if (isLoading) {
     return (
       <View className="flex-1 bg-dark-bg items-center justify-center">
-        <ActivityIndicator color="#6C63FF" />
+        <ActivityIndicator color={COLORS.brandPrimary} />
       </View>
     )
   }
@@ -85,22 +88,24 @@ function RootNavigator() {
 
 export default function RootLayout() {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <PersistQueryClientProvider
-        client={queryClient}
-        persistOptions={{
-          persister,
-          maxAge: 1000 * 60 * 60 * 24, // 24 hours
-        }}
-        onSuccess={() => {
-          // Replay any mutations that were queued while offline (OFFL-02)
-          queryClient.resumePausedMutations().then(() => {
-            queryClient.invalidateQueries()
-          })
-        }}
-      >
-        <RootNavigator />
-      </PersistQueryClientProvider>
-    </GestureHandlerRootView>
+    <ErrorBoundary>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <PersistQueryClientProvider
+          client={queryClient}
+          persistOptions={{
+            persister,
+            maxAge: 1000 * 60 * 60 * 24, // 24 hours
+          }}
+          onSuccess={() => {
+            // Replay any mutations that were queued while offline (OFFL-02)
+            queryClient.resumePausedMutations().then(() => {
+              queryClient.invalidateQueries()
+            })
+          }}
+        >
+          <RootNavigator />
+        </PersistQueryClientProvider>
+      </GestureHandlerRootView>
+    </ErrorBoundary>
   )
 }

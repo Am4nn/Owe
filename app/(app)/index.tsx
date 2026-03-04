@@ -3,7 +3,9 @@ import { Stack, router } from 'expo-router'
 import { useGroups } from '@/features/groups/hooks'
 import { usePendingInvites } from '@/features/invites/hooks'
 import { useBalanceSummary } from '@/features/balances/hooks'
+import { formatMoney } from '@/lib/format'
 import type { Group } from '@/features/groups/types'
+import { COLORS } from './_layout'
 import { ExpandableFAB } from '@/components/ui/ExpandableFAB'
 import { memo } from 'react'
 
@@ -25,23 +27,23 @@ const BalanceSummaryBar = memo(function BalanceSummaryBar() {
   if (isLoading) {
     return (
       <View className="bg-dark-surface border border-dark-border rounded-2xl px-4 py-3 mx-4 mb-4 items-center">
-        <ActivityIndicator color="#6C63FF" />
+        <ActivityIndicator color={COLORS.brandPrimary} />
       </View>
     )
   }
 
-  const owedAmount = ((data?.total_owed_cents ?? 0) / 100).toFixed(2)
-  const owingAmount = ((data?.total_owing_cents ?? 0) / 100).toFixed(2)
+  const owedAmount = formatMoney(data?.total_owed_cents ?? 0)
+  const owingAmount = formatMoney(data?.total_owing_cents ?? 0)
 
   return (
     <View className="bg-dark-surface border border-dark-border rounded-2xl px-4 py-3 mx-4 mb-4 flex-row justify-between">
       <View className="items-start">
         <Text className="text-white/50 text-xs uppercase tracking-wide mb-1">You are owed</Text>
-        <Text className="text-green-400 text-xl font-bold">${owedAmount}</Text>
+        <Text className="text-green-400 text-xl font-bold">{owedAmount}</Text>
       </View>
       <View className="items-end">
         <Text className="text-white/50 text-xs uppercase tracking-wide mb-1">You owe</Text>
-        <Text className="text-red-400 text-xl font-bold">${owingAmount}</Text>
+        <Text className="text-red-400 text-xl font-bold">{owingAmount}</Text>
       </View>
     </View>
   )
@@ -94,7 +96,7 @@ export default function DashboardScreen() {
         }
         ListEmptyComponent={
           isLoading ? (
-            <ActivityIndicator color="#6C63FF" />
+            <ActivityIndicator color={COLORS.brandPrimary} />
           ) : (
             <View className="items-center py-12">
               <Text className="text-white/50 text-base">No groups yet</Text>

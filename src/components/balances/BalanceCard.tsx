@@ -1,5 +1,6 @@
 import { View, Text } from 'react-native'
 import type { MemberBalance } from '@/features/balances/types'
+import { formatMoney } from '@/lib/format'
 
 interface BalanceCardProps {
   balance: MemberBalance
@@ -7,16 +8,16 @@ interface BalanceCardProps {
 
 export function BalanceCard({ balance }: BalanceCardProps) {
   const { display_name, net_cents } = balance
-  const amount = (Math.abs(net_cents) / 100).toFixed(2)
+  const amountStr = formatMoney(Math.abs(net_cents))
 
   let amountText: string
   let amountColor: string
 
   if (net_cents > 0) {
-    amountText = `owes you $${amount}`
+    amountText = `owes you ${amountStr}`
     amountColor = 'text-green-400'
   } else if (net_cents < 0) {
-    amountText = `you owe $${amount}`
+    amountText = `you owe ${amountStr}`
     amountColor = 'text-red-400'
   } else {
     amountText = 'settled'

@@ -8,6 +8,7 @@ import {
   computePercentageSplits,
   computeSharesSplits,
 } from '@/features/expenses/splits'
+import { formatMoney } from '@/lib/format'
 
 interface SplitEditorProps {
   members: GroupMember[]
@@ -23,10 +24,6 @@ const SPLIT_TABS: { type: SplitType; label: string }[] = [
   { type: 'percentage', label: 'Percentage' },
   { type: 'shares', label: 'Shares' },
 ]
-
-function formatCents(cents: number): string {
-  return `$${(cents / 100).toFixed(2)}`
-}
 
 export function SplitEditor({
   members,
@@ -135,14 +132,12 @@ export function SplitEditor({
             <TouchableOpacity
               key={tab.type}
               onPress={() => onSplitTypeChange(tab.type)}
-              className={`px-4 py-2 rounded-full ${
-                splitType === tab.type ? 'bg-brand-primary' : 'bg-dark-surface'
-              }`}
+              className={`px-4 py-2 rounded-full ${splitType === tab.type ? 'bg-brand-primary' : 'bg-dark-surface'
+                }`}
             >
               <Text
-                className={`text-sm font-medium ${
-                  splitType === tab.type ? 'text-white' : 'text-white/60'
-                }`}
+                className={`text-sm font-medium ${splitType === tab.type ? 'text-white' : 'text-white/60'
+                  }`}
               >
                 {tab.label}
               </Text>
@@ -161,7 +156,7 @@ export function SplitEditor({
             return (
               <View key={member.id} className="flex-row items-center justify-between py-2 border-b border-dark-border">
                 <Text className="text-white text-sm">{member.display_name}</Text>
-                <Text className="text-white/50 text-sm">{formatCents(amount)}</Text>
+                <Text className="text-white/50 text-sm">{formatMoney(amount)}</Text>
               </View>
             )
           })}
@@ -174,7 +169,7 @@ export function SplitEditor({
           <View className="flex-row justify-between mb-2">
             <Text className="text-white/50 text-xs">Total entered</Text>
             <Text className={`text-xs font-medium ${exactValid ? 'text-green-400' : 'text-red-400'}`}>
-              {formatCents(exactSum)} / {formatCents(totalCents)}
+              {formatMoney(exactSum)} / {formatMoney(totalCents)}
             </Text>
           </View>
           {members.map(member => (
@@ -186,12 +181,11 @@ export function SplitEditor({
                 keyboardType="number-pad"
                 placeholder="0"
                 placeholderTextColor="rgba(255,255,255,0.3)"
-                className={`bg-dark-surface rounded-xl px-4 py-3 text-white border ${
-                  exactValid ? 'border-dark-border' : 'border-red-500'
-                }`}
+                className={`bg-dark-surface rounded-xl px-4 py-3 text-white border ${exactValid ? 'border-dark-border' : 'border-red-500'
+                  }`}
               />
               <Text className="text-white/30 text-xs mt-1">
-                {formatCents(parseInt(exactValues[member.id] ?? '0', 10) || 0)}
+                {formatMoney(parseInt(exactValues[member.id] ?? '0', 10) || 0)}
               </Text>
             </View>
           ))}
@@ -222,7 +216,7 @@ export function SplitEditor({
                   className="bg-dark-surface rounded-xl px-4 py-3 text-white border border-dark-border"
                 />
                 <Text className="text-white/30 text-xs mt-1">
-                  {formatCents(previewCents)}
+                  {formatMoney(previewCents)}
                 </Text>
               </View>
             )
@@ -244,7 +238,7 @@ export function SplitEditor({
                 <View key={member.id} className="flex-row items-center justify-between py-2 border-b border-dark-border">
                   <View className="flex-1">
                     <Text className="text-white text-sm">{member.display_name}</Text>
-                    <Text className="text-white/30 text-xs mt-0.5">{formatCents(previewCents)}</Text>
+                    <Text className="text-white/30 text-xs mt-0.5">{formatMoney(previewCents)}</Text>
                   </View>
                   <View className="flex-row items-center gap-3">
                     <TouchableOpacity

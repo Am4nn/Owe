@@ -3,6 +3,7 @@ import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react
 import { Stack, router, useLocalSearchParams } from 'expo-router'
 import { useActivityFeed } from '@/features/activity/hooks'
 import type { ActivityItem } from '@/features/activity/types'
+import { COLORS } from '../../_layout'
 
 const ACTION_LABELS: Record<ActivityItem['action_type'], string> = {
   expense_added: 'added an expense',
@@ -73,7 +74,7 @@ export default function GroupActivityScreen() {
 
       {isLoading ? (
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator color="#6C63FF" />
+          <ActivityIndicator color={COLORS.brandPrimary} />
         </View>
       ) : !items || items.length === 0 ? (
         <View className="flex-1 items-center justify-center">

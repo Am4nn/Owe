@@ -7,6 +7,7 @@ import { Stack } from 'expo-router'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { useProfile, useUpdateProfile, useSignOut } from '@/features/auth/hooks'
+import { QueryGuard } from '@/components/ui/QueryGuard'
 import { supabase } from '@/lib/supabase'
 import { showAlert } from '@/lib/alert'
 
@@ -16,12 +17,12 @@ const profileSchema = z.object({
 type ProfileForm = z.infer<typeof profileSchema>
 
 export default function ProfileScreen() {
-  const { data: profile, isLoading } = useProfile()
+  const profileQuery = useProfile()
   const { mutate: updateProfile, isPending: isSaving } = useUpdateProfile()
   const { mutate: signOut } = useSignOut()
   const { control, handleSubmit, formState: { errors } } = useForm<ProfileForm>({
     resolver: zodResolver(profileSchema),
-    defaultValues: { display_name: profile?.display_name ?? '' },
+    defaultValues: { display_name: profileQuery.data?.display_name ?? '' },
   })
 
   const pickAvatar = async () => {
@@ -64,62 +65,65 @@ export default function ProfileScreen() {
     })
   }
 
-  if (isLoading) return null
-
   return (
     <ScrollView className="flex-1 bg-dark-bg" contentContainerClassName="px-6 py-8">
       <Stack.Screen options={{ title: 'Profile' }} />
+      <QueryGuard query={profileQuery}>
+        {(profile) => (
+          <>
+            {/* Avatar */}
+            <TouchableOpacity onPress={pickAvatar} className="self-center mb-6">
+              {profile?.avatar_url ? (
+                <Image
+                  source={{ uri: profile.avatar_url }}
+                  className="w-24 h-24 rounded-full"
+                />
+              ) : (
+                <View className="w-24 h-24 rounded-full bg-dark-surface border-2 border-brand-primary items-center justify-center">
+                  <Text className="text-brand-primary text-3xl font-bold">
+                    {profile?.display_name?.[0]?.toUpperCase() ?? '?'}
+                  </Text>
+                </View>
+              )}
+              <Text className="text-brand-accent text-center mt-2 text-sm">Change photo</Text>
+            </TouchableOpacity>
 
-      {/* Avatar */}
-      <TouchableOpacity onPress={pickAvatar} className="self-center mb-6">
-        {profile?.avatar_url ? (
-          <Image
-            source={{ uri: profile.avatar_url }}
-            className="w-24 h-24 rounded-full"
-          />
-        ) : (
-          <View className="w-24 h-24 rounded-full bg-dark-surface border-2 border-brand-primary items-center justify-center">
-            <Text className="text-brand-primary text-3xl font-bold">
-              {profile?.display_name?.[0]?.toUpperCase() ?? '?'}
-            </Text>
-          </View>
+            {/* Display name */}
+            <Controller
+              control={control}
+              name="display_name"
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  label="Display name"
+                  placeholder="How should friends see you?"
+                  value={value}
+                  onChangeText={onChange}
+                  error={errors.display_name?.message}
+                />
+              )}
+            />
+
+            <Button
+              title={isSaving ? 'Saving...' : 'Save profile'}
+              onPress={handleSubmit(onSubmit)}
+              disabled={isSaving}
+              className="mt-6"
+            />
+
+            {/* AUTH-04: Sign out — accessible from profile screen */}
+            <Button
+              title="Sign out"
+              variant="secondary"
+              onPress={() => {
+                signOut(undefined, {
+                  onError: (e) => showAlert('Sign Out Error', e.message),
+                })
+              }}
+              className="mt-4"
+            />
+          </>
         )}
-        <Text className="text-brand-accent text-center mt-2 text-sm">Change photo</Text>
-      </TouchableOpacity>
-
-      {/* Display name */}
-      <Controller
-        control={control}
-        name="display_name"
-        render={({ field: { onChange, value } }) => (
-          <Input
-            label="Display name"
-            placeholder="How should friends see you?"
-            value={value}
-            onChangeText={onChange}
-            error={errors.display_name?.message}
-          />
-        )}
-      />
-
-      <Button
-        title={isSaving ? 'Saving...' : 'Save profile'}
-        onPress={handleSubmit(onSubmit)}
-        disabled={isSaving}
-        className="mt-6"
-      />
-
-      {/* AUTH-04: Sign out — accessible from profile screen */}
-      <Button
-        title="Sign out"
-        variant="secondary"
-        onPress={() => {
-          signOut(undefined, {
-            onError: (e) => showAlert('Sign Out Error', e.message),
-          })
-        }}
-        className="mt-4"
-      />
+      </QueryGuard>
     </ScrollView>
   )
 }
