@@ -1,20 +1,25 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   View,
   Text,
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
-  Alert,
+  ScrollView,
 } from 'react-native'
 import { useRouter } from 'expo-router'
 import { usePendingInvites, useAcceptInvite, useDeclineInvite } from '@/features/invites/hooks'
+import { ConfirmModal } from '@/components/ui/ConfirmModal'
+import { showAlert } from '@/lib/alert'
 
 export default function InvitesScreen() {
   const router = useRouter()
   const { data: invites, isLoading, error } = usePendingInvites()
   const { mutate: acceptInvite, isPending: isAccepting } = useAcceptInvite()
-  const { mutate: declineInvite } = useDeclineInvite()
+  const { mutate: declineInvite, isPending: isDeclining } = useDeclineInvite()
+
+  const [showDeclineModal, setShowDeclineModal] = useState(false)
+  const [selectedInvite, setSelectedInvite] = useState<{ id: string, name: string } | null>(null)
 
   const handleAccept = (inviteId: string, groupId: string) => {
     acceptInvite(inviteId, {
@@ -22,24 +27,24 @@ export default function InvitesScreen() {
         router.push(`/groups/${groupId}`)
       },
       onError: (e) => {
-        Alert.alert('Error', e instanceof Error ? e.message : 'Failed to accept invite')
+        showAlert('Error', e instanceof Error ? e.message : 'Failed to accept invite')
       },
     })
   }
 
   const handleDecline = (inviteId: string, groupName: string) => {
-    Alert.alert(
-      'Decline Invite',
-      `Are you sure you want to decline the invite to "${groupName}"?`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Decline',
-          style: 'destructive',
-          onPress: () => declineInvite(inviteId),
-        },
-      ]
-    )
+    setSelectedInvite({ id: inviteId, name: groupName })
+    setShowDeclineModal(true)
+  }
+
+  const confirmDecline = () => {
+    if (!selectedInvite) return
+    setShowDeclineModal(false)
+    declineInvite(selectedInvite.id, {
+      onError: (e) => {
+        showAlert('Error', e instanceof Error ? e.message : 'Failed to decline invite')
+      },
+    })
   }
 
   if (isLoading) {
@@ -125,6 +130,17 @@ export default function InvitesScreen() {
             </View>
           )
         }}
+      />
+
+      <ConfirmModal
+        visible={showDeclineModal}
+        title="Decline Invite"
+        message={`Are you sure you want to decline the invite to "${selectedInvite?.name}"?`}
+        confirmText="Decline"
+        isDanger={true}
+        isLoading={isDeclining}
+        onConfirm={confirmDecline}
+        onCancel={() => setShowDeclineModal(false)}
       />
     </View>
   )

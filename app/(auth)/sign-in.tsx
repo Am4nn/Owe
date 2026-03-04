@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { View, Text, ScrollView, Alert, Platform } from 'react-native'
+import { View, Text, ScrollView, Platform } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -9,6 +9,7 @@ import * as WebBrowser from 'expo-web-browser'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { useSignIn, useSignInWithGoogle, createSessionFromUrl } from '@/features/auth/hooks'
+import { showAlert } from '@/lib/alert'
 
 const signInSchema = z.object({
   email: z.string().email('Please enter a valid email'),
@@ -44,7 +45,7 @@ export default function SignInScreen() {
   const onSubmit = (data: SignInForm) => {
     signIn(data, {
       onError: (error) => {
-        Alert.alert('Sign In Failed', error.message)
+        showAlert('Sign In Failed', error.message)
       },
     })
   }
@@ -109,7 +110,7 @@ export default function SignInScreen() {
       <Button
         title={isPendingGoogle ? 'Opening Google...' : 'Continue with Google'}
         onPress={() => signInWithGoogle(undefined, {
-          onError: (error) => Alert.alert('Google Sign-In Failed', error.message),
+          onError: (error) => showAlert('Google Sign-In Failed', error.message),
         })}
         disabled={isPendingGoogle}
         variant="secondary"

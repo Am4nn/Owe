@@ -14,6 +14,8 @@ import { Stack, router, useLocalSearchParams } from 'expo-router'
 import * as ExpoCrypto from 'expo-crypto'
 import { useGroup } from '@/features/groups/hooks'
 import { useCreateSettlement } from '@/features/settlements/hooks'
+import { MemberPickerModal } from '@/components/ui/MemberPickerModal'
+import { showAlert } from '@/lib/alert'
 import type { GroupMember } from '@/features/groups/types'
 
 export default function NewSettlementScreen() {
@@ -40,25 +42,27 @@ export default function NewSettlementScreen() {
   )
   const [showPayerPicker, setShowPayerPicker] = useState(false)
   const [showPayeePicker, setShowPayeePicker] = useState(false)
+  const [payerSearch, setPayerSearch] = useState('')
+  const [payeeSearch, setPayeeSearch] = useState('')
 
   const members = groupData?.members ?? []
 
   function handleSubmit() {
     const amountNum = parseFloat(amount)
     if (!amount || isNaN(amountNum) || amountNum <= 0) {
-      Alert.alert('Invalid amount', 'Please enter a valid amount greater than 0.')
+      showAlert('Invalid amount', 'Please enter a valid amount greater than 0.')
       return
     }
     if (!selectedPayer) {
-      Alert.alert('Missing payer', 'Please select who is paying.')
+      showAlert('Missing payer', 'Please select who is paying.')
       return
     }
     if (!selectedPayee) {
-      Alert.alert('Missing payee', 'Please select who is receiving payment.')
+      showAlert('Missing payee', 'Please select who is receiving payment.')
       return
     }
     if (selectedPayer.id === selectedPayee.id) {
-      Alert.alert('Invalid selection', 'Payer and payee must be different people.')
+      showAlert('Invalid selection', 'Payer and payee must be different people.')
       return
     }
 
@@ -78,54 +82,13 @@ export default function NewSettlementScreen() {
           router.replace('/(app)/settlement/success' as Parameters<typeof router.replace>[0])
         },
         onError: (err) => {
-          Alert.alert('Error', err instanceof Error ? err.message : 'Failed to record settlement')
+          showAlert('Error', err instanceof Error ? err.message : 'Failed to record settlement')
         },
       }
     )
   }
 
-  function MemberPickerModal({
-    visible,
-    onClose,
-    onSelect,
-    title,
-  }: {
-    visible: boolean
-    onClose: () => void
-    onSelect: (member: GroupMember) => void
-    title: string
-  }) {
-    return (
-      <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-        <View className="flex-1 justify-end bg-black/60">
-          <View className="bg-dark-surface rounded-t-3xl px-4 pt-4 pb-8">
-            <Text className="text-white font-bold text-lg mb-4">{title}</Text>
-            <FlatList
-              data={members}
-              keyExtractor={m => m.id}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  onPress={() => {
-                    onSelect(item)
-                    onClose()
-                  }}
-                  className="py-3 border-b border-dark-border"
-                >
-                  <Text className="text-white text-base">{item.display_name}</Text>
-                </TouchableOpacity>
-              )}
-            />
-            <TouchableOpacity
-              onPress={onClose}
-              className="mt-4 py-3 items-center"
-            >
-              <Text className="text-white/50">Cancel</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-    )
-  }
+
 
   return (
     <ScrollView className="flex-1 bg-dark-bg">
@@ -195,15 +158,37 @@ export default function NewSettlementScreen() {
 
       <MemberPickerModal
         visible={showPayerPicker}
-        onClose={() => setShowPayerPicker(false)}
-        onSelect={setSelectedPayer}
-        title="Who paid?"
+        members={members}
+        searchQuery={payerSearch}
+        onSearchChange={setPayerSearch}
+        onSelect={(id) => {
+          const m = members.find(x => x.id === id)
+          if (m) setSelectedPayer(m)
+          setShowPayerPicker(false)
+          setPayerSearch('')
+        }}
+        onClose={() => {
+          setShowPayerPicker(false)
+          setPayerSearch('')
+        }}
+        selectedIds={selectedPayer ? [selectedPayer.id] : []}
       />
       <MemberPickerModal
         visible={showPayeePicker}
-        onClose={() => setShowPayeePicker(false)}
-        onSelect={setSelectedPayee}
-        title="Who received payment?"
+        members={members}
+        searchQuery={payeeSearch}
+        onSearchChange={setPayeeSearch}
+        onSelect={(id) => {
+          const m = members.find(x => x.id === id)
+          if (m) setSelectedPayee(m)
+          setShowPayeePicker(false)
+          setPayeeSearch('')
+        }}
+        onClose={() => {
+          setShowPayeePicker(false)
+          setPayeeSearch('')
+        }}
+        selectedIds={selectedPayee ? [selectedPayee.id] : []}
       />
     </ScrollView>
   )

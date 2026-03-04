@@ -13,6 +13,9 @@ import {
 } from 'react-native'
 import { Stack, useLocalSearchParams, router } from 'expo-router'
 import { Button } from '@/components/ui/Button'
+import { CurrencyPickerModal } from '@/components/ui/CurrencyPickerModal'
+import { ConfirmModal } from '@/components/ui/ConfirmModal'
+import { showAlert } from '@/lib/alert'
 import { useGroup, useLeaveGroup, useInviteMember, useUpdateGroupCurrency } from '@/features/groups/hooks'
 import { useExpenses } from '@/features/expenses/hooks'
 import { useGroupBalances, useRealtimeExpenseSync } from '@/features/balances/hooks'
@@ -63,7 +66,7 @@ export default function GroupDetailScreen() {
       // router.back() throws "GO_BACK not handled" on web when there is no history stack.
       // Fallback to replacing with the app root so the group detail is removed from history.
       onSuccess: () => router.canGoBack() ? router.back() : router.replace('/(app)'),
-      onError: (e) => Alert.alert('Error', e.message),
+      onError: (e) => showAlert('Error', e.message),
     })
   }
 
@@ -83,12 +86,13 @@ export default function GroupDetailScreen() {
           // Show inline success — Alert.alert is unreliable on web
           // Note: email is sent via Edge Function (Phase 14) — invite is auto-claimed when they sign up
           setInviteSent(true)
+          setInviteEmail('')
           setTimeout(() => {
             setShowInviteModal(false)
             setInviteSent(false)
-          }, 2500)
+          }, 2000)
         },
-        onError: (e) => Alert.alert('Error', e.message),
+        onError: (e) => showAlert('Error', e.message),
       }
     )
   }
@@ -97,7 +101,7 @@ export default function GroupDetailScreen() {
     updateGroupCurrency(
       { groupId: id, currency: code },
       {
-        onError: (e) => Alert.alert('Error', e.message),
+        onError: (e) => showAlert('Error', e.message),
       }
     )
     setShowCurrencyPicker(false)
@@ -108,7 +112,7 @@ export default function GroupDetailScreen() {
     try {
       await exportGroupCsv(id, expenses ?? [])
     } catch (e) {
-      Alert.alert('Export failed', e instanceof Error ? e.message : 'Could not export expenses')
+      showAlert('Export failed', e instanceof Error ? e.message : 'Could not export expenses')
     }
   }
 
@@ -291,40 +295,17 @@ export default function GroupDetailScreen() {
         </View>
       </Modal>
 
-      {/* GRUP-05: Leave group confirmation modal — Alert.alert multi-button unreliable on web */}
-      <Modal
+      {/* GRUP-05: Leave group confirmation modal */}
+      <ConfirmModal
         visible={showLeaveModal}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowLeaveModal(false)}
-      >
-        <View className="flex-1 justify-center items-center bg-black/60 px-6">
-          <View className="bg-dark-surface rounded-2xl px-6 py-6 w-full">
-            <Text className="text-white font-bold text-lg mb-2">Leave group?</Text>
-            <Text className="text-white/60 text-sm mb-6">
-              You can rejoin if invited again. Outstanding balances will remain visible to other members.
-            </Text>
-            <View className="flex-row gap-3">
-              <TouchableOpacity
-                onPress={() => setShowLeaveModal(false)}
-                className="flex-1 border border-dark-border rounded-2xl py-3 items-center"
-              >
-                <Text className="text-white/70 font-medium">Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={handleConfirmLeave}
-                disabled={isLeaving}
-                className="flex-1 bg-brand-danger rounded-2xl py-3 items-center"
-              >
-                {isLeaving
-                  ? <ActivityIndicator color="#fff" />
-                  : <Text className="text-white font-semibold">Leave</Text>
-                }
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
+        title="Leave group?"
+        message="You can rejoin if invited again. Outstanding balances will remain visible to other members."
+        confirmText="Leave"
+        isDanger={true}
+        isLoading={isLeaving}
+        onConfirm={handleConfirmLeave}
+        onCancel={() => setShowLeaveModal(false)}
+      />
 
       {/* GRUP-02: Invite by email modal — Alert.prompt is iOS-only; Alert.alert unreliable on web */}
       <Modal
@@ -381,57 +362,17 @@ export default function GroupDetailScreen() {
       </Modal>
 
       {/* CURR-01: Currency picker modal */}
-      <Modal
+      <CurrencyPickerModal
         visible={showCurrencyPicker}
-        animationType="slide"
-        presentationStyle="pageSheet"
-        onRequestClose={() => {
+        baseCurrency={baseCurrency}
+        searchQuery={currencySearch}
+        onSearchChange={setCurrencySearch}
+        onSelect={handleSelectCurrency}
+        onClose={() => {
           setShowCurrencyPicker(false)
           setCurrencySearch('')
         }}
-      >
-        <View className="flex-1 bg-dark-bg">
-          <View className="px-4 pt-6 pb-3">
-            <View className="flex-row items-center justify-between mb-4">
-              <Text className="text-white font-bold text-xl">Select Currency</Text>
-              <TouchableOpacity
-                onPress={() => {
-                  setShowCurrencyPicker(false)
-                  setCurrencySearch('')
-                }}
-              >
-                <Text className="text-brand-primary font-medium">Cancel</Text>
-              </TouchableOpacity>
-            </View>
-            <TextInput
-              value={currencySearch}
-              onChangeText={setCurrencySearch}
-              placeholder="Search currencies..."
-              placeholderTextColor="rgba(255,255,255,0.3)"
-              className="bg-dark-surface rounded-xl px-4 py-3 text-white border border-dark-border"
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
-          </View>
-          <ScrollView>
-            {filteredCurrencies.map((currency) => (
-              <TouchableOpacity
-                key={currency.code}
-                onPress={() => handleSelectCurrency(currency.code)}
-                className={`flex-row items-center px-4 py-4 border-b border-dark-border ${currency.code === baseCurrency ? 'bg-brand-primary/10' : ''
-                  }`}
-              >
-                <Text className="text-white font-medium w-10 text-base">{currency.symbol}</Text>
-                <Text className="text-white font-semibold text-base mr-2">{currency.code}</Text>
-                <Text className="text-white/60 text-sm flex-1">{currency.name}</Text>
-                {currency.code === baseCurrency && (
-                  <Text className="text-brand-primary text-sm font-medium">Selected</Text>
-                )}
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-      </Modal>
+      />
     </View>
   )
 }

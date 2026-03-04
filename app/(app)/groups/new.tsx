@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Alert, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, TextInput, TouchableOpacity } from 'react-native'
 import { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -7,6 +7,7 @@ import { Stack, router } from 'expo-router'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { useCreateGroup } from '@/features/groups/hooks'
+import { showAlert } from '@/lib/alert'
 
 const createGroupSchema = z.object({
   name: z.string().min(1, 'Group name is required').max(100),
@@ -37,7 +38,7 @@ export default function NewGroupScreen() {
         onSuccess: (group) => {
           router.replace(`/(app)/groups/${group.id}`)
         },
-        onError: (e) => Alert.alert('Error', e.message),
+        onError: (e) => showAlert('Error', e.message),
       }
     )
   }

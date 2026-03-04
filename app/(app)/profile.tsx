@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Alert, Image, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { useProfile, useUpdateProfile, useSignOut } from '@/features/auth/hooks'
 import { supabase } from '@/lib/supabase'
+import { showAlert } from '@/lib/alert'
 
 const profileSchema = z.object({
   display_name: z.string().min(2).max(50),
@@ -45,7 +46,7 @@ export default function ProfileScreen() {
       .upload(fileName, blob, { upsert: true })
 
     if (uploadError) {
-      Alert.alert('Upload Failed', uploadError.message)
+      showAlert('Upload Failed', uploadError.message)
       return
     }
 
@@ -58,8 +59,8 @@ export default function ProfileScreen() {
 
   const onSubmit = (data: ProfileForm) => {
     updateProfile(data, {
-      onSuccess: () => Alert.alert('Saved', 'Profile updated'),
-      onError: (e) => Alert.alert('Error', e.message),
+      onSuccess: () => showAlert('Saved', 'Profile updated'),
+      onError: (e) => showAlert('Error', e.message),
     })
   }
 
@@ -114,7 +115,7 @@ export default function ProfileScreen() {
         variant="secondary"
         onPress={() => {
           signOut(undefined, {
-            onError: (e) => Alert.alert('Sign Out Error', e.message),
+            onError: (e) => showAlert('Sign Out Error', e.message),
           })
         }}
         className="mt-4"

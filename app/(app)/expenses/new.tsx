@@ -6,17 +6,17 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
-  Alert,
-  Modal,
 } from 'react-native'
 import { Stack, router, useLocalSearchParams } from 'expo-router'
 import * as ExpoCrypto from 'expo-crypto'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { showAlert } from '@/lib/alert'
 import { supabase } from '@/lib/supabase'
 import { useGroup } from '@/features/groups/hooks'
 import { useCreateExpense } from '@/features/expenses/hooks'
+import { CurrencyPickerModal } from '@/components/ui/CurrencyPickerModal'
 import { SplitEditor } from '@/components/expenses/SplitEditor'
 import { CATEGORIES } from '@/features/expenses/categories'
 import { useFxRates, COMMON_CURRENCIES, computeBaseCents } from '@/features/currency/hooks'
@@ -182,7 +182,7 @@ export default function NewExpenseScreen() {
         },
       })
     } catch (err) {
-      Alert.alert('Error', err instanceof Error ? err.message : 'Failed to create expense')
+      showAlert('Error', err instanceof Error ? err.message : 'Failed to create expense')
     }
   }
 
@@ -419,62 +419,22 @@ export default function NewExpenseScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* CURR-02: Currency picker modal */}
-      <Modal
+      {/* Currency picker modal */}
+      <CurrencyPickerModal
         visible={showCurrencyPicker}
-        animationType="slide"
-        presentationStyle="pageSheet"
-        onRequestClose={() => {
+        baseCurrency={expenseCurrency}
+        searchQuery={currencySearch}
+        onSearchChange={setCurrencySearch}
+        onSelect={(code) => {
+          setExpenseCurrency(code)
           setShowCurrencyPicker(false)
           setCurrencySearch('')
         }}
-      >
-        <View className="flex-1 bg-dark-bg">
-          <View className="px-4 pt-6 pb-3">
-            <View className="flex-row items-center justify-between mb-4">
-              <Text className="text-white font-bold text-xl">Select Currency</Text>
-              <TouchableOpacity
-                onPress={() => {
-                  setShowCurrencyPicker(false)
-                  setCurrencySearch('')
-                }}
-              >
-                <Text className="text-brand-primary font-medium">Cancel</Text>
-              </TouchableOpacity>
-            </View>
-            <TextInput
-              value={currencySearch}
-              onChangeText={setCurrencySearch}
-              placeholder="Search currencies..."
-              placeholderTextColor="rgba(255,255,255,0.3)"
-              className="bg-dark-surface rounded-xl px-4 py-3 text-white border border-dark-border"
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
-          </View>
-          <ScrollView>
-            {filteredCurrencies.map((currency) => (
-              <TouchableOpacity
-                key={currency.code}
-                onPress={() => {
-                  setExpenseCurrency(currency.code)
-                  setShowCurrencyPicker(false)
-                  setCurrencySearch('')
-                }}
-                className={`flex-row items-center px-4 py-4 border-b border-dark-border ${currency.code === expenseCurrency ? 'bg-brand-primary/10' : ''
-                  }`}
-              >
-                <Text className="text-white font-medium w-10 text-base">{currency.symbol}</Text>
-                <Text className="text-white font-semibold text-base mr-2">{currency.code}</Text>
-                <Text className="text-white/60 text-sm flex-1">{currency.name}</Text>
-                {currency.code === expenseCurrency && (
-                  <Text className="text-brand-primary text-sm font-medium">Selected</Text>
-                )}
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-      </Modal>
+        onClose={() => {
+          setShowCurrencyPicker(false)
+          setCurrencySearch('')
+        }}
+      />
     </ScrollView>
   )
 }

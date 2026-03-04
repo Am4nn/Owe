@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { View, Text, ScrollView, Alert, Platform } from 'react-native'
+import { View, Text, ScrollView, Platform } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -8,6 +8,7 @@ import * as Linking from 'expo-linking'
 import * as WebBrowser from 'expo-web-browser'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+import { showAlert } from '@/lib/alert'
 import { useSignUp, useSignInWithGoogle, createSessionFromUrl } from '@/features/auth/hooks'
 
 const signUpSchema = z.object({
@@ -48,7 +49,7 @@ export default function SignUpScreen() {
         // Auth state change triggers navigation automatically via Stack.Protected
       },
       onError: (error) => {
-        Alert.alert('Sign Up Failed', error.message)
+        showAlert('Sign Up Failed', error.message)
       },
     })
   }
@@ -125,7 +126,7 @@ export default function SignUpScreen() {
       <Button
         title={isPendingGoogle ? 'Opening Google...' : 'Continue with Google'}
         onPress={() => signInWithGoogle(undefined, {
-          onError: (error) => Alert.alert('Google Sign-In Failed', error.message),
+          onError: (error) => showAlert('Google Sign-In Failed', error.message),
         })}
         disabled={isPendingGoogle}
         variant="secondary"

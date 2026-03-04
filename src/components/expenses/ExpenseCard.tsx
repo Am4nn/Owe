@@ -1,8 +1,9 @@
 import React, { useRef } from 'react'
-import { View, Text, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
 import type { SwipeableMethods } from 'react-native-gesture-handler/ReanimatedSwipeable'
 import { router } from 'expo-router'
+import { showAlert } from '@/lib/alert'
 import type { Expense } from '@/features/expenses/types'
 import type { GroupMember } from '@/features/groups/types'
 import { CATEGORIES } from '@/features/expenses/categories'
@@ -18,7 +19,7 @@ function formatAmount(cents: number, currencyCode: string): string {
   // Simple formatting: use currency code prefix for non-USD, $ for USD
   // For a production app we'd use Intl.NumberFormat — for MVP, code prefix is clear enough
   const amount = (cents / 100).toFixed(2)
-  return currencyCode === 'USD' ? `$${amount}` : `${currencyCode} ${amount}`
+  return currencyCode === 'USD' ? `$${amount} ` : `${currencyCode} ${amount} `
 }
 
 function formatDate(dateStr: string): string {
@@ -55,7 +56,7 @@ export function ExpenseCard({ expense, members, onSettle, onRemind }: ExpenseCar
       onRemind(expense)
     } else {
       // Placeholder: push reminders are a Phase 3 feature
-      Alert.alert('Remind', 'Push reminders will be available in the next update.')
+      showAlert('Remind', 'Push reminders will be available in the next update.')
     }
   }
 
@@ -89,7 +90,7 @@ export function ExpenseCard({ expense, members, onSettle, onRemind }: ExpenseCar
       overshootFriction={8}
     >
       <TouchableOpacity
-        onPress={() => router.push(`/(app)/expenses/${expense.id}` as Parameters<typeof router.push>[0])}
+        onPress={() => router.push(`/ (app) / expenses / ${expense.id} ` as Parameters<typeof router.push>[0])}
         className="bg-dark-surface border border-dark-border rounded-2xl px-4 py-4 mb-3"
       >
         <View className="flex-row items-start justify-between">
