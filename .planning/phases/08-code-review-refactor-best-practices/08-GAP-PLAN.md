@@ -66,11 +66,11 @@ Load these files for context:
 </task>
 
 ## Must-Haves
-- [ ] Modal encapsulation (DRY compliance)
-- [ ] Universal QueryGuard on primary screens
-- [ ] Type-safety without "cheating"
+- [x] Modal encapsulation (DRY compliance)
+- [x] Universal QueryGuard on primary screens
+- [x] Type-safety without "cheating"
 
 ## Success Criteria
-- [ ] All tasks verified passing
-- [ ] `tsc` passes without errors
-- [ ] UX consistency for loading/error states
+- [x] All tasks verified passing
+- [x] `tsc` passes without errors
+- [x] UX consistency for loading/error states

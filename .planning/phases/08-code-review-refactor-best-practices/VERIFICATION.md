@@ -7,7 +7,7 @@ verdict: PASS
 # Phase 8 Verification Report
 
 ## Summary
-20/20 must-haves verified
+23/23 must-haves verified
 
 ## Must-Haves
 
@@ -153,8 +153,32 @@ Test Suites: 2 passed, 2 total
 Tests:       30 passed, 30 total
 ```
 
+### ✅ `CurrencyPickerModal` state fully encapsulated (DRY)
+**Status:** PASS
+**Evidence:** 
+```
+Search state and filtering logic moved from screens into the component. Prop interface simplified.
+Verified in `groups/[id]/index.tsx` and `expenses/new.tsx`.
+```
+
+### ✅ `QueryGuard` coverage expanded to Settlement and Edit screens
+**Status:** PASS
+**Evidence:** 
+```
+`NewSettlementScreen` and `EditExpenseScreen` refactored to use QueryGuard with Container/Presenter pattern.
+Manual loading indicators removed.
+```
+
+### ✅ Feature hooks hardened (zero type cheating)
+**Status:** PASS
+**Evidence:** 
+```
+Explicit row interfaces added to `groups`, `balances`, and `invites` hooks.
+`as unknown` casts replaced with correctly typed results. `tsc` passed.
+```
+
 ## Verdict
 PASS
 
 ## Gap Closure Required
-- None. Gap closure `fix-oauth-warmup` plan complete.
+- None. All Phase 8 Audit gaps resolved (Modal encapsulation, QueryGuard coverage, Hook hardening).
