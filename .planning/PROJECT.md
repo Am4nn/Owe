@@ -80,6 +80,7 @@ Users can split expenses, track shared debts, and settle up with friends without
 | mutationFn extracted as named export | Required for setMutationDefaults to serialize/deserialize paused mutations across restarts | ✓ Good — OFFL-02 offline replay enabled for create/update/delete |
 | expo-sqlite localStorage polyfill | Avoids SecureStore 2048-byte limit on JWT tokens with claims | ✓ Good — auth sessions persist correctly |
 | Pin tailwindcss@^3.4.x (not v4) | NativeWind 4.x uses Tailwind v3 API; v4 silently breaks className handling | ✓ Good — prevents silent styling breakage |
+| Container/Presenter for QueryGuard | Ensures component state initializes only after data is guarded/available | ✓ Good — resolved hydration errors in settlement/edit screens |
 
 ---
-*Last updated: 2026-03-01 after v1.0 milestone — 42/42 requirements shipped*
+*Last updated: 2026-03-04 after Phase 8 gap closure completion*
