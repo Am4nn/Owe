@@ -48,7 +48,21 @@ export function usePendingInvites() {
         .gt('expires_at', new Date().toISOString())
         .order('created_at', { ascending: false })
       if (error) throw error
-      return data as unknown as GroupInvite[]
+
+      interface InviteRow {
+        id: string
+        group_id: string
+        invited_email: string
+        invited_by: string
+        accepted_at: string | null
+        expires_at: string
+        created_at: string
+        groups: { id: string; name: string } | null
+        inviter: { display_name: string } | null
+      }
+
+      const rows = (data as unknown) as InviteRow[]
+      return rows as unknown as GroupInvite[]
     },
     staleTime: 30_000,
   })
