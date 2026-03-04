@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
+import { requireUserId } from '@/lib/auth'
+import { insertActivity } from '@/lib/activity'
 import type { Settlement, CreateSettlementInput } from './types'
 
 /**
@@ -38,29 +40,14 @@ export function useCreateSettlement() {
         .single()
       if (settlementError) throw settlementError
 
-      // Step 2: Resolve actor_id (current user's member_id in this group)
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) throw new Error('Not authenticated')
-
-      const { data: actorMember, error: actorError } = await supabase
-        .from('group_members')
-        .select('id')
-        .eq('group_id', group_id)
-        .eq('user_id', user.id)
-        .single()
-      if (actorError) throw actorError
-
-      // Step 3: Insert activity row
-      const { error: activityError } = await supabase
-        .from('activities')
-        .insert({
-          action_type: 'settlement_recorded',
-          group_id,
-          actor_id: actorMember.id,
-          expense_id: null,
-          metadata: { amount_cents },
-        })
-      if (activityError) throw activityError
+      // Step 2: Insert activity row via shared helper
+      const userId = await requireUserId()
+      await insertActivity({
+        userId,
+        groupId: group_id,
+        actionType: 'settlement_recorded',
+        metadata: { amount_cents },
+      })
 
       return settlement as Settlement
     },

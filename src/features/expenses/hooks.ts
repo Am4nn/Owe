@@ -1,13 +1,8 @@
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
+import { requireUserId } from '@/lib/auth'
+import { insertActivity } from '@/lib/activity'
 import type { CreateExpenseInput, UpdateExpenseInput, Expense, ExpenseSplit } from './types'
-
-// Helper to get current user ID
-async function getCurrentUserId(): Promise<string> {
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) throw new Error('Not authenticated')
-  return user.id
-}
 
 /**
  * Fetch all non-deleted expenses for a group, ordered by expense_date DESC.
@@ -114,26 +109,14 @@ export async function createExpenseMutationFn(input: CreateExpenseInput): Promis
     throw splitsError
   }
 
-  // Step 3: Resolve actor_id (current user's member_id in this group)
-  const { data: actorMember, error: actorError } = await supabase
-    .from('group_members')
-    .select('id')
-    .eq('group_id', group_id)
-    .eq('user_id', user.id)
-    .single()
-  if (actorError) throw actorError
-
-  // Step 4: Insert activity row
-  const { error: activityError } = await supabase
-    .from('activities')
-    .insert({
-      action_type: 'expense_added',
-      group_id,
-      actor_id: actorMember.id,
-      expense_id: expense.id,
-      metadata: { description },
-    })
-  if (activityError) throw activityError
+  // Step 3: Insert activity row via shared helper
+  await insertActivity({
+    userId: user.id,
+    groupId: group_id,
+    actionType: 'expense_added',
+    expenseId: expense.id,
+    metadata: { description },
+  })
 
   return expense as Expense
 }
@@ -201,28 +184,14 @@ export async function updateExpenseMutationFn(input: UpdateExpenseInput): Promis
     if (insertError) throw insertError
   }
 
-  // Resolve actor_id and insert expense_edited activity row
-  const { data: { user: actorUser } } = await supabase.auth.getUser()
-  if (!actorUser) throw new Error('Not authenticated')
-
-  const { data: actorMember, error: actorError } = await supabase
-    .from('group_members')
-    .select('id')
-    .eq('group_id', input.group_id)
-    .eq('user_id', actorUser.id)
-    .single()
-  if (actorError) throw actorError
-
-  const { error: activityError } = await supabase
-    .from('activities')
-    .insert({
-      action_type: 'expense_edited',
-      group_id: input.group_id,
-      actor_id: actorMember.id,
-      expense_id: input.id,
-      metadata: null,
-    })
-  if (activityError) throw activityError
+  // Insert expense_edited activity row via shared helper
+  const userId = await requireUserId()
+  await insertActivity({
+    userId,
+    groupId: input.group_id,
+    actionType: 'expense_edited',
+    expenseId: input.id,
+  })
 
   return updatedExpense as Expense
 }
@@ -252,7 +221,7 @@ export function useUpdateExpense() {
  * must receive a stable function reference (not an inline closure) to survive app restart.
  */
 export async function deleteExpenseMutationFn({ id, group_id }: { id: string; group_id: string }): Promise<{ id: string; group_id: string }> {
-  const userId = await getCurrentUserId()
+  const userId = await requireUserId()
   const { error } = await supabase
     .from('expenses')
     .update({ deleted_at: new Date().toISOString() })
@@ -260,25 +229,13 @@ export async function deleteExpenseMutationFn({ id, group_id }: { id: string; gr
     .eq('created_by', userId)
   if (error) throw error
 
-  // Resolve actor_id (reuse userId already fetched above)
-  const { data: actorMember, error: actorError } = await supabase
-    .from('group_members')
-    .select('id')
-    .eq('group_id', group_id)
-    .eq('user_id', userId)
-    .single()
-  if (actorError) throw actorError
-
-  const { error: activityError } = await supabase
-    .from('activities')
-    .insert({
-      action_type: 'expense_deleted',
-      group_id,
-      actor_id: actorMember.id,
-      expense_id: id,
-      metadata: null,
-    })
-  if (activityError) throw activityError
+  // Insert expense_deleted activity row via shared helper
+  await insertActivity({
+    userId,
+    groupId: group_id,
+    actionType: 'expense_deleted',
+    expenseId: id,
+  })
 
   return { id, group_id }
 }

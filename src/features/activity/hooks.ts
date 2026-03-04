@@ -1,13 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
+import { requireUserId } from '@/lib/auth'
+import { insertActivity } from '@/lib/activity'
 import type { ActivityItem, Comment, Reaction } from './types'
-
-// Helper to get current user ID
-async function getCurrentUserId(): Promise<string> {
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) throw new Error('Not authenticated')
-  return user.id
-}
 
 /**
  * Fetch the activity feed, optionally filtered by group.
@@ -35,7 +30,7 @@ export function useActivityFeed(groupId?: string) {
       }
 
       // All-groups view: two-step query (PostgREST cannot express WHERE IN (subquery))
-      const userId = await getCurrentUserId()
+      const userId = await requireUserId()
       const { data: memberships, error: membershipsError } = await supabase
         .from('group_members')
         .select('group_id')
@@ -70,7 +65,7 @@ export function useAddComment() {
   return useMutation({
     mutationKey: ['comments', 'create'],
     mutationFn: async ({ expense_id, body }: { expense_id: string; body: string }) => {
-      const userId = await getCurrentUserId()
+      const userId = await requireUserId()
 
       // Insert comment
       const { data: comment, error: commentError } = await supabase
@@ -88,22 +83,12 @@ export function useAddComment() {
         .single()
       if (expenseError) throw expenseError
 
-      // Resolve actor member_id
-      const { data: actorMember, error: actorError } = await supabase
-        .from('group_members')
-        .select('id')
-        .eq('group_id', expense.group_id)
-        .eq('user_id', userId)
-        .single()
-      if (actorError) throw actorError
-
-      // Insert activity row
-      await supabase.from('activities').insert({
-        action_type: 'comment_added',
-        group_id: expense.group_id,
-        actor_id: actorMember.id,
-        expense_id,
-        metadata: null,
+      // Insert activity row via shared helper
+      await insertActivity({
+        userId,
+        groupId: expense.group_id,
+        actionType: 'comment_added',
+        expenseId: expense_id,
       })
 
       return comment as Comment
@@ -147,7 +132,7 @@ export function useAddReaction() {
   return useMutation({
     mutationKey: ['reactions', 'create'],
     mutationFn: async ({ expense_id, emoji }: { expense_id: string; emoji: string }) => {
-      const userId = await getCurrentUserId()
+      const userId = await requireUserId()
 
       // Upsert the reaction
       const { data, error } = await supabase
@@ -168,26 +153,14 @@ export function useAddReaction() {
         .single()
       if (expenseError) throw expenseError
 
-      // Resolve actor member_id
-      const { data: actorMember, error: actorError } = await supabase
-        .from('group_members')
-        .select('id')
-        .eq('group_id', expense.group_id)
-        .eq('user_id', userId)
-        .single()
-      if (actorError) throw actorError
-
-      // Insert activity row
-      const { error: activityError } = await supabase
-        .from('activities')
-        .insert({
-          action_type: 'reaction_added',
-          group_id: expense.group_id,
-          actor_id: actorMember.id,
-          expense_id,
-          metadata: { emoji },
-        })
-      if (activityError) throw activityError
+      // Insert activity row via shared helper
+      await insertActivity({
+        userId,
+        groupId: expense.group_id,
+        actionType: 'reaction_added',
+        expenseId: expense_id,
+        metadata: { emoji },
+      })
 
       return { ...(data as Reaction), group_id: expense.group_id }
     },
@@ -207,7 +180,7 @@ export function useRemoveReaction() {
   return useMutation({
     mutationKey: ['reactions', 'delete'],
     mutationFn: async ({ expense_id }: { expense_id: string }) => {
-      const userId = await getCurrentUserId()
+      const userId = await requireUserId()
       const { error } = await supabase
         .from('expense_reactions')
         .delete()

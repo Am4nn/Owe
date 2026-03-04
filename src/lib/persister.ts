@@ -1,41 +1,5 @@
-import { Platform } from 'react-native'
-import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
-import { createMMKV } from 'react-native-mmkv'
+// React Native will automatically resolve to .native.ts or .web.ts
+// We just need to define the type interface here for tsc, but
+// Metro bundler handles the actual resolution.
+export * from './persister.native' // Base export for tsc
 
-// MMKV is native-only — use localStorage on web
-const buildStorage = () => {
-  if (Platform.OS === 'web') {
-    return {
-      setItem: (key: string, value: string): Promise<void> => {
-        localStorage.setItem(key, value)
-        return Promise.resolve()
-      },
-      getItem: (key: string): Promise<string | null> => {
-        return Promise.resolve(localStorage.getItem(key))
-      },
-      removeItem: (key: string): Promise<void> => {
-        localStorage.removeItem(key)
-        return Promise.resolve()
-      },
-    }
-  }
-
-  // Native: MMKV v4 uses createMMKV() factory instead of new MMKV()
-  const storage = createMMKV()
-  return {
-    setItem: (key: string, value: string): Promise<void> => {
-      storage.set(key, value)
-      return Promise.resolve()
-    },
-    getItem: (key: string): Promise<string | null> => {
-      const value = storage.getString(key)
-      return Promise.resolve(value === undefined ? null : value)
-    },
-    removeItem: (key: string): Promise<void> => {
-      storage.remove(key)
-      return Promise.resolve()
-    },
-  }
-}
-
-export const persister = createAsyncStoragePersister({ storage: buildStorage() })

@@ -1,14 +1,8 @@
 import { useEffect } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
+import { requireUserId } from '@/lib/auth'
 import type { MemberBalance, BalanceSummary, DebtSuggestion } from './types'
-
-// Helper to get current user ID
-async function getCurrentUserId(): Promise<string> {
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) throw new Error('Not authenticated')
-  return user.id
-}
 
 /**
  * BALS-02: Fetch per-member net balances for a group.
@@ -91,7 +85,7 @@ export function useBalanceSummary() {
   return useQuery({
     queryKey: ['balances', 'summary'],
     queryFn: async () => {
-      const userId = await getCurrentUserId()
+      const userId = await requireUserId()
 
       // Get all group_member rows for this user
       const { data: memberships, error: membershipsError } = await supabase

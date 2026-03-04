@@ -8,7 +8,7 @@ import {
   Alert,
 } from 'react-native'
 import { useRouter } from 'expo-router'
-import { usePendingInvites, useAcceptInvite, useDeclineInvite } from '@/features/groups/hooks'
+import { usePendingInvites, useAcceptInvite, useDeclineInvite } from '@/features/invites/hooks'
 
 export default function InvitesScreen() {
   const router = useRouter()

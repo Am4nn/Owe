@@ -19,32 +19,12 @@ import { useGroupBalances, useRealtimeExpenseSync } from '@/features/balances/ho
 import { BalanceCard } from '@/components/balances/BalanceCard'
 import { ExpenseCard } from '@/components/expenses/ExpenseCard'
 import { useFxRates, COMMON_CURRENCIES } from '@/features/currency/hooks'
-import { exportGroupCsv } from '@/features/export/hooks'
+import { exportGroupCsv } from '@/features/export/utils'
 import { useReminderConfig } from '@/features/notifications/hooks'
 import type { GroupMember } from '@/features/groups/types'
 import type { Expense } from '@/features/expenses/types'
 
-function MemberRow({ member }: { member: GroupMember }) {
-  const isNamedOnly = member.user_id === null
-  return (
-    <View className="flex-row items-center py-3 border-b border-dark-border">
-      <View className="w-10 h-10 rounded-full bg-dark-surface border border-dark-border items-center justify-center mr-3">
-        <Text className="text-white font-semibold">
-          {member.display_name[0]?.toUpperCase()}
-        </Text>
-      </View>
-      <View className="flex-1">
-        <Text className="text-white font-medium">{member.display_name}</Text>
-        {isNamedOnly && (
-          <Text className="text-white/40 text-xs">Not on Owe</Text>
-        )}
-      </View>
-      {member.role === 'admin' && (
-        <Text className="text-brand-accent text-xs font-medium">admin</Text>
-      )}
-    </View>
-  )
-}
+import { MemberRow } from '@/components/groups/MemberRow'
 
 export default function GroupDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()

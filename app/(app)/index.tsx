@@ -1,6 +1,7 @@
 import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { Stack, router } from 'expo-router'
-import { useGroups, usePendingInvites } from '@/features/groups/hooks'
+import { useGroups } from '@/features/groups/hooks'
+import { usePendingInvites } from '@/features/invites/hooks'
 import { useBalanceSummary } from '@/features/balances/hooks'
 import type { Group } from '@/features/groups/types'
 import { ExpandableFAB } from '@/components/ui/ExpandableFAB'

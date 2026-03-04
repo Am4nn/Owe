@@ -10,7 +10,7 @@ import { persister } from '@/lib/persister'
 import { useSession } from '@/features/auth/hooks'
 import { createExpenseMutationFn, updateExpenseMutationFn, deleteExpenseMutationFn } from '@/features/expenses/hooks'
 import { registerPushToken, useNotificationDeepLink } from '@/features/notifications/hooks'
-import { useClaimInvites } from '@/features/groups/hooks'
+import { useClaimInvites } from '@/features/invites/hooks'
 import '../global.css'
 import '@/stores/ui'
 

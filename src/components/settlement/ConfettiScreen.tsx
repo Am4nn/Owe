@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Platform } from 'react-native'
 import ConfettiCannon from 'react-native-confetti-cannon'
 import * as Haptics from 'expo-haptics'
 
@@ -11,7 +11,9 @@ export function ConfettiScreen({ onDismiss }: ConfettiScreenProps) {
   const confettiRef = useRef<ConfettiCannon>(null)
 
   useEffect(() => {
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+    if (Platform.OS !== 'web') {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+    }
     confettiRef.current?.start()
   }, [])
 
