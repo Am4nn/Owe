@@ -85,7 +85,6 @@ export default function NewExpenseScreen() {
     groupData?.group?.base_currency ?? 'USD'
   )
   const [showCurrencyPicker, setShowCurrencyPicker] = useState(false)
-  const [currencySearch, setCurrencySearch] = useState('')
 
   // CURR-03: Fetch FX rates from fx_rates table (stale 30 min)
   const { data: fxRates } = useFxRates()
@@ -115,13 +114,6 @@ export default function NewExpenseScreen() {
 
   const members = groupData?.members ?? []
 
-  const filteredCurrencies = currencySearch.trim()
-    ? COMMON_CURRENCIES.filter(
-      (c) =>
-        c.code.toLowerCase().includes(currencySearch.toLowerCase()) ||
-        c.name.toLowerCase().includes(currencySearch.toLowerCase())
-    )
-    : COMMON_CURRENCIES
 
   async function onSubmit(values: FormValues) {
     try {
@@ -425,16 +417,12 @@ export default function NewExpenseScreen() {
       <CurrencyPickerModal
         visible={showCurrencyPicker}
         baseCurrency={expenseCurrency}
-        searchQuery={currencySearch}
-        onSearchChange={setCurrencySearch}
         onSelect={(code) => {
           setExpenseCurrency(code)
           setShowCurrencyPicker(false)
-          setCurrencySearch('')
         }}
         onClose={() => {
           setShowCurrencyPicker(false)
-          setCurrencySearch('')
         }}
       />
     </ScrollView>

@@ -113,12 +113,12 @@ See: .planning/PROJECT.md (updated 2026-02-27)
 
 ## Current Position
 
-Phase: 15 of 15 — COMPLETE (3/3 plans complete, verified by user)
-Plan: 3 of 3 in phase 15 complete (15-01 Invite Claim Logic, 15-02 Pending Invites UI, 15-03 Deep Linking)
-Status: Phase 15 COMPLETE — email invite E2E flow deployed and verified ✅
-Last activity: 2026-03-03 — Phase 15 verified: invite claim, accept/decline UI, deep linking all working
+Phase: 08-code-review-refactor-best-practices — AUDITED (Gaps Identified)
+Plan: Audit results in 08-AUDIT.md
+Status: Phase 8 completed but audit reveals significant encapsulation and coverage gaps.
+Last activity: 2026-03-04 — Strict Senior Engineer Audit performed; identified CurrencyPickerModal state leakage and missing QueryGuards.
 
-Progress: [██████████] 100% (Phase 15 complete)
+Progress: [████████░░] 80% (Phase 8 Audit gaps pending)
 
 ## Performance Metrics
 
@@ -158,7 +158,7 @@ Progress: [██████████] 100% (Phase 15 complete)
 
 ### Roadmap Evolution
 
-- Phase 8 added (inserted): Code Review, Refactor & Best Practices — former Phase 8 (UI/UX Upgrade) shifted to Phase 9; Phases 9–13 renumbered to 10–14
+- Phase 8: Code Review, Refactor & Best Practices — Structural implementation completed, but 2026-03-04 audit identified critical gaps in encapsulation (CurrencyPickerModal) and coverage (QueryGuard on settlement/edit).
 - Phase 14 completed: Email Invite Delivery via Resend — Edge Function + DB Webhook pipeline shipped
 - Phase 15 completed: Email Invite E2E Completion — invite claim logic (DB functions + auth trigger), pending invites UI, deep linking from email CTA
 
