@@ -37,6 +37,7 @@
 - [ ] Phase 13: PDF Export + Apple Sign-In — EXPE-01
 - [x] Phase 14: Email Invite Delivery (Supabase Edge Function) — send actual invite emails when a user is added to `group_invites`; notify existing members of new expenses
 - [x] Phase 15: Email Invite E2E Completion — deep link from email into app, invite claim/accept logic on sign-up & login, pending invites UI, web landing page for non-app users
+- [ ] Phase 16: Future Feature Implementation — wiring data and logic for features designed in Phase 9
 
 ## Phase Details
 
@@ -50,7 +51,7 @@
 **Plans**: TBD
 
 Plans:
-- [ ] 07-01-PLAN.md — Bug fixes batch 1 (scope TBD during planning)
+- [x] 07-01-PLAN.md — Bug fixes batch 1
 
 ---
 
@@ -74,27 +75,28 @@ Plans:
 ---
 
 ### Phase 9: UI/UX Upgrade
-**Goal**: Align every screen with the Stitch design reference — cohesive dark fintech aesthetic, glassmorphism cards, redesigned group cards, Stitch-accurate navigation, and polished micro-interactions across the full app
+**Goal**: Align every screen with the Stitch design reference — cohesive dark fintech aesthetic, glassmorphism cards, redesigned group cards, Stitch navigation shell, and polished micro-interactions across the full app (covering all 31 design variants)
 **Depends on**: Phase 8
-**Design Reference**: `artifacts/stitch_owe_design/` (27 screens with screen.png + code.html per screen)
+**Design Reference**: `artifacts/stitch_owe_design/` (31 screens with screen.png + code.html per screen (some screens doesn't have html))
 **Requirements**: UIUX-01 (enhanced), visual parity with Stitch design board
 **Success Criteria** (what must be TRUE):
-  1. Dashboard shows side-by-side balance summary cards (green "You are owed" / red "You owe"), group cards with background images + overlay, and activity feed rows with category icon + color-coded amounts matching Stitch `dashboard_strict_dark_refinement`
-  2. Group detail screen matches `group_detail_dark_theme_refined`: group avatar/icon at top, balance summary bar + "Settle All" CTA, member avatar stack with +N overflow and Invite action, simplified debts cards with inline REMIND chip, chat-bubble–style expense history
-  3. Add expense screen matches `add_expense_strict_dark_theme`: large `$0.00` amount header, description input, category pill row (Food/Travel/Shop/Other + custom), "Paid By" avatar stack, segmented split-type control (Equal/Exact/%), member amount rows, purple "Save Expense" CTA
-  4. Activity feed matches `activity_feed_updated_navigation`: tab bar (All / Groups / Friends / Settlements), avatar + action description + relative timestamp + color-coded amount per row, emoji reaction pill counts below each row
-  5. Settlement success screen matches `settlement_success_strict_dark`: dark teal radial gradient background, glowing teal ring + checkmark animation, "All Clear!" heading, payer + payee + amount, transaction ID chip, "Back to Group" + "View Receipt" actions
-  6. Sign-in and sign-up screens match `sign_in_unified_google_button` / `sign_up_final_design`: infinity logo at top, glassmorphism card with email + password fields, purple "Sign In/Up" CTA, "OR CONTINUE WITH" divider, unified "Continue with Google" button below
-  7. Bottom navigation matches all Stitch screens: 4 tabs (Home / Activity / Groups / Profile) with centered floating purple FAB — no labels hidden, correct active-state purple underline/icon tint
-  8. All text, spacing, border-radius, shadow, and color tokens are consistent with the Stitch palette: background `#0e1117`, card `#1a1d2e`, purple accent `#7B5CF6`, green `#22c55e`, red `#ef4444`
-**Plans**: TBD (will be split per screen group during planning)
-
-Plans:
-- [ ] 09-01-PLAN.md — Design tokens + navigation shell (colors, typography, bottom tabs, FAB)
-- [ ] 09-02-PLAN.md — Auth screens (sign-in, sign-up, splash/onboarding)
-- [ ] 09-03-PLAN.md — Dashboard + group cards
-- [ ] 09-04-PLAN.md — Group detail + add expense screen
-- [ ] 09-05-PLAN.md — Activity feed + settlement success screen
+  1. Dashboard matches `dashboard_strict_dark_refinement`: side-by-side balance summary cards (green/red), horizontal-scroll group cards with background images + overlays, and recent activity feed. Supports empty state (`dashboard_empty_state`).
+  2. Group detail screen matches `group_detail_dark_theme_refined`: featuring balance summary bar, "Settle All" CTA, member avatar stack with +N overflow and Invite action, simplified debts cards with inline REMIND chips, and chat-bubble style expense history.
+  3. Add expense screen matches `add_expense_strict_dark_theme`: large amount header, description input, category pill row, "Paid By" avatar selection, segmented split-type control (Equal/Exact/%), and member amount rows. Includes `split_confirmation` and `expense_added_success` views.
+  4. Activity feed matches `activity_feed_updated_navigation`: persistent segment control (All / Groups / Friends / Settlements), search/filter capabilities (`activity_feed_with_search_filter`), and emoji reactions on expense rows.
+  5. Settlement flow matches `settlement_success_strict_dark`: teal radial gradient success view with transaction ID chips and "Back to Group" / "View Receipt" CTAs.
+  6. Sign-in, Sign-up, and Onboarding match `sign_in_unified_google_button`, `sign_up_final_design`, and `splash_onboarding_owe_new_logo`: infinity logo branding, glassmorphism input cards, and unified Google OAuth button.
+  7. Profile and Social flows: Profile stats matches `settings_profile_no_scrollbars`. Add Friends flow matches `search_add_friends_no_scrollbars` (suggested friends scroll + invite via link). Friend details match `friend_balance_sarah_miller`.
+  8. Navigation Shell & Utilities: Bottom navigation (Home / Activity / Groups / Profile) with expanded FAB menu (`fab_expansion_menu` — Scan/Manual/Transfer). Includes standard Error (`general_error_404`), No-Internet, and Maintenance views.
+  9. Visual Consistency: All tokens match the Stitch palette (Background `#0e1117`, Card `#1a1d2e`, Accent `#7B5CF6`). Clean UI with no scrollbars and consistent radius/spacing across all 31 design variants.
+  10. Deferred Visual Consistency: Features designed during Phase 9 (UI/UX Upgrade) but not implemented must have complete, high-parity designs with data/logic powered by mocks. Full functional implementation will follow in Phase 16.
+  Its very likely we will design something whose implementation might have not done yet so that featue should be added in phase 16 as a future feature but the design should and must completed for that feature in this phase and wiring the data and logic can be taken in phase 16 currently it can be powered by mock if required.
+**Plans**:
+- [ ] 09-01-PLAN.md — Design tokens + Navigation Shell (Colors, typography, glassmorphism, bottom tabs, FAB expansion menu)
+- [ ] 09-02-PLAN.md — Auth & Onboarding Flow (Sign-in, Sign-up, Onboarding splash, Forgot Password/OTP verification)
+- [ ] 09-03-PLAN.md — Dashboard & Profile (Empty/Populated dashboard, Group cards, Profile stats, Friends list/detail)
+- [ ] 09-04-PLAN.md — Group Detail & Expense Entry (Group header, Member status, Add Expense screen, Split logic UI, Expense details)
+- [ ] 09-05-PLAN.md — Feed & Polish (Full activity feed with filters, Settlement success views, System error/empty states)
 
 ---
 
@@ -115,6 +117,16 @@ Plans:
 - [x] 15-01-PLAN.md — Invite claim logic (DB function + auth trigger + RLS policies)
 - [x] 15-02-PLAN.md — Pending invites UI + accept/decline flow
 - [x] 15-03-PLAN.md — Deep linking from email + web landing page
+
+### Phase 16: Future Feature Implementation
+**Goal**: Implement the functional logic and data wiring for advanced features designed during the Phase 9 UI/UX Upgrade
+**Depends on**: Phase 9
+**Requirements**: Various (QR-01, SUBS-01, ADMIN-01)
+**Success Criteria** (what must be TRUE):
+  1. All mock-powered features from Phase 9 are fully integrated with backend services
+  2. End-to-end testing completed for QR payments, subscription management, and admin dashboard
+  3. No visual regressions from the original Phase 9 design specs
+**Plans**: TBD (This is just a placeholder for now)
 
 ---
 
@@ -138,3 +150,4 @@ Plans:
 | 13. PDF Export + Apple Sign-In | v2.0 | 0/? | Not started | — |
 | 14. Email Invite Delivery | v2.0 | 1/1 | Complete | 2026-03-03 |
 | 15. Email Invite E2E Completion | v2.0 | 3/3 | Complete | 2026-03-03 |
+| 16. Future Feature Implementation | v2.0 | 0/? | Not started | — |

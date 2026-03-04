@@ -161,6 +161,7 @@ Progress: [██████████] 100% (Phase 8 Gaps Closed)
 - Phase 8: Code Review, Refactor & Best Practices — Structural implementation completed, but 2026-03-04 audit identified critical gaps in encapsulation (CurrencyPickerModal) and coverage (QueryGuard on settlement/edit).
 - Phase 14 completed: Email Invite Delivery via Resend — Edge Function + DB Webhook pipeline shipped
 - Phase 15 completed: Email Invite E2E Completion — invite claim logic (DB functions + auth trigger), pending invites UI, deep linking from email CTA
+- Phase 16 added: Future Feature Implementation — placeholder for deferred Phase 9 functional requirements
 
 ### Decisions
 
