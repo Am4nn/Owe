@@ -27,8 +27,15 @@ export function useGroups() {
           )
         `)
         .eq('user_id', await requireUserId())
+
       if (error) throw error
-      return data?.map(row => row.groups as unknown as Group).filter(Boolean) ?? []
+
+      interface GroupRow {
+        groups: Group | null
+      }
+
+      const rows = (data as unknown) as GroupRow[]
+      return rows.map(row => row.groups).filter((g): g is Group => !!g)
     },
     staleTime: 30_000, // Show stale groups, refetch in background after 30s
     // gcTime defaults to 24h from queryClient.ts — keeps cache alive across sessions (OFFL-01)
@@ -53,7 +60,10 @@ export function useGroup(groupId: string) {
         .eq('group_id', groupId)
       if (membersError) throw membersError
 
-      return { group: group as Group, members: members as GroupMember[] }
+      return {
+        group: group as Group,
+        members: (members as unknown) as GroupMember[]
+      }
     },
     staleTime: 30_000,
     enabled: !!groupId,

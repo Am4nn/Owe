@@ -42,7 +42,6 @@ export default function GroupDetailScreen() {
   useFxRates()
 
   const [showCurrencyPicker, setShowCurrencyPicker] = useState(false)
-  const [currencySearch, setCurrencySearch] = useState('')
   const [showInviteModal, setShowInviteModal] = useState(false)
   const [inviteEmail, setInviteEmail] = useState('')
   const [inviteSent, setInviteSent] = useState(false)
@@ -106,7 +105,6 @@ export default function GroupDetailScreen() {
       }
     )
     setShowCurrencyPicker(false)
-    setCurrencySearch('')
   }
 
   const handleExport = async () => {
@@ -124,13 +122,6 @@ export default function GroupDetailScreen() {
           const members = data?.members ?? []
           const baseCurrency = data?.group.base_currency ?? 'USD'
 
-          const filteredCurrencies = currencySearch.trim()
-            ? COMMON_CURRENCIES.filter(
-              (c) =>
-                c.code.toLowerCase().includes(currencySearch.toLowerCase()) ||
-                c.name.toLowerCase().includes(currencySearch.toLowerCase())
-            )
-            : COMMON_CURRENCIES
 
           return (
             <>
@@ -361,13 +352,8 @@ export default function GroupDetailScreen() {
               <CurrencyPickerModal
                 visible={showCurrencyPicker}
                 baseCurrency={baseCurrency}
-                searchQuery={currencySearch}
-                onSearchChange={setCurrencySearch}
                 onSelect={handleSelectCurrency}
-                onClose={() => {
-                  setShowCurrencyPicker(false)
-                  setCurrencySearch('')
-                }}
+                onClose={() => setShowCurrencyPicker(false)}
               />
             </>
           )

@@ -4,6 +4,16 @@ import { supabase } from '@/lib/supabase'
 import { requireUserId } from '@/lib/auth'
 import type { MemberBalance, BalanceSummary, DebtSuggestion } from './types'
 
+interface SplitWithExpense {
+  member_id: string
+  amount_cents: number
+  expense: {
+    payer_id: string
+    group_id: string
+    deleted_at: string | null
+  }
+}
+
 /**
  * BALS-02: Fetch per-member net balances for a group.
  * Positive net_cents = that member is owed money.
@@ -35,9 +45,10 @@ export function useGroupBalances(groupId: string) {
       // payer gains positive (they fronted the money), split member loses (they owe)
       const balances = new Map<string, number>()
 
-      for (const split of splits ?? []) {
-        const expense = (split.expense as unknown) as { payer_id: string; group_id: string; deleted_at: string | null }
-        const payerId = expense.payer_id
+      const typedSplits = (splits as unknown) as SplitWithExpense[]
+
+      for (const split of typedSplits) {
+        const payerId = split.expense.payer_id
         balances.set(payerId, (balances.get(payerId) ?? 0) + split.amount_cents)
         balances.set(split.member_id, (balances.get(split.member_id) ?? 0) - split.amount_cents)
       }
@@ -116,6 +127,8 @@ export function useBalanceSummary() {
         .select('payer_id, payee_id, amount_cents, group_id')
         .in('group_id', groupIds)
 
+      const typedSplits = (allSplits as unknown) as SplitWithExpense[]
+
       // For each group the user is in, compute their net position
       for (const membership of memberships) {
         const memberId = membership.id
@@ -123,17 +136,13 @@ export function useBalanceSummary() {
         let netCents = 0
 
         // Filter splits for this group
-        const groupSplits = (allSplits ?? []).filter(split => {
-          const expense = (split.expense as unknown) as { payer_id: string; group_id: string; deleted_at: string | null }
-          return expense.group_id === groupId
-        })
+        const groupSplits = typedSplits.filter(split => split.expense.group_id === groupId)
 
         // Filter settlements for this group
         const groupSettlements = (allSettlements ?? []).filter(s => s.group_id === groupId)
 
         for (const split of groupSplits) {
-          const expense = (split.expense as unknown) as { payer_id: string; group_id: string; deleted_at: string | null }
-          if (expense.payer_id === memberId) {
+          if (split.expense.payer_id === memberId) {
             netCents += split.amount_cents
           }
           if (split.member_id === memberId) {
