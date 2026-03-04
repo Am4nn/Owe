@@ -1,15 +1,14 @@
 import { useEffect } from 'react'
-import { View, Text, ScrollView, Platform } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Link, router } from 'expo-router'
-import * as Linking from 'expo-linking'
-import * as WebBrowser from 'expo-web-browser'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { showAlert } from '@/lib/alert'
-import { useSignUp, useSignInWithGoogle, createSessionFromUrl } from '@/features/auth/hooks'
+import { useSignUp, useSignInWithGoogle } from '@/features/auth/hooks'
+import { useOAuthWarmUp } from '@/hooks/useOAuthWarmUp'
 
 const signUpSchema = z.object({
   displayName: z.string().min(2, 'Name must be at least 2 characters').max(50),
@@ -26,20 +25,8 @@ export default function SignUpScreen() {
     defaultValues: { displayName: '', email: '', password: '' },
   })
 
-  // AUTH-06: WebBrowser warmup — pre-warms Chrome Custom Tabs on Android for faster open
-  // Not available on web
-  useEffect(() => {
-    if (Platform.OS === 'web') return
-    WebBrowser.warmUpAsync()
-    return () => { WebBrowser.coolDownAsync() }
-  }, [])
-
-  // AUTH-06: Cold-start deep link handler — catches OAuth redirect if Android cold-started the app
-  // WebBrowser.openAuthSessionAsync returns 'cancel' on cold-start; Linking.useURL() catches it
-  const url = Linking.useURL()
-  useEffect(() => {
-    if (url) createSessionFromUrl(url)
-  }, [url])
+  // AUTH-06: Shared OAuth cold-start deep link handler + WebBrowser warm-up
+  useOAuthWarmUp()
 
   const { mutate: signInWithGoogle, isPending: isPendingGoogle } = useSignInWithGoogle()
 

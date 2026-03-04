@@ -26,7 +26,7 @@
 ### 🚧 v1.1 Polish (In Progress)
 
 - [x] **Phase 7: Bug Fixes** — completed 2026-03-03
-- [ ] **Phase 8: Code Review, Refactor & Best Practices**
+- [x] **Phase 8: Code Review, Refactor & Best Practices** — completed 2026-03-04
 - [ ] **Phase 9: UI/UX Upgrade**
 
 ### 📋 v2.0 Engagement & Insights (Planned)
@@ -67,9 +67,9 @@ Plans:
 **Plans**: TBD (split per focus area during planning)
 
 Plans:
-- [ ] 08-01-PLAN.md — Architecture audit + cross-platform strategy research & implementation
-- [ ] 08-02-PLAN.md — DRY refactor: modals, error handlers, shared hooks
-- [ ] 08-03-PLAN.md — Code quality pass: dead code, naming, React Query, loading/error states
+- [x] 08-01-PLAN.md — Architecture audit + cross-platform strategy research & implementation
+- [x] 08-02-PLAN.md — DRY refactor: modals, error handlers, shared hooks
+- [x] 08-03-PLAN.md — Code quality pass: dead code, naming, React Query, loading/error states
 
 ---
 
@@ -130,7 +130,7 @@ Plans:
 | 5. Schema & Notification Fixes | v1.0 | 1/1 | Complete | 2026-03-01 |
 | 6. Google OAuth Verification | v1.0 | 1/1 | Complete | 2026-03-01 |
 | 7. Bug Fixes | v1.1 | 1/1 | Complete | 2026-03-03 |
-| 8. Code Review, Refactor & Best Practices | v1.1 | 0/3 | Not started | — |
+| 8. Code Review, Refactor & Best Practices | v1.1 | 3/3 | Complete | 2026-03-04 |
 | 9. UI/UX Upgrade | v1.1 | 0/5 | Not started | — |
 | 10. Receipt Scanning | v2.0 | 0/? | Not started | — |
 | 11. Recurring Expenses | v2.0 | 0/? | Not started | — |

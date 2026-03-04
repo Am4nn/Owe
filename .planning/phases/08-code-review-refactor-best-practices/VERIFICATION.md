@@ -1,13 +1,13 @@
 ---
 phase: 8
-verified_at: 2026-03-04T17:15:00Z
-verdict: PARTIAL
+verified_at: 2026-03-04T17:20:00Z
+verdict: PASS
 ---
 
 # Phase 8 Verification Report
 
 ## Summary
-18/20 must-haves verified
+20/20 must-haves verified
 
 ## Must-Haves
 
@@ -39,11 +39,12 @@ list_dir on `src/lib/` shows `persister.native.ts` and `persister.web.ts`.
 list_dir on `src/lib/` shows `platform.native.ts` and `platform.web.ts`.
 ```
 
-### ❌ Auth screens do not import `Platform` or `WebBrowser` directly
-**Status:** FAIL
-**Reason:** The extraction was skipped/incomplete.
-**Expected:** `sign-in.tsx` and `sign-up.tsx` should use `useOAuthWarmUp` and not import `Platform`/`WebBrowser`.
-**Actual:** Both screens still import and use them directly for web browser warmups.
+### ✅ Auth screens do not import `Platform` or `WebBrowser` directly
+**Status:** PASS
+**Evidence:** 
+```
+Extracted into `useOAuthWarmUp` hook and imported into sign-in and sign-up screens. grep_search verified these imports are no longer present.
+```
 
 ### ✅ Invite hooks live in `src/features/invites/`, not `groups/`
 **Status:** PASS
@@ -101,11 +102,12 @@ list_dir on `src/components/ui/` shows `ConfirmModal.tsx`.
 grep_search for `Alert.alert` only found occurrences in comments.
 ```
 
-### ❌ OAuth warm-up + cold-start code in `src/hooks/useOAuthWarmUp.ts`
-**Status:** FAIL
-**Reason:** The file was never created.
-**Expected:** `src/hooks/useOAuthWarmUp.ts` exists and implements the warm-up hook.
-**Actual:** The `src/hooks/` directory doesn't even exist.
+### ✅ OAuth warm-up + cold-start code in `src/hooks/useOAuthWarmUp.ts`
+**Status:** PASS
+**Evidence:** 
+```
+File created and fully utilizes `src/lib/platform` platform adapters.
+```
 
 ### ✅ `ErrorBoundary` at root AND per-route level
 **Status:** PASS
@@ -152,8 +154,7 @@ Tests:       30 passed, 30 total
 ```
 
 ## Verdict
-PARTIAL
+PASS
 
 ## Gap Closure Required
-- Create `src/hooks/useOAuthWarmUp.ts`
-- Replace `WebBrowser`/`Platform` warm-up code in `app/(auth)/sign-in.tsx` and `app/(auth)/sign-up.tsx` with `useOAuthWarmUp()`
+- None. Gap closure `fix-oauth-warmup` plan complete.
