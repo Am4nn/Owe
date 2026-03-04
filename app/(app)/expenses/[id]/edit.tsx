@@ -14,6 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Button } from '@/components/ui/Button'
 import { ConfirmModal } from '@/components/ui/ConfirmModal'
+import { QueryGuard } from '@/components/ui/QueryGuard'
 import { useGroup } from '@/features/groups/hooks'
 import { showAlert } from '@/lib/alert'
 import { useExpense, useUpdateExpense, useDeleteExpense } from '@/features/expenses/hooks'
@@ -33,8 +34,9 @@ type FormValues = z.infer<typeof schema>
 
 export default function EditExpenseScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
-  const { data: expense, isLoading: expenseLoading } = useExpense(id)
-  const { data: groupData, isLoading: groupLoading } = useGroup(expense?.group_id ?? '')
+  const expenseQuery = useExpense(id)
+  const expense = expenseQuery.data
+  const groupQuery = useGroup(expense?.group_id ?? '')
   const updateExpense = useUpdateExpense()
   const deleteExpense = useDeleteExpense()
   const { isPending: isDeleting } = deleteExpense
@@ -127,200 +129,197 @@ export default function EditExpenseScreen() {
     )
   }
 
-  if (expenseLoading || groupLoading) {
-    return (
-      <View className="flex-1 bg-dark-bg items-center justify-center">
-        <ActivityIndicator color="#6C63FF" />
-      </View>
-    )
-  }
-
-  if (!expense) {
-    return (
-      <View className="flex-1 bg-dark-bg items-center justify-center">
-        <Text className="text-white/50">Expense not found</Text>
-      </View>
-    )
-  }
-
   return (
-    <View className="flex-1 bg-dark-bg">
-      <ScrollView className="flex-1">
-        <Stack.Screen options={{ title: 'Edit expense', headerBackTitle: 'Back' }} />
+    <QueryGuard query={expenseQuery}>
+      {(expense) => (
+        <QueryGuard query={groupQuery}>
+          {(groupData) => {
+            const members = groupData?.members ?? []
 
-        <View className="px-4 pt-4 pb-8">
-          <Text className="text-white/50 text-sm uppercase tracking-wide mb-4">Edit expense</Text>
+            return (
+              <View className="flex-1 bg-dark-bg">
+                <ScrollView className="flex-1">
+                  <Stack.Screen options={{ title: 'Edit expense', headerBackTitle: 'Back' }} />
 
-          {/* Description */}
-          <Controller
-            control={control}
-            name="description"
-            render={({ field: { onChange, value } }) => (
-              <View className="mb-4">
-                <Text className="text-white/70 text-sm mb-2">Description</Text>
-                <TextInput
-                  value={value}
-                  onChangeText={onChange}
-                  placeholder="What was this expense for?"
-                  placeholderTextColor="rgba(255,255,255,0.3)"
-                  className="bg-dark-surface rounded-xl px-4 py-3 text-white border border-dark-border"
-                />
-                {errors.description && (
-                  <Text className="text-red-400 text-xs mt-1">{errors.description.message}</Text>
-                )}
-              </View>
-            )}
-          />
+                  <View className="px-4 pt-4 pb-8">
+                    <Text className="text-white/50 text-sm uppercase tracking-wide mb-4">Edit expense</Text>
 
-          {/* Amount */}
-          <Controller
-            control={control}
-            name="amount"
-            render={({ field: { onChange, value } }) => (
-              <View className="mb-4">
-                <Text className="text-white/70 text-sm mb-2">Amount</Text>
-                <TextInput
-                  value={value}
-                  onChangeText={onChange}
-                  placeholder="0.00"
-                  placeholderTextColor="rgba(255,255,255,0.3)"
-                  keyboardType="decimal-pad"
-                  className="bg-dark-surface rounded-xl px-4 py-3 text-white border border-dark-border text-xl font-semibold"
-                />
-                {errors.amount && (
-                  <Text className="text-red-400 text-xs mt-1">{errors.amount.message}</Text>
-                )}
-              </View>
-            )}
-          />
+                    {/* Description */}
+                    <Controller
+                      control={control}
+                      name="description"
+                      render={({ field: { onChange, value } }) => (
+                        <View className="mb-4">
+                          <Text className="text-white/70 text-sm mb-2">Description</Text>
+                          <TextInput
+                            value={value}
+                            onChangeText={onChange}
+                            placeholder="What was this expense for?"
+                            placeholderTextColor="rgba(255,255,255,0.3)"
+                            className="bg-dark-surface rounded-xl px-4 py-3 text-white border border-dark-border"
+                          />
+                          {errors.description && (
+                            <Text className="text-red-400 text-xs mt-1">{errors.description.message}</Text>
+                          )}
+                        </View>
+                      )}
+                    />
 
-          {/* Payer picker */}
-          {members.length > 0 && (
-            <Controller
-              control={control}
-              name="payer_member_id"
-              render={({ field: { onChange, value } }) => (
-                <View className="mb-4">
-                  <Text className="text-white/70 text-sm mb-2">Paid by</Text>
-                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    <View className="flex-row gap-2">
-                      {members.map(member => (
-                        <TouchableOpacity
-                          key={member.id}
-                          onPress={() => onChange(member.id)}
-                          className={`px-4 py-2 rounded-full border ${value === member.id
-                            ? 'bg-brand-primary border-brand-primary'
-                            : 'bg-dark-surface border-dark-border'
-                            }`}
-                        >
-                          <Text
-                            className={`text-sm ${value === member.id ? 'text-white font-medium' : 'text-white/60'}`}
-                          >
-                            {member.display_name}
-                          </Text>
-                        </TouchableOpacity>
-                      ))}
-                    </View>
-                  </ScrollView>
-                  {errors.payer_member_id && (
-                    <Text className="text-red-400 text-xs mt-1">{errors.payer_member_id.message}</Text>
-                  )}
-                </View>
-              )}
-            />
-          )}
+                    {/* Amount */}
+                    <Controller
+                      control={control}
+                      name="amount"
+                      render={({ field: { onChange, value } }) => (
+                        <View className="mb-4">
+                          <Text className="text-white/70 text-sm mb-2">Amount</Text>
+                          <TextInput
+                            value={value}
+                            onChangeText={onChange}
+                            placeholder="0.00"
+                            placeholderTextColor="rgba(255,255,255,0.3)"
+                            keyboardType="decimal-pad"
+                            className="bg-dark-surface rounded-xl px-4 py-3 text-white border border-dark-border text-xl font-semibold"
+                          />
+                          {errors.amount && (
+                            <Text className="text-red-400 text-xs mt-1">{errors.amount.message}</Text>
+                          )}
+                        </View>
+                      )}
+                    />
 
-          {/* Date */}
-          <Controller
-            control={control}
-            name="expense_date"
-            render={({ field: { onChange, value } }) => (
-              <View className="mb-4">
-                <Text className="text-white/70 text-sm mb-2">Date</Text>
-                <TextInput
-                  value={value}
-                  onChangeText={onChange}
-                  placeholder="YYYY-MM-DD"
-                  placeholderTextColor="rgba(255,255,255,0.3)"
-                  className="bg-dark-surface rounded-xl px-4 py-3 text-white border border-dark-border"
-                />
-              </View>
-            )}
-          />
+                    {/* Payer picker */}
+                    {members.length > 0 && (
+                      <Controller
+                        control={control}
+                        name="payer_member_id"
+                        render={({ field: { onChange, value } }) => (
+                          <View className="mb-4">
+                            <Text className="text-white/70 text-sm mb-2">Paid by</Text>
+                            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                              <View className="flex-row gap-2">
+                                {members.map(member => (
+                                  <TouchableOpacity
+                                    key={member.id}
+                                    onPress={() => onChange(member.id)}
+                                    className={`px-4 py-2 rounded-full border ${value === member.id
+                                      ? 'bg-brand-primary border-brand-primary'
+                                      : 'bg-dark-surface border-dark-border'
+                                      }`}
+                                  >
+                                    <Text
+                                      className={`text-sm ${value === member.id ? 'text-white font-medium' : 'text-white/60'}`}
+                                    >
+                                      {member.display_name}
+                                    </Text>
+                                  </TouchableOpacity>
+                                ))}
+                              </View>
+                            </ScrollView>
+                            {errors.payer_member_id && (
+                              <Text className="text-red-400 text-xs mt-1">{errors.payer_member_id.message}</Text>
+                            )}
+                          </View>
+                        )}
+                      />
+                    )}
 
-          {/* Category */}
-          <Controller
-            control={control}
-            name="category"
-            render={({ field: { onChange, value } }) => (
-              <View className="mb-4">
-                <Text className="text-white/70 text-sm mb-2">Category</Text>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  <View className="flex-row gap-2">
-                    {CATEGORIES.map(cat => (
-                      <TouchableOpacity
-                        key={cat.id}
-                        onPress={() => onChange(value === cat.id ? undefined : cat.id)}
-                        className={`px-3 py-2 rounded-full border ${value === cat.id
-                          ? 'bg-brand-primary border-brand-primary'
-                          : 'bg-dark-surface border-dark-border'
-                          }`}
-                      >
-                        <Text className="text-sm">
-                          {cat.icon} {cat.label}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
+                    {/* Date */}
+                    <Controller
+                      control={control}
+                      name="expense_date"
+                      render={({ field: { onChange, value } }) => (
+                        <View className="mb-4">
+                          <Text className="text-white/70 text-sm mb-2">Date</Text>
+                          <TextInput
+                            value={value}
+                            onChangeText={onChange}
+                            placeholder="YYYY-MM-DD"
+                            placeholderTextColor="rgba(255,255,255,0.3)"
+                            className="bg-dark-surface rounded-xl px-4 py-3 text-white border border-dark-border"
+                          />
+                        </View>
+                      )}
+                    />
+
+                    {/* Category */}
+                    <Controller
+                      control={control}
+                      name="category"
+                      render={({ field: { onChange, value } }) => (
+                        <View className="mb-4">
+                          <Text className="text-white/70 text-sm mb-2">Category</Text>
+                          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                            <View className="flex-row gap-2">
+                              {CATEGORIES.map(cat => (
+                                <TouchableOpacity
+                                  key={cat.id}
+                                  onPress={() => onChange(value === cat.id ? undefined : cat.id)}
+                                  className={`px-3 py-2 rounded-full border ${value === cat.id
+                                    ? 'bg-brand-primary border-brand-primary'
+                                    : 'bg-dark-surface border-dark-border'
+                                    }`}
+                                >
+                                  <Text className="text-sm">
+                                    {cat.icon} {cat.label}
+                                  </Text>
+                                </TouchableOpacity>
+                              ))}
+                            </View>
+                          </ScrollView>
+                        </View>
+                      )}
+                    />
+
+                    {/* Split editor */}
+                    {members.length > 0 && (
+                      <SplitEditor
+                        members={members}
+                        totalCents={amountCents}
+                        splitType={splitType}
+                        onSplitTypeChange={setSplitType}
+                        onSplitsChange={newSplits => setSplits(newSplits)}
+                      />
+                    )}
+
+                    {/* Submit */}
+                    <TouchableOpacity
+                      onPress={handleSubmit(onSubmit)}
+                      disabled={isSubmitting || updateExpense.isPending}
+                      className="bg-brand-primary rounded-2xl py-4 items-center mt-6"
+                    >
+                      {(isSubmitting || updateExpense.isPending) ? (
+                        <ActivityIndicator color="white" />
+                      ) : (
+                        <Text className="text-white font-semibold text-base">Save changes</Text>
+                      )}
+                    </TouchableOpacity>
+
+                    {/* Delete Button */}
+                    <Button
+                      title="Delete Expense"
+                      onPress={handleDelete}
+                      variant="danger"
+                      className="mt-4"
+                    />
                   </View>
                 </ScrollView>
+
+                <ConfirmModal
+                  visible={showDeleteModal}
+                  title="Delete Expense"
+                  message="Are you sure you want to delete this expense? This action cannot be undone."
+                  confirmText="Delete"
+                  isDanger={true}
+                  isLoading={isDeleting}
+                  onConfirm={handleConfirmDelete}
+                  onCancel={() => setShowDeleteModal(false)}
+                />
               </View>
-            )}
-          />
-
-          {/* Split editor */}
-          {members.length > 0 && (
-            <SplitEditor
-              members={members}
-              totalCents={amountCents}
-              splitType={splitType}
-              onSplitTypeChange={setSplitType}
-              onSplitsChange={newSplits => setSplits(newSplits)}
-            />
-          )}
-
-          {/* Submit */}
-          <TouchableOpacity
-            onPress={handleSubmit(onSubmit)}
-            disabled={isSubmitting || updateExpense.isPending}
-            className="bg-brand-primary rounded-2xl py-4 items-center mt-6"
-          >
-            {(isSubmitting || updateExpense.isPending) ? (
-              <ActivityIndicator color="white" />
-            ) : (
-              <Text className="text-white font-semibold text-base">Save changes</Text>
-            )}
-          </TouchableOpacity>
-
-          {/* Delete Button */}
-          <Button
-            title="Delete Expense"
-            onPress={handleDelete}
-            variant="danger"
-            className="mt-4"
-          />
-        </View>
-      </ScrollView>
-
-      <ConfirmModal
-        visible={showDeleteModal}
-        title="Delete Expense"
-        message="Are you sure you want to delete this expense? This action cannot be undone."
-        confirmText="Delete"
-        isDanger={true}
-        isLoading={isDeleting}
-        onConfirm={handleConfirmDelete}
-        onCancel={() => setShowDeleteModal(false)}
-      />
-    </View>
+            )
+          }}
+        </QueryGuard>
+      )}
+    </QueryGuard>
+  )
   )
 }
