@@ -111,15 +111,15 @@ function buildInviteEmail({ groupName, inviterName, invitedEmail, expiresDate }:
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>You're invited to ${groupName} on Owe</title>
 </head>
-<body style="margin:0;padding:0;background-color:#0e1117;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0e1117;padding:40px 0;">
+<body style="margin:0;padding:0;background-color:#0f172a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0f172a;padding:40px 0;">
     <tr>
       <td align="center">
         <table width="560" cellpadding="0" cellspacing="0" style="background-color:#1a1d2e;border-radius:16px;overflow:hidden;border:1px solid #2a2d3e;">
 
           <!-- Header -->
           <tr>
-            <td style="padding:32px 40px 24px;text-align:center;background:linear-gradient(135deg,#1a1d2e 0%,#0e1117 100%);">
+            <td style="padding:32px 40px 24px;text-align:center;background:linear-gradient(135deg,#1a1d2e 0%,#0f172a 100%);">
               <div style="display:inline-block;width:48px;height:48px;background:linear-gradient(135deg,#7B5CF6,#6D28D9);border-radius:12px;line-height:48px;font-size:24px;margin-bottom:16px;">∞</div>
               <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:700;letter-spacing:-0.3px;">You're invited to Owe</h1>
             </td>
@@ -146,7 +146,7 @@ function buildInviteEmail({ groupName, inviterName, invitedEmail, expiresDate }:
               </table>
 
               <!-- Details card -->
-              <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0e1117;border-radius:10px;border:1px solid #2a2d3e;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0f172a;border-radius:10px;border:1px solid #2a2d3e;">
                 <tr>
                   <td style="padding:16px 20px;">
                     <table width="100%" cellpadding="0" cellspacing="0">
