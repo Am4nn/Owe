@@ -6,31 +6,28 @@ interface InputProps extends TextInputProps {
   label?: string
   error?: string
   icon?: LucideIcon
+  variant?: 'default' | 'secondary'
+  borderRadius?: number
+  iconGap?: number
 }
 
-// Inline styles for glass input (CSS classes like glass-input don't work on native)
-const glassInputBase = {
-  backgroundColor: 'rgba(14, 17, 23, 0.6)',
+const inputBaseStyle = {
   borderWidth: 1,
   borderRadius: 14,
 }
 
-const glassInputDefault = {
-  ...glassInputBase,
-  borderColor: 'rgba(255, 255, 255, 0.12)',
+const variants = {
+  default: {
+    backgroundColor: 'rgba(14, 17, 23, 0.6)',
+    borderColor: 'rgba(255, 255, 255, 0.12)',
+  },
+  secondary: {
+    backgroundColor: '#1c2334',
+    borderColor: 'rgba(255, 255, 255, 0.05)',
+  }
 }
 
-const glassInputFocus = {
-  ...glassInputBase,
-  borderColor: 'rgba(123, 92, 246, 0.5)',
-}
-
-const glassInputError = {
-  ...glassInputBase,
-  borderColor: '#FF4D6D',
-}
-
-export function Input({ label, error, icon: Icon, className, secureTextEntry, ...props }: InputProps) {
+export function Input({ label, error, icon: Icon, className, secureTextEntry, variant = 'default', borderRadius, iconGap = 2, ...props }: InputProps) {
   const [isFocused, setIsFocused] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
@@ -43,8 +40,21 @@ export function Input({ label, error, icon: Icon, className, secureTextEntry, ..
   // When secureTextEntry is passed, manage visibility toggle internally
   const isSecure = secureTextEntry && !showPassword
 
-  // Determine container style based on state
-  const containerStyle = error ? glassInputError : isFocused ? glassInputFocus : glassInputDefault
+  const baseVariantStyle = variants[variant] || variants.default
+
+  // Determine container border color based on state
+  const currentBorderColor = error
+    ? '#FF4D6D'
+    : isFocused
+      ? 'rgba(123, 92, 246, 0.5)'
+      : baseVariantStyle.borderColor
+
+  const containerStyle = {
+    ...inputBaseStyle,
+    backgroundColor: baseVariantStyle.backgroundColor,
+    borderColor: currentBorderColor,
+    ...(borderRadius !== undefined ? { borderRadius } : {})
+  }
 
   return (
     <View className="gap-1.5 w-full">
@@ -56,7 +66,7 @@ export function Input({ label, error, icon: Icon, className, secureTextEntry, ..
         style={containerStyle}
       >
         {Icon && (
-          <View className="pl-3 pr-2">
+          <View className="pl-3" style={{ paddingRight: iconGap * 4 }}>
             <Icon size={24} color="#64748B" />
           </View>
         )}

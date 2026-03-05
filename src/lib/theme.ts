@@ -9,7 +9,7 @@ export const theme = {
       warning: '#F59E0B',
     },
     dark: {
-      bg: '#0e1117',
+      bg: '#0f172a',
       surface: '#1a1d2e',
       elevated: '#252840',
     },
@@ -17,7 +17,7 @@ export const theme = {
       primary: '#F8FAFC',
       secondary: '#94A3B8',
       tertiary: '#64748B',
-      inverse: '#0e1117',
+      inverse: '#0f172a',
     },
     status: {
       online: '#22C55E',

@@ -12,7 +12,6 @@ import Animated, {
 } from 'react-native-reanimated'
 import { router } from 'expo-router'
 import { Plus, X, Camera, Edit2, ArrowRightLeft } from 'lucide-react-native'
-import { BlurView } from 'expo-blur'
 
 export function ExpandableFAB() {
   const isOpen = useSharedValue(0)

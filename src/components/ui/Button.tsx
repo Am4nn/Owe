@@ -10,6 +10,7 @@ interface ButtonProps extends TouchableOpacityProps {
   icon?: LucideIcon
   loading?: boolean
   fullWidth?: boolean
+  borderRadius?: number
 }
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
@@ -23,6 +24,7 @@ export function Button({
   fullWidth = true,
   disabled,
   className,
+  borderRadius = 16,
   style,
   onPress,
   onPressIn,
@@ -84,12 +86,12 @@ export function Button({
         style={[
           animatedStyle,
           {
-            borderRadius: 16,
+            borderRadius,
             shadowColor: '#7B5CF6',
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.5,
-            shadowRadius: 18,
-            elevation: 12,
+            shadowOffset: { width: 0, height: 12 },
+            shadowOpacity: 0.28,
+            shadowRadius: 24,
+            elevation: 9,
           },
         ]}
         className={`${widthClass} ${opacityClass}`}
@@ -100,7 +102,7 @@ export function Button({
           onPressOut={handlePressOut}
           disabled={disabled || loading}
           activeOpacity={0.85}
-          style={{ borderRadius: 16, overflow: 'hidden' }}
+          style={{ borderRadius, overflow: 'hidden' }}
         >
           <LinearGradient
             colors={['#9B7BFF', '#7B5CF6']}
@@ -108,7 +110,7 @@ export function Button({
             end={{ x: 1, y: 1 }}
             style={{
               height: sizeHeight,
-              borderRadius: 16,
+              borderRadius,
               alignItems: 'center',
               justifyContent: 'center',
               paddingHorizontal: size === 'lg' ? 32 : size === 'md' ? 24 : 16,
@@ -149,7 +151,7 @@ export function Button({
         animatedStyle,
         {
           height: sizeHeight,
-          borderRadius: 16,
+          borderRadius,
           paddingHorizontal: size === 'lg' ? 32 : size === 'md' ? 24 : 16,
           ...variantStyle,
         },
