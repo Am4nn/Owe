@@ -13,7 +13,7 @@ import { createExpenseMutationFn, updateExpenseMutationFn, deleteExpenseMutation
 import { registerPushToken, useNotificationDeepLink } from '@/features/notifications/hooks'
 import { useClaimInvites } from '@/features/invites/hooks'
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
-import { COLORS } from './(app)/_layout'
+import { theme } from '@/lib/theme'
 import '../global.css'
 import '@/stores/ui'
 
@@ -66,7 +66,7 @@ function RootNavigator() {
   if (isLoading) {
     return (
       <View className="flex-1 bg-dark-bg items-center justify-center">
-        <ActivityIndicator color={COLORS.brandPrimary} />
+        <ActivityIndicator color={theme.colors.brand.primary} />
       </View>
     )
   }

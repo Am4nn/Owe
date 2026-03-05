@@ -22,7 +22,7 @@ import { CATEGORIES } from '@/features/expenses/categories'
 import { useFxRates, COMMON_CURRENCIES, computeBaseCents } from '@/features/currency/hooks'
 import type { SplitType, SplitInput } from '@/features/expenses/types'
 import { formatMoney } from '@/lib/format'
-import { COLORS } from '../_layout'
+import { theme } from '@/lib/theme'
 
 const schema = z.object({
   description: z.string().min(1, 'Description required').max(200),
@@ -183,7 +183,7 @@ export default function NewExpenseScreen() {
   if (!isDirectMode && groupLoading) {
     return (
       <View className="flex-1 bg-dark-bg items-center justify-center">
-        <ActivityIndicator color={COLORS.brandPrimary} />
+        <ActivityIndicator color={theme.colors.brand.primary} />
       </View>
     )
   }
@@ -406,7 +406,7 @@ export default function NewExpenseScreen() {
           className="bg-brand-primary rounded-2xl py-4 items-center mt-6"
         >
           {(isSubmitting || createExpense.isPending) ? (
-            <ActivityIndicator color={COLORS.brandPrimary} />
+            <ActivityIndicator color={theme.colors.brand.primary} />
           ) : (
             <Text className="text-white font-semibold text-base">Add expense</Text>
           )}
