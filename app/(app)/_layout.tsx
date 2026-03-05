@@ -69,7 +69,7 @@ export default function AppLayout() {
           {/* Hidden Modals & Nested Screens */}
           <Tabs.Screen name="invites" options={{ href: null, title: 'Invites' }} />
           <Tabs.Screen name="groups/new" options={{ href: null, title: 'New group' }} />
-          <Tabs.Screen name="groups/[id]" options={{ href: null, headerShown: false }} />
+          {/* <Tabs.Screen name="groups/[id]" options={{ href: null, headerShown: false }} /> */}
           <Tabs.Screen name="expenses/new" options={{ href: null, title: 'Add expense' }} />
           <Tabs.Screen name="expenses/[id]/index" options={{ href: null, title: 'Expense' }} />
           <Tabs.Screen name="expenses/[id]/edit" options={{ href: null, title: 'Edit Expense' }} />
