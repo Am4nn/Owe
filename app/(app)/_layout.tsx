@@ -1,7 +1,5 @@
 import { Tabs } from 'expo-router'
 import { View } from 'react-native'
-import { useSession } from '@/features/auth/hooks'
-import { useClaimInvites } from '@/features/invites/hooks'
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
 import { ExpandableFAB } from '@/components/ui/ExpandableFAB'
 import { Home, Clock, Users, User } from 'lucide-react-native'

@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react'
 import { Platform } from 'react-native'
-import { Session } from '@supabase/supabase-js'
+import { Session, User } from '@supabase/supabase-js'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import { queryClient as globalQueryClient } from '@/lib/queryClient'
@@ -8,6 +7,7 @@ import type { Profile, SignInInput, SignUpInput, UpdateProfileInput } from './ty
 import { makeRedirectUri } from 'expo-auth-session'
 import * as QueryParams from 'expo-auth-session/build/QueryParams'
 import * as WebBrowser from 'expo-web-browser'
+import { AuthStatus, useAuthStore } from '@/stores/auth'
 
 WebBrowser.maybeCompleteAuthSession()
 
@@ -15,30 +15,18 @@ const redirectTo = makeRedirectUri()
 // Reads "owe" scheme from app.json automatically.
 // Produces "owe://..." on EAS dev client. Register "owe://**" in Supabase dashboard.
 
-// AUTH-03: Session persistence — reads from expo-sqlite localStorage on mount
-export function useSession() {
-  const [session, setSession] = useState<Session | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+export interface AuthSession {
+  user: User | null,
+  status: AuthStatus,
+  isAuthenticated: boolean,
+  isLoading: boolean,
+}
 
-  useEffect(() => {
-    // Load the persisted session from expo-sqlite localStorage
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      setIsLoading(false)
-    })
-
-    // Subscribe to auth state changes (sign in, sign out, token refresh)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setSession(session)
-        setIsLoading(false)
-      }
-    )
-
-    return () => subscription.unsubscribe()
-  }, [])
-
-  return { session, isLoading }
+export function useSession(): AuthSession {
+  const user = useAuthStore((state) => state.session?.user || null)
+  const status = useAuthStore((state) => state.status)
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+  return { user, status, isAuthenticated, isLoading: status === 'loading' }
 }
 
 // AUTH-01: Sign up with email + password + display name
@@ -174,3 +162,4 @@ export function useSignInWithGoogle() {
     },
   })
 }
+

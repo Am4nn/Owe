@@ -9,6 +9,7 @@ import NetInfo from '@react-native-community/netinfo'
 import { queryClient } from '@/lib/queryClient'
 import { persister } from '@/lib/persister'
 import { useSession } from '@/features/auth/hooks'
+import { initializeAuthStore } from '@/stores/auth'
 import { createExpenseMutationFn, updateExpenseMutationFn, deleteExpenseMutationFn } from '@/features/expenses/hooks'
 import { registerPushToken, useNotificationDeepLink } from '@/features/notifications/hooks'
 import { useClaimInvites } from '@/features/invites/hooks'
@@ -47,23 +48,24 @@ queryClient.setMutationDefaults(['expenses', 'delete'], {
 })
 
 function RootNavigator() {
-  const { session, isLoading } = useSession()
+  const { status, isAuthenticated } = useSession()
+
+  useEffect(() => {
+    initializeAuthStore()
+  }, [])
 
   // NOTF-01/02: Register push token when user is authenticated
-  // Never runs on simulators (expo-device guard inside registerPushToken)
-  // INVT-E2E-02: Silently claim any pending invites on login
   const { mutate: claimInvites } = useClaimInvites()
   useEffect(() => {
-    if (session) {
+    if (isAuthenticated) {
       registerPushToken()
       claimInvites() // Auto-claim pending invites matching user's email
     }
-  }, [session])
+  }, [isAuthenticated, claimInvites])
 
-  // NOTF-01/02: Handle deep-link navigation on notification tap (cold-start + foreground)
   useNotificationDeepLink()
 
-  if (isLoading) {
+  if (status === 'loading') {
     return (
       <View className="flex-1 bg-dark-bg items-center justify-center">
         <ActivityIndicator color={theme.colors.brand.primary} />
@@ -73,13 +75,14 @@ function RootNavigator() {
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
-      {/* Unauthenticated route group — only accessible when NOT signed in */}
-      <Stack.Protected guard={!session}>
+      {/* Unauthenticated flow always starts with onboarding */}
+      <Stack.Protected guard={!isAuthenticated}>
+        <Stack.Screen name="onboarding" />
         <Stack.Screen name="(auth)" />
       </Stack.Protected>
 
-      {/* Protected route group — only accessible when signed in */}
-      <Stack.Protected guard={!!session}>
+      {/* Protected route group */}
+      <Stack.Protected guard={isAuthenticated}>
         <Stack.Screen name="(app)" />
       </Stack.Protected>
     </Stack>
