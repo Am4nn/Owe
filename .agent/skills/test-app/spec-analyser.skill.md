@@ -5,14 +5,14 @@ description: Converts TEST_SPEC.md into structured testable requirements.
 
 # Spec Analyser
 
-.planning/TEST_SPEC.md is authoritative.
+The dynamically provided TEST_SPEC.md (passed via prompt or context) is authoritative.
 
 If conflict exists:
-TEST_SPEC.md overrides planning docs.
+The provided TEST_SPEC.md overrides planning docs.
 
 Responsibilities:
 
-- Parse TEST_SPEC.md
+- Parse the provided TEST_SPEC.md
 - Extract:
   - Requirements
   - Preconditions

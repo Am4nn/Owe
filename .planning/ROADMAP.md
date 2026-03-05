@@ -92,11 +92,12 @@ Plans:
   10. Deferred Visual Consistency: Features designed during Phase 9 (UI/UX Upgrade) but not implemented must have complete, high-parity designs with data/logic powered by mocks. Full functional implementation will follow in Phase 16.
   Its very likely we will design something whose implementation might have not done yet so that featue should be added in phase 16 as a future feature but the design should and must completed for that feature in this phase and wiring the data and logic can be taken in phase 16 currently it can be powered by mock if required.
 **Plans**:
-- [ ] 09-01-PLAN.md — Design tokens + Navigation Shell (Colors, typography, glassmorphism, bottom tabs, FAB expansion menu)
+- [ ] 09-01-PLAN.md — Design Foundations & Token System (Colors, typography, glassmorphism, shadows, base components, icon system, FAB)
 - [ ] 09-02-PLAN.md — Auth & Onboarding Flow (Sign-in, Sign-up, Onboarding splash, Forgot Password/OTP verification)
 - [ ] 09-03-PLAN.md — Dashboard & Profile (Empty/Populated dashboard, Group cards, Profile stats, Friends list/detail)
-- [ ] 09-04-PLAN.md — Group Detail & Expense Entry (Group header, Member status, Add Expense screen, Split logic UI, Expense details)
-- [ ] 09-05-PLAN.md — Feed & Polish (Full activity feed with filters, Settlement success views, System error/empty states)
+- [ ] 09-04-PLAN.md — Group Detail & Expense Entry (Group header, Member status, Create Group, Add Expense, Split confirmation, Expense detail/success)
+- [ ] 09-05-PLAN.md — Feed, Notifications & Polish (Activity feed with filters, Notifications center, Transaction history, Settlement success, Error/offline/maintenance states)
+- [ ] 09-06-PLAN.md — Deferred Feature Screens (Mock-Powered) (Insights/charts, QR code payment, Subscriptions, Admin dashboard, Payment methods, Help & Support — design-complete with mock data, logic wired in Phase 16)
 
 ---
 
@@ -143,7 +144,7 @@ Plans:
 | 6. Google OAuth Verification | v1.0 | 1/1 | Complete | 2026-03-01 |
 | 7. Bug Fixes | v1.1 | 1/1 | Complete | 2026-03-03 |
 | 8. Code Review, Refactor & Best Practices | v1.1 | 3/3 | Complete | 2026-03-04 |
-| 9. UI/UX Upgrade | v1.1 | 0/5 | Not started | — |
+| 9. UI/UX Upgrade | v1.1 | 0/6 | Not started | — |
 | 10. Receipt Scanning | v2.0 | 0/? | Not started | — |
 | 11. Recurring Expenses | v2.0 | 0/? | Not started | — |
 | 12. Spending Insights | v2.0 | 0/? | Not started | — |
