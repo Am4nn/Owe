@@ -212,3 +212,38 @@ export function useReactions(expenseId: string) {
     staleTime: 30_000,
   })
 }
+
+/**
+ * Fetch the 5 most recent activities across all groups for the Dashboard.
+ * This is a lightweight alias of useActivityFeed with a fixed limit.
+ */
+export function useRecentActivity() {
+  return useQuery({
+    queryKey: ['activity', 'recent'],
+    queryFn: async () => {
+      const userId = await requireUserId()
+      const { data: memberships, error: membershipsError } = await supabase
+        .from('group_members')
+        .select('group_id')
+        .eq('user_id', userId)
+      if (membershipsError) throw membershipsError
+
+      const groupIds = (memberships ?? []).map(m => m.group_id)
+      if (groupIds.length === 0) return [] as ActivityItem[]
+
+      const { data, error } = await supabase
+        .from('activities')
+        .select('*, actor:group_members!actor_id(display_name)')
+        .in('group_id', groupIds)
+        .order('created_at', { ascending: false })
+        .limit(5)
+      if (error) throw error
+
+      return (data ?? []).map(item => ({
+        ...item,
+        actor_display_name: (item.actor as { display_name: string } | null)?.display_name ?? null,
+      })) as ActivityItem[]
+    },
+    staleTime: 30_000,
+  })
+}
