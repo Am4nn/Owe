@@ -1,9 +1,9 @@
-import { View, Text, TouchableOpacity, ScrollView, Image } from 'react-native'
+import { View, Text, TouchableOpacity, Image } from 'react-native'
 import { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Link, router } from 'expo-router'
+import { Link } from 'expo-router'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { SocialDivider } from '@/components/auth/SocialDivider'
@@ -11,8 +11,9 @@ import { GoogleButton } from '@/components/auth/GoogleButton'
 import { useSignUp, useSignInWithGoogle } from '@/features/auth/hooks'
 import { useOAuthWarmUp } from '@/hooks/useOAuthWarmUp'
 import { showAlert } from '@/lib/alert'
-import { Infinity, Mail, Lock, User, Camera, Check } from 'lucide-react-native'
+import { Mail, Lock, User, Camera, Check } from 'lucide-react-native'
 import { ScreenContainer } from '@/components/ui/ScreenContainer'
+import { GlowWrapper } from '@/components/ui/GlowWrapper'
 import * as ImagePicker from 'expo-image-picker'
 
 const signUpSchema = z.object({
@@ -26,6 +27,60 @@ const signUpSchema = z.object({
 })
 
 type SignUpForm = z.infer<typeof signUpSchema>
+
+interface SignUpInputProps {
+  control: any
+  name: keyof SignUpForm
+  icon: any
+  placeholder: string
+  secureTextEntry?: boolean
+  keyboardType?: any
+  autoCapitalize?: any
+  errors: any
+}
+
+const SignUpInput = ({ control, name, icon, placeholder, secureTextEntry, keyboardType, autoCapitalize, errors }: SignUpInputProps) => (
+  <Controller
+    control={control}
+    name={name}
+    render={({ field: { onChange, value } }) => (
+      <Input
+        variant='secondary'
+        borderRadius={20}
+        iconGap={4}
+        icon={icon}
+        placeholder={placeholder}
+        secureTextEntry={secureTextEntry}
+        keyboardType={keyboardType}
+        autoCapitalize={autoCapitalize}
+        value={value}
+        onChangeText={onChange}
+        error={errors[name]?.message}
+      />
+    )}
+  />
+)
+
+const AvatarPicker = ({ avatarUri, pickImage }: { avatarUri: string | null, pickImage: () => void }) => (
+  <View className="items-center mb-8">
+    <TouchableOpacity
+      onPress={pickImage}
+      className="w-[120px] h-[120px] rounded-full border-2 border-brand-primary items-center justify-center bg-dark-elevated relative overflow-visible"
+    >
+      {avatarUri ? (
+        <Image source={{ uri: avatarUri }} className="w-full h-full rounded-full" />
+      ) : (
+        <Image
+          source={require('@/assets/images/placeholders/avatar.png')}
+          style={{ width: '100%', height: '100%' }}
+        />
+      )}
+      <View className="absolute bottom-0 right-0 w-8 h-8 bg-brand-primary rounded-full items-center justify-center border-2 border-[#0f172a]">
+        <Text className="text-white text-lg font-bold leading-none">+</Text>
+      </View>
+    </TouchableOpacity>
+  </View>
+);
 
 export default function SignUpScreen() {
   const { mutate: signUp, isPending } = useSignUp()
@@ -71,98 +126,61 @@ export default function SignUpScreen() {
   }
 
   return (
-    <ScreenContainer padded scrollable>
-      <View className="flex-1 justify-center py-10 min-h-screen">
-        <View className="items-center mb-8">
-          <View className="w-12 h-12 rounded-xl bg-dark-elevated border border-[rgba(255,255,255,0.08)] items-center justify-center mb-6 shadow-[0_0_24px_rgba(123,92,246,0.15)]">
-            <Infinity size={24} color="#7B5CF6" />
-          </View>
-          <Text className="text-[28px] text-white font-bold mb-1">Create Account</Text>
+    <ScreenContainer padded>
+      <View className="flex-1 justify-center">
+        <View className="items-center mb-8 justify-center flex-row gap-2">
+          <Text style={{ fontSize: 34, fontWeight: '800', color: '#FFFFFF', marginBottom: 8, letterSpacing: -0.5 }}>
+            Create Account
+          </Text>
         </View>
 
-        {/* Avatar Picker */}
-        <View className="items-center mb-8">
-          <TouchableOpacity
-            onPress={pickImage}
-            className="w-[120px] h-[120px] rounded-full border-2 border-brand-primary items-center justify-center bg-dark-elevated relative overflow-visible"
-          >
-            {avatarUri ? (
-              <Image source={{ uri: avatarUri }} className="w-full h-full rounded-full" />
-            ) : (
-              <Camera size={40} color="rgba(255,255,255,0.4)" />
-            )}
-            <View className="absolute bottom-0 right-0 w-8 h-8 bg-brand-primary rounded-full items-center justify-center border-2 border-[#0e1117]">
-              <Text className="text-white text-lg font-bold leading-none">+</Text>
-            </View>
-          </TouchableOpacity>
+        <View pointerEvents="box-none" style={{ alignItems: 'center', justifyContent: 'center', zIndex: 1 }}>
+          <GlowWrapper>
+            <AvatarPicker avatarUri={avatarUri} pickImage={pickImage} />
+          </GlowWrapper>
         </View>
 
-        <View className="gap-4 w-full">
-          <Controller
+        <View className="gap-5 w-full">
+          <SignUpInput
             control={control}
             name="displayName"
-            render={({ field: { onChange, value } }) => (
-              <Input
-                icon={User}
-                placeholder="How should we call you?"
-                value={value}
-                onChangeText={onChange}
-                error={errors.displayName?.message}
-              />
-            )}
+            icon={User}
+            placeholder="How should we call you?"
+            errors={errors}
           />
-          <Controller
+          <SignUpInput
             control={control}
             name="email"
-            render={({ field: { onChange, value } }) => (
-              <Input
-                icon={Mail}
-                placeholder="you@example.com"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                value={value}
-                onChangeText={onChange}
-                error={errors.email?.message}
-              />
-            )}
+            icon={Mail}
+            placeholder="you@example.com"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            errors={errors}
           />
-          <Controller
+          <SignUpInput
             control={control}
             name="password"
-            render={({ field: { onChange, value } }) => (
-              <Input
-                icon={Lock}
-                placeholder="8+ characters"
-                secureTextEntry
-                value={value}
-                onChangeText={onChange}
-                error={errors.password?.message}
-              />
-            )}
+            icon={Lock}
+            placeholder="8+ characters"
+            secureTextEntry
+            errors={errors}
           />
-          <Controller
+          <SignUpInput
             control={control}
             name="confirmPassword"
-            render={({ field: { onChange, value } }) => (
-              <Input
-                icon={Lock}
-                placeholder="Confirm password"
-                secureTextEntry
-                value={value}
-                onChangeText={onChange}
-                error={errors.confirmPassword?.message}
-              />
-            )}
+            icon={Lock}
+            placeholder="Confirm password"
+            secureTextEntry
+            errors={errors}
           />
         </View>
 
-        {/* Terms Checkbox */}
         <TouchableOpacity
-          className="flex-row items-center mt-6 mb-8 gap-3"
+          className="flex-row items-center mt-10 mb-10 gap-3"
           activeOpacity={0.7}
           onPress={() => setTermsAccepted(!termsAccepted)}
         >
-          <View className={`w-5 h-5 rounded border items-center justify-center ${termsAccepted ? 'bg-brand-primary border-brand-primary' : 'border-[rgba(255,255,255,0.3)] bg-transparent'}`}>
+          <View className={`w-5 h-5 rounded-full border items-center justify-center ${termsAccepted ? 'bg-brand-primary border-brand-primary' : 'border-[rgba(255,255,255,0.3)] bg-transparent'}`}>
             {termsAccepted && <Check size={14} color="#FFF" />}
           </View>
           <Text className="text-text-secondary pr-4 flex-1 leading-tight">
@@ -176,7 +194,7 @@ export default function SignUpScreen() {
           disabled={isPending}
         />
 
-        <SocialDivider />
+        <SocialDivider className='mt-8 mb-8' />
 
         <GoogleButton
           label={isPendingGoogle ? 'Opening Google...' : 'Continue with Google'}

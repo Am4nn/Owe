@@ -23,7 +23,7 @@ const profileSchema = z.object({
 type ProfileForm = z.infer<typeof profileSchema>
 
 export default function ProfileScreen() {
-  const { session } = useSession()
+  const { user } = useSession()
   const profileQuery = useProfile()
   const { mutate: updateProfile, isPending: isSaving } = useUpdateProfile()
   const { mutate: signOut } = useSignOut()
@@ -120,13 +120,13 @@ export default function ProfileScreen() {
             <Avatar
               size="xl"
               uri={profile?.avatar_url}
-              fallback={profile?.display_name || session?.user?.email}
+              fallback={profile?.display_name || user?.email}
               bordered
               showEdit="pencil"
             />
           </TouchableOpacity>
           <Text className="text-white text-2xl font-bold">{profile?.display_name || 'Anonymous'}</Text>
-          <Text className="text-brand-primary text-base mt-1">{session?.user?.email}</Text>
+          <Text className="text-brand-primary text-base mt-1">{user?.email}</Text>
         </View>
 
         {/* Stats Row */}

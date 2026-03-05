@@ -13,7 +13,8 @@ import { useOAuthWarmUp } from '@/hooks/useOAuthWarmUp'
 import { showAlert } from '@/lib/alert'
 import { Mail, Lock } from 'lucide-react-native'
 import { ScreenContainer } from '@/components/ui/ScreenContainer'
-import { Svg, Path, Circle } from 'react-native-svg'
+import { GlowWrapper } from '@/components/ui/GlowWrapper'
+import OweLogo from '@/components/icon/owe-logo'
 
 const signInSchema = z.object({
   email: z.string().email('Please enter a valid email'),
@@ -22,27 +23,6 @@ const signInSchema = z.object({
 
 type SignInForm = z.infer<typeof signInSchema>
 
-/** Owe Logo — two overlapping circles representing connected people sharing expenses */
-function OweLogo({ size = 60 }: { size?: number }) {
-  const r = size * 0.35
-  const overlap = size * 0.22
-  const cx1 = r + 3
-  const cx2 = size - r - 3
-  const cy = size * 0.5
-  return (
-    <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} fill="none">
-      {/* Overlap fill */}
-      <Path
-        d={`M${cx1 + overlap} ${cy - r * 0.8} A${r} ${r} 0 0 1 ${cx1 + overlap} ${cy + r * 0.8} A${r} ${r} 0 0 1 ${cx1 + overlap} ${cy - r * 0.8}`}
-        fill="rgba(123, 92, 246, 0.2)"
-      />
-      {/* Left circle */}
-      <Circle cx={cx1} cy={cy} r={r} stroke="#7B5CF6" strokeWidth={3} />
-      {/* Right circle */}
-      <Circle cx={cx2} cy={cy} r={r} stroke="#9B7BFF" strokeWidth={3} />
-    </Svg>
-  )
-}
 
 export default function SignInScreen() {
   const { mutate: signIn, isPending } = useSignIn()
@@ -65,22 +45,14 @@ export default function SignInScreen() {
 
   return (
     <ScreenContainer padded>
-      <View className="flex-1 justify-center">
-        {/* Header: Logo + Title */}
+      <View className="flex-1 justify-center gap-5">
         <View className="items-center" style={{ marginBottom: 32 }}>
-          {/* Icon with purple glow blob behind it (Android doesn't support colored shadows) */}
-          <View style={{ alignItems: 'center', justifyContent: 'center', marginBottom: 24 }}>
-            {/* Glow blob behind logo */}
-            <View
-              style={{
-                position: 'absolute',
-                width: 80,
-                height: 80,
-                borderRadius: 40,
-                backgroundColor: 'rgba(123, 92, 246, 0.12)',
-              }}
-            />
-            <OweLogo size={64} />
+          <View pointerEvents="box-none" style={{ alignItems: 'center', justifyContent: 'center', marginBottom: 24, zIndex: 1 }}>
+            <GlowWrapper>
+              <View style={{ width: 64, height: 64, alignItems: 'center', justifyContent: 'center' }}>
+                <OweLogo size={64} />
+              </View>
+            </GlowWrapper>
           </View>
           <Text style={{ fontSize: 34, fontWeight: '800', color: '#FFFFFF', marginBottom: 8, letterSpacing: -0.5 }}>
             Welcome Back
@@ -90,10 +62,8 @@ export default function SignInScreen() {
           </Text>
         </View>
 
-        {/* Glassmorphism Card wrapping form + CTA + Google */}
         <GlassCard padding={28}>
           <View style={{ gap: 20 }}>
-            {/* Email field */}
             <Controller
               control={control}
               name="email"
@@ -111,7 +81,6 @@ export default function SignInScreen() {
               )}
             />
 
-            {/* Password field with label row (label left, Forgot right) */}
             <View>
               <View className="flex-row justify-between items-center" style={{ marginBottom: 6 }}>
                 <Text className="text-text-secondary text-sm font-medium">Password</Text>
@@ -135,7 +104,6 @@ export default function SignInScreen() {
               />
             </View>
 
-            {/* Sign In Button */}
             <View style={{ marginTop: 4 }}>
               <Button
                 title={isPending ? 'Signing In...' : 'Sign In'}
@@ -157,7 +125,6 @@ export default function SignInScreen() {
           </View>
         </GlassCard>
 
-        {/* Footer: Sign Up link */}
         <View className="flex-row justify-center" style={{ marginTop: 32 }}>
           <Text style={{ fontSize: 15, color: '#94A3B8' }}>
             Don't have an account?{' '}

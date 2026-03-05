@@ -16,7 +16,7 @@ import { Search, Wallet } from 'lucide-react-native'
 import { ScreenContainer } from '@/components/ui/ScreenContainer'
 
 export default function DashboardScreen() {
-  const { session } = useSession()
+  const { user } = useSession()
   const [refreshing, setRefreshing] = useState(false)
   const { data: allGroups, isLoading: isLoadingGroups, refetch: refetchGroups } = useGroups()
   const { data: balances, isLoading: isLoadingBalances, refetch: refetchBalances } = useBalanceSummary()
@@ -48,7 +48,7 @@ export default function DashboardScreen() {
       <View className="px-6 pt-4 pb-2 flex-row justify-between items-center">
         <View className="flex-row items-center gap-3">
           <TouchableOpacity onPress={() => router.push('/(app)/profile')}>
-            <Avatar size="sm" fallback={session?.user?.email?.[0]?.toUpperCase() || 'U'} />
+            <Avatar size="sm" fallback={user?.email?.[0]?.toUpperCase() || 'U'} />
           </TouchableOpacity>
           <Text className="text-white text-xl font-bold tracking-tight">Owe</Text>
         </View>
