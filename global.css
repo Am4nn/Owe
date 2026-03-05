@@ -1,3 +1,89 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --color-brand-primary: #7B5CF6;
+    --color-brand-secondary: #9B7BFF;
+    --color-brand-accent: #00D4AA;
+    --gradient-cta: linear-gradient(135deg, #7B5CF6, #9B7BFF);
+    --gradient-cover: linear-gradient(135deg, #7B5CF6, #4C1D95);
+    --gradient-teal: linear-gradient(135deg, #00D4AA, #00E5C0);
+    --glass-bg: rgba(26, 29, 46, 0.7);
+    --glass-bg-elevated: rgba(37, 40, 64, 0.85);
+    --glass-bg-input: rgba(26, 29, 46, 0.5);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-border-dashed: rgba(255, 255, 255, 0.15);
+    --glass-blur: 12px;
+    --focus-ring: rgba(123, 92, 246, 0.5);
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-radius: 16px;
+  }
+
+  .glass-card-elevated {
+    background: var(--glass-bg-elevated);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-radius: 20px;
+  }
+
+  .glass-card-dashed {
+    background: var(--glass-bg);
+    border: 1px dashed var(--glass-border-dashed);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-radius: 16px;
+  }
+
+  .glass-input {
+    background: var(--glass-bg-input);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+  }
+
+  .glass-input-focus {
+    border-color: var(--focus-ring);
+    box-shadow: 0 0 12px rgba(123, 92, 246, 0.15);
+  }
+
+  .gradient-cta {
+    background: var(--gradient-cta);
+  }
+
+  .gradient-cover {
+    background: var(--gradient-cover);
+  }
+
+  .text-amount-positive {
+    color: #06D6A0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .text-amount-negative {
+    color: #FF4D6D;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .text-amount-neutral {
+    color: #F8FAFC;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #94A3B8;
+  }
+}

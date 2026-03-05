@@ -1,2 +1,5 @@
 packages:
-  - "."
+  - .
+
+patchedDependencies:
+  react-native-css-interop@0.2.2: patches/react-native-css-interop@0.2.2.patch
