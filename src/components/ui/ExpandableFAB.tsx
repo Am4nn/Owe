@@ -1,18 +1,21 @@
 import React, { useState } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, Pressable } from 'react-native'
 import Animated, {
   useSharedValue,
   withSpring,
   useAnimatedStyle,
   interpolate,
   SharedValue,
+  withDelay,
+  withTiming,
+  withSequence,
 } from 'react-native-reanimated'
 import { router } from 'expo-router'
+import { Plus, X, Camera, Edit2, ArrowRightLeft } from 'lucide-react-native'
+import { BlurView } from 'expo-blur'
 
 export function ExpandableFAB() {
-  const isOpen = useSharedValue<number>(0)
-  // JS-side mirror of isOpen for pointer-events and toast — Reanimated shared
-  // values are UI-thread only; React state is needed for JS-side logic on web.
+  const isOpen = useSharedValue(0)
   const [isOpenState, setIsOpenState] = useState(false)
   const [toastMsg, setToastMsg] = useState<string | null>(null)
 
@@ -25,7 +28,7 @@ export function ExpandableFAB() {
   function closeAndNavigate(action: () => void) {
     isOpen.value = withSpring(0, { damping: 15, stiffness: 200 })
     setIsOpenState(false)
-    action()
+    setTimeout(action, 200) // wait for animation
   }
 
   function showToast(msg: string) {
@@ -33,97 +36,143 @@ export function ExpandableFAB() {
     setTimeout(() => setToastMsg(null), 2500)
   }
 
+  const backdropStyle = useAnimatedStyle(() => ({
+    opacity: isOpen.value,
+    pointerEvents: isOpen.value > 0 ? 'auto' : 'none'
+  }))
+
+  const mainIconStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${interpolate(isOpen.value, [0, 1], [0, 135])}deg` }]
+  }))
+
+  // The radial positions: left-up, straight-up, right-up
+  // Angle starting from top (0) -> -45deg, 0deg, 45deg
   const childButtons = [
     {
-      label: 'Manual Entry',
-      offsetY: -80,
+      label: 'Scan',
+      icon: Camera,
+      color: '#06D6A0',
+      angle: -45,
+      radius: 100,
+      delay: 50,
+      onPress: () => closeAndNavigate(() => showToast('Receipt scanning arrives in v2')),
+    },
+    {
+      label: 'Manual',
+      icon: Edit2,
+      color: '#7B5CF6',
+      angle: 0,
+      radius: 110,
+      delay: 0,
       onPress: () => closeAndNavigate(() => router.push('/(app)/expenses/new' as Parameters<typeof router.push>[0])),
     },
     {
-      label: 'New Group',
-      offsetY: -160,
-      onPress: () => closeAndNavigate(() => router.push('/(app)/groups/new' as Parameters<typeof router.push>[0])),
-    },
-    {
-      label: 'Add Transfer',
-      offsetY: -240,
+      label: 'Transfer',
+      icon: ArrowRightLeft,
+      color: '#3B82F6',
+      angle: 45,
+      radius: 100,
+      delay: 100,
       onPress: () => closeAndNavigate(() => showToast('Transfer recording coming soon')),
-    },
-    {
-      label: 'Scan Receipt',
-      offsetY: -320,
-      onPress: () => closeAndNavigate(() => showToast('Receipt scanning arrives in v2')),
     },
   ]
 
   return (
-    // zIndex: on web, elevation is ignored — explicit zIndex keeps buttons above content
-    <View className="absolute bottom-8 right-6" style={{ elevation: 8, zIndex: 1000 }}>
-      {/* Coming-soon toast — shown inline near the FAB to avoid Alert.alert on web */}
-      {toastMsg && (
-        <View
-          className="absolute bg-dark-surface border border-dark-border rounded-xl px-3 py-2"
-          style={{ bottom: 72, right: 0, minWidth: 200 }}
-          pointerEvents="none"
-        >
-          <Text className="text-white/80 text-sm">{toastMsg}</Text>
-        </View>
-      )}
-
-      {/* Child buttons rendered behind main FAB */}
-      {childButtons.map((child, index) => (
-        <ChildFABButton
-          key={index}
-          label={child.label}
-          offsetY={child.offsetY}
-          isOpen={isOpen}
-          isVisible={isOpenState}
-          onPress={child.onPress}
-        />
-      ))}
-
-      {/* Main FAB */}
-      <TouchableOpacity
-        onPress={toggle}
-        className="bg-brand-primary w-14 h-14 rounded-full items-center justify-center"
-        style={{ elevation: 8, zIndex: 1001 }}
+    <>
+      <Animated.View
+        style={[StyleSheet.absoluteFill, backdropStyle, { zIndex: 990, elevation: 7 }]}
+        className="bg-black/40"
       >
-        <Text className="text-white text-2xl font-light">+</Text>
-      </TouchableOpacity>
-    </View>
+        <Pressable className="flex-1" onPress={toggle} />
+      </Animated.View>
+
+      <View className="absolute bottom-8 right-6" style={{ elevation: 8, zIndex: 1000 }}>
+        {toastMsg && (
+          <View
+            className="absolute bg-dark-surface border border-dark-border rounded-xl px-3 py-2"
+            style={{ bottom: 72, right: 0, minWidth: 200 }}
+            pointerEvents="none"
+          >
+            <Text className="text-white/80 text-sm">{toastMsg}</Text>
+          </View>
+        )}
+
+        {childButtons.map((child, index) => (
+          <RadialChildButton
+            key={index}
+            {...child}
+            isOpen={isOpen}
+            isVisible={isOpenState}
+          />
+        ))}
+
+        <TouchableOpacity
+          onPress={toggle}
+          className="gradient-cta w-[56px] h-[56px] rounded-full items-center justify-center shadow-[0_0_24px_rgba(123,92,246,0.30)]"
+          style={{ elevation: 8, zIndex: 1001 }}
+        >
+          <Animated.View style={mainIconStyle}>
+            {/* The + rotates to become roughly an X. 
+                Using Lucide Plus since X does not match the exact 135deg rotation of Plus visually perfectly if we swap them */}
+            <Plus size={28} color="white" />
+          </Animated.View>
+        </TouchableOpacity>
+      </View>
+    </>
   )
 }
 
-interface ChildFABButtonProps {
+interface RadialChildButtonProps {
   label: string
-  offsetY: number
+  icon: any
+  color: string
+  angle: number
+  radius: number
+  delay: number
   isOpen: SharedValue<number>
   isVisible: boolean
   onPress: () => void
 }
 
-function ChildFABButton({ label, offsetY, isOpen, isVisible, onPress }: ChildFABButtonProps) {
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: isOpen.value,
-    transform: [
-      {
-        translateY: interpolate(isOpen.value, [0, 1], [0, offsetY]),
-      },
-    ],
-  }))
+function RadialChildButton({ label, icon: Icon, color, angle, radius, delay, isOpen, isVisible, onPress }: RadialChildButtonProps) {
+  const animatedStyle = useAnimatedStyle(() => {
+    // Math checks out: 0 degrees is straight UP.
+    // X = sin(angle) * r
+    // Y = -cos(angle) * r  (negative goes UP in React Native coords)
+
+    // Convert angle to radians
+    const radians = angle * (Math.PI / 180)
+    const targetX = Math.sin(radians) * radius
+    const targetY = -Math.cos(radians) * radius
+
+    const delayVal = isVisible ? delay : (100 - delay) // reverse delay on close
+    const springConfig = { damping: 14, stiffness: 200 }
+
+    return {
+      opacity: withDelay(delayVal, withTiming(isOpen.value, { duration: 150 })),
+      transform: [
+        { scale: withDelay(delayVal, withSpring(isOpen.value, springConfig)) },
+        { translateX: withDelay(delayVal, withSpring(isOpen.value * targetX, springConfig)) },
+        { translateY: withDelay(delayVal, withSpring(isOpen.value * targetY, springConfig)) },
+      ],
+    }
+  })
 
   return (
-    // Animated.View has better web support than createAnimatedComponent(TouchableOpacity).
-    // pointerEvents mirrors isOpenState so invisible buttons never intercept touches.
     <Animated.View
       pointerEvents={isVisible ? 'auto' : 'none'}
-      style={[animatedStyle, { position: 'absolute', bottom: 0, right: 0, zIndex: 999 }]}
+      style={[animatedStyle, { position: 'absolute', top: 4, left: 4, zIndex: 999 }]}
     >
-      <TouchableOpacity
-        onPress={onPress}
-        className="bg-dark-surface border border-dark-border rounded-full px-4 py-3 flex-row items-center"
-      >
-        <Text className="text-white text-sm font-medium">{label}</Text>
+      <TouchableOpacity onPress={onPress} className="items-center">
+        <View
+          className="w-12 h-12 rounded-full items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.25)]"
+          style={{ backgroundColor: color }}
+        >
+          <Icon size={20} color="white" />
+        </View>
+        <View className="mt-2 bg-dark-elevated/80 px-2 py-1 rounded border border-[rgba(255,255,255,0.08)]">
+          <Text className="text-white text-[10px] font-medium">{label}</Text>
+        </View>
       </TouchableOpacity>
     </Animated.View>
   )
