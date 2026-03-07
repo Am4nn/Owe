@@ -37,7 +37,7 @@ Users can split expenses, track shared debts, and settle up with friends without
 
 - In-app payment rails (Plaid/Stripe) — regulatory complexity, Phase 4+
 - WhatsApp / Telegram bot integration — external API dependency, Phase 4+
-- Web dashboard — mobile-first product, Phase 4+
+- Web dashboard/support — Never. Owe is strictly a native mobile-only product (iOS/Android). Do not write or maintain web-specific code (`Platform.OS === 'web'`).
 - B2B team plans — monetization milestone, Phase 4+
 - Real-time group chat — high infrastructure cost, comments on expenses cover dispute resolution
 - Ads or freemium feature gating — against core philosophy, tip jar only

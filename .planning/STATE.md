@@ -216,6 +216,7 @@ Recent decisions affecting current work:
 - [Phase 05-schema-notification-fixes]: Expo Router (app) group prefix must not appear in push notification dataUrl — useNotificationDeepLink uses router.push(url) verbatim, so deep-link URL must match Expo Router navigable path exactly
 - [Phase 06-google-oauth-verification]: Documentation-only plan — no code changes; Phase 1.5 code confirmed correct by Phase 6 research, plan closes audit trail gap only
 - [Phase 06-google-oauth-verification]: VERIFICATION.md status: human_needed — cold-start OAuth and account linking require live Android device + Supabase project; code wiring statically verified but runtime outcomes are not
+- [Phase 1.1-Polish]: Web support completely stripped and permanently rejected — Owe is strictly native iOS/Android; `Platform.OS === 'web'` branches must not be introduced or maintained.
 
 ### Pending Todos
 
