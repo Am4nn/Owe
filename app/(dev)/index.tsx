@@ -343,25 +343,25 @@ export default function ComponentShowcase() {
 
         {/* ── AVATAR STACK ─────────────────────────────────────────────── */}
         <Section title="AvatarStack">
-          <Variant label="3 avatars">
+          <Variant label="3 members">
             <AvatarStack
-              avatars={[
-                { fallback: 'Jo' },
-                { fallback: 'Sa' },
-                { fallback: 'Am' },
+              members={[
+                { name: 'Jo' },
+                { name: 'Sa' },
+                { name: 'Am' },
               ]}
             />
           </Variant>
-          <Variant label="5 avatars (shows +N)">
+          <Variant label="5 members (shows +N overflow)">
             <AvatarStack
-              avatars={[
-                { fallback: 'Jo' },
-                { fallback: 'Sa' },
-                { fallback: 'Am' },
-                { fallback: 'Ri' },
-                { fallback: 'Ke' },
+              members={[
+                { name: 'Jo' },
+                { name: 'Sa' },
+                { name: 'Am' },
+                { name: 'Ri' },
+                { name: 'Ke' },
               ]}
-              max={3}
+              maxDisplay={3}
             />
           </Variant>
         </Section>
