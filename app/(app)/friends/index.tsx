@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { router } from 'expo-router'
 import { X, Search } from 'lucide-react-native'
 import { ScreenContainer } from '@/components/ui/ScreenContainer'
-import { Input } from '@/components/ui/Input'
+import { TextInputField } from '@/components/ui/inputs/TextInputField'
 import { ContactItem } from '@/components/friends/ContactItem'
 
 // Mock Data
@@ -34,7 +34,7 @@ export default function AddFriendsScreen() {
       </View>
 
       <View className="px-4 py-4">
-        <Input
+        <TextInputField
           icon={Search}
           placeholder="Search name, email, or phone"
           value={search}

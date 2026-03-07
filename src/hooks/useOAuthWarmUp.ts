@@ -13,7 +13,7 @@ export function useOAuthWarmUp() {
     return () => { coolDownBrowser() }
   }, [])
 
-  const url = Linking.useURL()
+  const url = Linking.useLinkingURL()
   useEffect(() => {
     if (url) createSessionFromUrl(url)
   }, [url])

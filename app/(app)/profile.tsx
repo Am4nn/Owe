@@ -5,7 +5,7 @@ import { z } from 'zod'
 import * as ImagePicker from 'expo-image-picker'
 import { router } from 'expo-router'
 import { Button } from '@/components/ui/Button'
-import { Input } from '@/components/ui/Input'
+import { TextInputField } from '@/components/ui/inputs/TextInputField'
 import { Avatar } from '@/components/ui/Avatar'
 import { StatCard } from '@/components/profile/StatCard'
 import { SettingsMenu, SettingsSection } from '@/components/profile/SettingsMenu'
@@ -143,7 +143,7 @@ export default function ProfileScreen() {
             control={control}
             name="display_name"
             render={({ field: { onChange, value } }) => (
-              <Input
+              <TextInputField
                 icon={User}
                 label="Display Name"
                 placeholder="How should friends see you?"

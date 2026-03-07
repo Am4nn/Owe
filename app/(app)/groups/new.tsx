@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Stack, router } from 'expo-router'
 import { Button } from '@/components/ui/Button'
-import { Input } from '@/components/ui/Input'
+import { TextInputField } from '@/components/ui/inputs/TextInputField'
 import { useCreateGroup } from '@/features/groups/hooks'
 import { showAlert } from '@/lib/alert'
 
@@ -56,7 +56,7 @@ export default function NewGroupScreen() {
           control={control}
           name="name"
           render={({ field: { onChange, value } }) => (
-            <Input
+            <TextInputField
               label="Group name"
               placeholder="Weekend trip, House expenses..."
               value={value}
@@ -70,7 +70,7 @@ export default function NewGroupScreen() {
           control={control}
           name="base_currency"
           render={({ field: { onChange, value } }) => (
-            <Input
+            <TextInputField
               label="Base currency"
               placeholder="USD"
               autoCapitalize="characters"

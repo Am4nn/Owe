@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Link } from 'expo-router'
 import { Button } from '@/components/ui/Button'
-import { Input } from '@/components/ui/Input'
+import { TextInputField } from '@/components/ui/inputs/TextInputField'
 import { SocialDivider } from '@/components/auth/SocialDivider'
 import { GoogleButton } from '@/components/auth/GoogleButton'
 import { GlassCard } from '@/components/ui/GlassCard'
@@ -68,7 +68,7 @@ export default function SignInScreen() {
               control={control}
               name="email"
               render={({ field: { onChange, value } }) => (
-                <Input
+                <TextInputField
                   label="Email Address"
                   icon={Mail}
                   placeholder="name@example.com"
@@ -92,7 +92,7 @@ export default function SignInScreen() {
                 control={control}
                 name="password"
                 render={({ field: { onChange, value } }) => (
-                  <Input
+                  <TextInputField
                     icon={Lock}
                     placeholder="••••••••"
                     secureTextEntry

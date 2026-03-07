@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Link } from 'expo-router'
 import { Button } from '@/components/ui/Button'
-import { Input } from '@/components/ui/Input'
+import { TextInputField } from '@/components/ui/inputs/TextInputField'
 import { SocialDivider } from '@/components/auth/SocialDivider'
 import { GoogleButton } from '@/components/auth/GoogleButton'
 import { useSignUp, useSignInWithGoogle } from '@/features/auth/hooks'
@@ -44,7 +44,7 @@ const SignUpInput = ({ control, name, icon, placeholder, secureTextEntry, keyboa
     control={control}
     name={name}
     render={({ field: { onChange, value } }) => (
-      <Input
+      <TextInputField
         variant='secondary'
         borderRadius={20}
         iconGap={4}

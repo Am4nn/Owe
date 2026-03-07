@@ -152,6 +152,8 @@ export const variantStyles = {
   },
 };
 
+// TODO: Add more variants based on elevation
+
 export function GlassCard({
   variant = 'default',
   padding = 16,

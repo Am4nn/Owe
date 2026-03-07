@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import { useState, useEffect } from 'react'
 import { router } from 'expo-router'
 import { Button } from '@/components/ui/Button'
-import { Input } from '@/components/ui/Input'
+import { TextInputField } from '@/components/ui/inputs/TextInputField'
 import { SocialDivider } from '@/components/auth/SocialDivider'
 import { OTPInput } from '@/components/auth/OTPInput'
 import { supabase } from '@/lib/supabase'
@@ -101,7 +101,7 @@ export default function ForgotPasswordScreen() {
 
         {!isEmailSent ? (
           <View className="gap-6 w-full">
-            <Input
+            <TextInputField
               icon={Mail}
               placeholder="you@example.com"
               keyboardType="email-address"
