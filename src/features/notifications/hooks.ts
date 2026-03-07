@@ -14,19 +14,16 @@ import type { ReminderConfig, UpsertReminderConfigInput } from './types'
 // ---------------------------------------------------------------------------
 // Foreground notification handler — show alerts/sounds while app is active
 // Set at module-top so it is registered before any component mounts
-// Skip on web — expo-notifications is native-only
 // ---------------------------------------------------------------------------
-if (Platform.OS !== 'web') {
-  Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-      shouldShowAlert: true,
-      shouldPlaySound: true,
-      shouldSetBadge: false,
-      shouldShowBanner: true,
-      shouldShowList: true,
-    }),
-  })
-}
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+    shouldShowBanner: true,
+    shouldShowList: true,
+  }),
+});
 
 // ---------------------------------------------------------------------------
 // registerPushToken — called once on authenticated app launch
@@ -35,8 +32,6 @@ if (Platform.OS !== 'web') {
 // token rotation (rare, but possible after reinstall on same device).
 // ---------------------------------------------------------------------------
 export async function registerPushToken(): Promise<void> {
-  // Web does not support expo-notifications
-  if (Platform.OS === 'web') return
   // Physical device required — simulators cannot obtain push tokens
   if (!Device.isDevice) return
 
@@ -90,8 +85,6 @@ export function useNotificationDeepLink(): void {
   const router = useRouter()
 
   useEffect(() => {
-    // Web does not support expo-notifications
-    if (Platform.OS === 'web') return
 
     // Handle cold-start: app was not running when the notification was tapped
     Notifications.getLastNotificationResponseAsync().then((response) => {

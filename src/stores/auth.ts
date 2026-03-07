@@ -1,4 +1,4 @@
-import { AppState, AppStateStatus, Platform } from 'react-native'
+import { AppState, AppStateStatus } from 'react-native'
 import { Session } from '@supabase/supabase-js'
 import { create } from 'zustand'
 import { supabase } from '@/lib/supabase'
@@ -45,18 +45,16 @@ export function initializeAuthStore() {
     setSessionState(session)
   })
 
-  if (Platform.OS !== 'web') {
-    const handleAppState = (state: AppStateStatus) => {
-      if (state === 'active') {
-        supabase.auth.startAutoRefresh()
-      } else {
-        supabase.auth.stopAutoRefresh()
-      }
+  const handleAppState = (state: AppStateStatus) => {
+    if (state === 'active') {
+      supabase.auth.startAutoRefresh()
+    } else {
+      supabase.auth.stopAutoRefresh()
     }
-
-    appStateSubscription = AppState.addEventListener('change', handleAppState)
-    handleAppState(AppState.currentState)
   }
+
+  appStateSubscription = AppState.addEventListener('change', handleAppState)
+  handleAppState(AppState.currentState)
 }
 
 export function cleanupAuthStore() {

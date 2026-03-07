@@ -140,18 +140,10 @@ export function useSignInWithGoogle() {
         provider: 'google',
         options: {
           redirectTo,
-          // Web doesn't need to skip the redirect; we want it to actually redirect the page
-          skipBrowserRedirect: Platform.OS !== 'web',
+          skipBrowserRedirect: true,
         },
       })
       if (error) throw error
-
-      if (Platform.OS === 'web') {
-        // On web, if skipBrowserRedirect was false (which it is now), Supabase already
-        // redirecting the window. But if we still need to, we can just return or do nothing.
-        // Supabase will handle the redirect.
-        return
-      }
 
       // Step 2 & 3: Only for Native
       const res = await WebBrowser.openAuthSessionAsync(data?.url ?? '', redirectTo)

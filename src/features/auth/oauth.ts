@@ -1,6 +1,6 @@
 import { makeRedirectUri } from 'expo-auth-session'
 import { supabase } from '@/lib/supabase'
-import { Platform } from 'react-native'
+
 
 export function useOAuthGoogle() {
   async function signInWithGoogle() {
@@ -12,7 +12,7 @@ export function useOAuthGoogle() {
       provider: 'google',
       options: {
         redirectTo: redirectUri,
-        skipBrowserRedirect: Platform.OS !== 'web',
+        skipBrowserRedirect: true,
       },
     })
 

@@ -31,11 +31,7 @@ export function Input({ label, error, icon: Icon, className, secureTextEntry, va
   const [isFocused, setIsFocused] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
-  // Fix for React Native Web controlled TextInput duplication (WEB-02)
-  const webProps = Platform.OS === 'web' && props.value !== undefined ? {
-    defaultValue: props.value as string,
-    value: undefined // Make uncontrolled to prevent cursor jump/duplication
-  } : {}
+
 
   // When secureTextEntry is passed, manage visibility toggle internally
   const isSecure = secureTextEntry && !showPassword
@@ -83,7 +79,6 @@ export function Input({ label, error, icon: Icon, className, secureTextEntry, va
             props.onBlur?.(e)
           }}
           {...props}
-          {...webProps}
         />
         {secureTextEntry && (
           <TouchableOpacity

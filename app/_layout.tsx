@@ -18,11 +18,6 @@ import { theme } from '@/lib/theme'
 import '../global.css'
 import '@/stores/ui'
 
-// NativeWind: use class-based dark mode on web to suppress 'media' warning
-if (Platform.OS === 'web') {
-  (StyleSheet as unknown as { setFlag?: (k: string, v: string) => void }).setFlag?.('darkMode', 'class')
-}
-
 // Module-level setup — runs once when the module loads (before any component mounts)
 // Wire React Query's online state to device network connectivity (OFFL-02)
 onlineManager.setEventListener((setOnline) => {
