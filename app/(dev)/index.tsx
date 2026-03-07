@@ -92,6 +92,29 @@ import {
   OfflineIllustration,
 } from '@/components/ui'
 
+// ── Feature component imports ────────────────────────────────────────────────
+import { GoogleButton }        from '@/components/auth/GoogleButton'
+import { OTPInput }            from '@/components/auth/OTPInput'
+import { SocialDivider }       from '@/components/auth/SocialDivider'
+import { ActivityItem }        from '@/components/dashboard/ActivityItem'
+import { GroupCardHorizontal } from '@/components/dashboard/GroupCardHorizontal'
+import { BalanceCard }         from '@/components/dashboard/BalanceCard'
+import { ExpenseSummaryCard }  from '@/components/expenses/ExpenseSummaryCard'
+import { SplitSummary }        from '@/components/expenses/SplitSummary'
+import { SplitBreakdownList }  from '@/components/expenses/SplitBreakdownList'
+import { SplitMemberRow }      from '@/components/expenses/SplitMemberRow'
+import { PaidBySelector }      from '@/components/expenses/PaidBySelector'
+import { SplitMethodSelector } from '@/components/expenses/SplitMethodSelector'
+import { FriendRow }           from '@/components/friends/FriendRow'
+import { ContactItem }         from '@/components/friends/ContactItem'
+import { GroupHeader }         from '@/components/groups/GroupHeader'
+import { GroupBalanceSummary } from '@/components/groups/GroupBalanceSummary'
+import { MemberRow }           from '@/components/groups/MemberRow'
+import { ProfileHeader }       from '@/components/profile/ProfileHeader'
+import { SettingsMenu }        from '@/components/profile/SettingsMenu'
+import { StatCard }            from '@/components/profile/StatCard'
+import { PaginationDots }      from '@/components/onboarding/PaginationDots'
+
 // ── Local helpers ─────────────────────────────────────────────────────────────
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -201,6 +224,12 @@ export default function ComponentShowcase() {
   const [amountCents, setAmountCents] = useState(0)
   const [toggleOn, setToggleOn] = useState(true)
   const [textValue, setTextValue] = useState('')
+
+  // Feature component state
+  const [otpValue, setOtpValue] = useState('')
+  const [splitMethod, setSplitMethod] = useState<'equal' | 'exact' | 'percentage'>('equal')
+  const [paidById, setPaidById] = useState('1')
+  const [dotIndex, setDotIndex] = useState(1)
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.dark.bg }}>
@@ -1185,6 +1214,254 @@ export default function ComponentShowcase() {
               <OfflineIllustration />
             </View>
           </Variant>
+        </Section>
+
+        {/* ══════════════════════════════════════════════════════════════
+            FEATURE COMPONENTS
+            ══════════════════════════════════════════════════════════════ */}
+
+        {/* ── AUTH ─────────────────────────────────────────────────────── */}
+        <Section title="Auth — GoogleButton / SocialDivider / OTPInput">
+          <Variant label="GoogleButton">
+            <GoogleButton onPress={() => {}} />
+          </Variant>
+          <Variant label="GoogleButton disabled">
+            <GoogleButton onPress={() => {}} disabled label="Signing in…" />
+          </Variant>
+          <Variant label="SocialDivider">
+            <SocialDivider />
+          </Variant>
+          <Variant label="OTPInput (6-digit)">
+            <OTPInput value={otpValue} onChangeText={setOtpValue} />
+          </Variant>
+        </Section>
+
+        {/* ── DASHBOARD ────────────────────────────────────────────────── */}
+        <Section title="Dashboard — ActivityItem / BalanceCard / GroupCardHorizontal">
+          <Variant label="ActivityItem">
+            <ActivityItem
+              id="1"
+              actorName="Sarah"
+              actionText="added"
+              targetName="Sushi Night"
+              amountCents={4500}
+              timestamp="2h ago"
+              onPress={() => {}}
+            />
+          </Variant>
+          <Variant label="BalanceCard — owed / owe">
+            <Row gap={12}>
+              <BalanceCard type="owed" amountCents={18000} personCount={3} />
+              <BalanceCard type="owe"  amountCents={5500}  personCount={1} />
+            </Row>
+          </Variant>
+          <Variant label="GroupCardHorizontal">
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <Row gap={12}>
+                <GroupCardHorizontal name="Weekend Trip"  memberCount={6} balanceCents={4250}  onPress={() => {}} />
+                <GroupCardHorizontal name="Flat Mates"    memberCount={3} balanceCents={-1800} onPress={() => {}} />
+                <GroupCardHorizontal name="Road Trip '26" memberCount={4} balanceCents={0}     onPress={() => {}} />
+              </Row>
+            </ScrollView>
+          </Variant>
+        </Section>
+
+        {/* ── EXPENSE FLOW ─────────────────────────────────────────────── */}
+        <Section title="Expenses — ExpenseSummaryCard / SplitSummary / SplitBreakdownList">
+          <Variant label="ExpenseSummaryCard">
+            <ExpenseSummaryCard
+              title="Grocery Store"
+              totalCents={6000}
+              categoryLabel="Food"
+              categoryIcon={ShoppingCart}
+              payerName="Sarah"
+              date="Mar 5, 2026"
+            />
+          </Variant>
+          <Variant label="SplitSummary — equal">
+            <SplitSummary method="equal" totalCents={6000} perPersonCents={2000} memberCount={3} />
+          </Variant>
+          <Variant label="SplitBreakdownList">
+            <SplitBreakdownList
+              totalCents={6000}
+              members={[
+                { id: '1', name: 'Sarah',  amountCents: 2000, isPayer: true },
+                { id: '2', name: 'Josh',   amountCents: 2000 },
+                { id: '3', name: 'Riya',   amountCents: 2000 },
+              ]}
+            />
+          </Variant>
+        </Section>
+
+        {/* ── SPLIT INPUTS ─────────────────────────────────────────────── */}
+        <Section title="Expenses — SplitMemberRow / PaidBySelector / SplitMethodSelector">
+          <Variant label="SplitMemberRow (display)">
+            <UIColumn gap={2}>
+              <SplitMemberRow name="Sarah"  amountCents={2000} isPayer />
+              <SplitMemberRow name="Josh"   amountCents={2000} />
+              <SplitMemberRow name="Riya"   amountCents={2000} />
+            </UIColumn>
+          </Variant>
+          <Variant label="PaidBySelector (interactive)">
+            <PaidBySelector
+              members={[
+                { id: '1', name: 'You'   },
+                { id: '2', name: 'Sarah' },
+                { id: '3', name: 'Josh'  },
+                { id: '4', name: 'Riya'  },
+              ]}
+              selectedId={paidById}
+              onSelect={setPaidById}
+            />
+          </Variant>
+          <Variant label="SplitMethodSelector (interactive)">
+            <SplitMethodSelector selected={splitMethod} onSelect={setSplitMethod} />
+          </Variant>
+        </Section>
+
+        {/* ── FRIENDS ──────────────────────────────────────────────────── */}
+        <Section title="Friends — FriendRow / ContactItem">
+          <Variant label="FriendRow — all balance states">
+            <UIColumn gap={10}>
+              <FriendRow name="Sarah Miller" balanceCents={2500}  onPress={() => {}} />
+              <FriendRow name="Josh Kane"    balanceCents={-1200} onPress={() => {}} />
+              <FriendRow name="Riya Patel"   balanceCents={0}     onPress={() => {}} />
+            </UIColumn>
+          </Variant>
+          <Variant label="ContactItem">
+            <GlassCard style={{ padding: 0, overflow: 'hidden' }}>
+              <ContactItem id="1" name="Aisha Rahman"  phoneOrEmail="+44 7700 900123" isAdded={false} onAdd={() => {}} />
+              <ContactItem id="2" name="Liam Johnson"  phoneOrEmail="liam@example.com" isAdded onAdd={() => {}} />
+            </GlassCard>
+          </Variant>
+        </Section>
+
+        {/* ── GROUPS ───────────────────────────────────────────────────── */}
+        <Section title="Groups — GroupHeader / GroupBalanceSummary / MemberRow">
+          <Variant label="GroupHeader — balance positive">
+            <GroupHeader
+              name="Weekend Trip"
+              icon={Plane}
+              memberCount={6}
+              netBalanceCents={4250}
+              onBack={() => {}}
+              onOptions={() => {}}
+            />
+          </Variant>
+          <Variant label="GroupHeader — you owe">
+            <GroupHeader
+              name="Flat Mates"
+              icon={Home}
+              memberCount={3}
+              netBalanceCents={-1800}
+              onBack={() => {}}
+            />
+          </Variant>
+          <Variant label="GroupBalanceSummary">
+            <GroupBalanceSummary
+              members={[
+                { id: '1', name: 'Sarah',  netCents: 2500 },
+                { id: '2', name: 'Josh',   netCents: -1200 },
+                { id: '3', name: 'Riya',   netCents: 700 },
+                { id: '4', name: 'Aman',   netCents: 0 },
+              ]}
+            />
+          </Variant>
+          <Variant label="MemberRow">
+            <GlassCard style={{ padding: 0, overflow: 'hidden' }}>
+              <MemberRow member={{ id: '1', user_id: 'uid1', display_name: 'Sarah Miller', role: 'admin' } as any} />
+              <MemberRow member={{ id: '2', user_id: 'uid2', display_name: 'Josh Kane',    role: 'member' } as any} />
+              <MemberRow member={{ id: '3', user_id: null,   display_name: 'Riya Patel',   role: 'member' } as any} />
+            </GlassCard>
+          </Variant>
+        </Section>
+
+        {/* ── PROFILE ──────────────────────────────────────────────────── */}
+        <Section title="Profile — ProfileHeader / StatCard / SettingsMenu">
+          <Variant label="ProfileHeader">
+            <ProfileHeader
+              name="Aman Bamzii"
+              email="aman@example.com"
+              statusLabel="Pro"
+              onEditAvatar={() => {}}
+            />
+          </Variant>
+          <Variant label="StatCard — horizontal row">
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <Row gap={0}>
+                <StatCard label="TOTAL SPENT"   value="$2,845"  valueColor="text-white" />
+                <StatCard label="SETTLED"        value="$1,920"  valueColor="text-status-success" />
+                <StatCard label="GROUPS"         value="7"       valueColor="text-white" />
+              </Row>
+            </ScrollView>
+          </Variant>
+          <Variant label="SettingsMenu">
+            <SettingsMenu
+              sections={[
+                {
+                  title: 'Account Settings',
+                  items: [
+                    { id: 'lang',     icon: Bell,       label: 'Language',          value: 'English', onPress: () => {} },
+                    { id: 'currency', icon: CreditCard, label: 'Default Currency',  value: 'USD',     onPress: () => {} },
+                  ],
+                },
+                {
+                  title: 'Privacy',
+                  items: [
+                    { id: 'privacy', icon: Lock, label: 'Activity Visibility', value: 'Friends', onPress: () => {} },
+                  ],
+                },
+              ]}
+            />
+          </Variant>
+        </Section>
+
+        {/* ── ONBOARDING ───────────────────────────────────────────────── */}
+        <Section title="Onboarding — PaginationDots">
+          <Variant label="PaginationDots — tap to cycle active dot">
+            <View style={{ alignItems: 'center', gap: 16 }}>
+              <PaginationDots count={3} activeIndex={dotIndex} />
+              <Row gap={8}>
+                {[0, 1, 2].map((i) => (
+                  <TouchableOpacity
+                    key={i}
+                    onPress={() => setDotIndex(i)}
+                    style={{
+                      paddingHorizontal: 14,
+                      paddingVertical: 6,
+                      borderRadius: theme.radii.pill,
+                      backgroundColor: dotIndex === i ? theme.colors.brand.primary : theme.colors.dark.surface,
+                      borderWidth: 1,
+                      borderColor: theme.colors.glass.border,
+                    }}
+                  >
+                    <Text style={{ color: theme.colors.text.primary, fontSize: theme.typography.caption }}>
+                      Slide {i + 1}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </Row>
+            </View>
+          </Variant>
+          <Variant label="OnboardingCarousel / OnboardingSlide — full-screen; rendered via /(onboarding) route">
+            <GlassCard style={{ padding: 16 }}>
+              <Text style={{ color: theme.colors.text.secondary, fontSize: theme.typography.bodySm, lineHeight: 20 }}>
+                OnboardingCarousel wraps OnboardingSlide in a full-screen PagerView.
+                Navigate to the app's onboarding route to preview the full experience.
+              </Text>
+            </GlassCard>
+          </Variant>
+        </Section>
+
+        {/* ── SETTLEMENT ───────────────────────────────────────────────── */}
+        <Section title="Settlement — ConfettiScreen">
+          <GlassCard style={{ padding: 16 }}>
+            <Text style={{ color: theme.colors.text.secondary, fontSize: theme.typography.bodySm, lineHeight: 20 }}>
+              ConfettiScreen fires confetti + haptics immediately on mount via react-native-confetti-cannon.
+              It is rendered as a full-screen overlay on the settlement_success and expense_added_success routes.
+              Rendering it inline would trigger the cannon on every showcase scroll — preview it via the settlement flow.
+            </Text>
+          </GlassCard>
         </Section>
 
       </ScrollView>
