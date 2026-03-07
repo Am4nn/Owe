@@ -22,18 +22,34 @@ import { useRouter } from 'expo-router'
 import {
   ShoppingCart, Utensils, Car, Plane, Home, Zap,
   Bell, Lock, CreditCard, HelpCircle, Trash2, ChevronLeft,
-  ArrowDownLeft, TrendingUp, Receipt,
+  TrendingUp, Receipt,
+  DollarSign, Users, Activity, Download, AlertTriangle,
 } from 'lucide-react-native'
 import { theme } from '@/lib/theme'
 
 // ── Component imports from barrel ────────────────────────────────────────────
 import {
-  Button,
+  // Primitives
+  Box,
+  Row as UIRow,
+  Column as UIColumn,
+  Stack as UIStack,
+  UIText,
+  Spacer,
+  PressableBox,
+  // Surfaces
+  Card,
   GlassCard,
+  // Actions
+  Button,
+  // Social
   Avatar,
   AvatarStack,
+  // States
   EmptyState,
+  // Misc
   Divider,
+  // Inputs
   TextInputField,
   SearchBar,
   AmountInput,
@@ -41,16 +57,39 @@ import {
   CategoryPill,
   FilterChip,
   FilterChipGroup,
+  // Display
   AmountText,
   AmountBadge,
   StatusBadge,
   SectionLabel,
   IconContainer,
+  // Lists
   ListItem,
+  // Finance
   BalanceIndicator,
+  BalanceSummaryCard,
   ExpenseItem,
   TransactionRow,
+  TransactionList,
+  ActivityList,
   NotificationItem,
+  NotificationList,
+  InsightsCard,
+  SpendingChart,
+  SpendingDonutChart,
+  PaymentMethodRow,
+  PaymentMethodList,
+  // Overlays
+  QRScannerView,
+  // Admin
+  MetricCard,
+  MetricsGrid,
+  AdminActions,
+  // Illustrations
+  SuccessIllustration,
+  ErrorIllustration,
+  MaintenanceIllustration,
+  OfflineIllustration,
 } from '@/components/ui'
 
 // ── Local helpers ─────────────────────────────────────────────────────────────
@@ -834,6 +873,318 @@ export default function ComponentShowcase() {
               </View>
             ))}
           </GlassCard>
+        </Section>
+
+        {/* ── PRIMITIVES ───────────────────────────────────────────────── */}
+        <Section title="Primitives — Box / Row / Column / Stack">
+          <Variant label="Box — padding + backgroundColor + borderRadius">
+            <Box
+              padding={16}
+              backgroundColor={theme.colors.dark.surface}
+              borderRadius={theme.radii.card}
+              borderWidth={1}
+              borderColor={theme.colors.glass.border}
+            >
+              <Text style={{ color: theme.colors.text.secondary, fontSize: theme.typography.bodySm }}>
+                Box with padding=16, borderRadius=card
+              </Text>
+            </Box>
+          </Variant>
+
+          <Variant label="UIRow — horizontal flex with gap">
+            <UIRow gap={12} align="center">
+              <Box width={40} height={40} borderRadius={8} backgroundColor="rgba(123,92,246,0.2)" />
+              <Box width={80} height={12} borderRadius={6} backgroundColor="rgba(255,255,255,0.08)" />
+              <Box width={48} height={12} borderRadius={6} backgroundColor="rgba(255,255,255,0.05)" />
+            </UIRow>
+          </Variant>
+
+          <Variant label="UIColumn — explicit vertical flex">
+            <UIColumn gap={8}>
+              <Box height={12} borderRadius={6} backgroundColor="rgba(123,92,246,0.3)" />
+              <Box height={10} width="75%" borderRadius={5} backgroundColor="rgba(255,255,255,0.08)" />
+              <Box height={10} width="50%" borderRadius={5} backgroundColor="rgba(255,255,255,0.05)" />
+            </UIColumn>
+          </Variant>
+
+          <Variant label="UIStack — children with consistent space={12}">
+            <UIStack space={12}>
+              <Box height={36} borderRadius={8} backgroundColor={theme.colors.dark.surface} borderWidth={1} borderColor={theme.colors.glass.border} />
+              <Box height={36} borderRadius={8} backgroundColor={theme.colors.dark.surface} borderWidth={1} borderColor={theme.colors.glass.border} />
+              <Box height={36} borderRadius={8} backgroundColor={theme.colors.dark.surface} borderWidth={1} borderColor={theme.colors.glass.border} />
+            </UIStack>
+          </Variant>
+        </Section>
+
+        {/* ── TEXT PRIMITIVE ───────────────────────────────────────────── */}
+        <Section title="Primitives — UIText">
+          <Variant label="Variants">
+            <UIColumn gap={6}>
+              <UIText variant="h2" weight="bold">h2 · bold</UIText>
+              <UIText variant="h3">h3 · normal</UIText>
+              <UIText variant="h4" weight="semibold">h4 · semibold</UIText>
+              <UIText variant="body">body · normal</UIText>
+              <UIText variant="bodySm" color="secondary">bodySm · secondary</UIText>
+              <UIText variant="caption" color="tertiary">caption · tertiary</UIText>
+              <UIText variant="tiny" color="muted">tiny · muted</UIText>
+            </UIColumn>
+          </Variant>
+          <Variant label="Colors">
+            <Row gap={16}>
+              <UIText variant="bodySm" color="primary">primary</UIText>
+              <UIText variant="bodySm" color="secondary">secondary</UIText>
+              <UIText variant="bodySm" color="tertiary">tertiary</UIText>
+              <UIText variant="bodySm" color="muted">muted</UIText>
+            </Row>
+          </Variant>
+          <Variant label="Weights">
+            <Row gap={16}>
+              <UIText variant="bodySm" weight="normal">normal</UIText>
+              <UIText variant="bodySm" weight="medium">medium</UIText>
+              <UIText variant="bodySm" weight="semibold">semibold</UIText>
+              <UIText variant="bodySm" weight="bold">bold</UIText>
+              <UIText variant="bodySm" weight="extrabold">extrabold</UIText>
+            </Row>
+          </Variant>
+        </Section>
+
+        {/* ── SPACER + PRESSABLE BOX ───────────────────────────────────── */}
+        <Section title="Primitives — Spacer / PressableBox">
+          <Variant label="Spacer vertical (16px gap between blocks)">
+            <Box backgroundColor="rgba(123,92,246,0.15)" height={24} borderRadius={6} />
+            <Spacer size={16} />
+            <Box backgroundColor="rgba(123,92,246,0.15)" height={24} borderRadius={6} />
+          </Variant>
+          <Variant label="PressableBox — tap to see opacity feedback">
+            <PressableBox
+              onPress={() => {}}
+              padding={14}
+              backgroundColor={theme.colors.dark.surface}
+              borderRadius={theme.radii.card}
+              borderWidth={1}
+              borderColor={theme.colors.glass.border}
+              activeOpacity={0.5}
+            >
+              <UIText variant="bodySm" color="secondary">Tap me — activeOpacity=0.5</UIText>
+            </PressableBox>
+          </Variant>
+        </Section>
+
+        {/* ── CARD ─────────────────────────────────────────────────────── */}
+        <Section title="Card">
+          <Variant label="default">
+            <Card padding={16}>
+              <Text style={{ color: theme.colors.text.secondary }}>Default — dark surface + border</Text>
+            </Card>
+          </Variant>
+          <Variant label="elevated">
+            <Card variant="elevated" padding={16}>
+              <Text style={{ color: theme.colors.text.secondary }}>Elevated — brighter for modal-like surfaces</Text>
+            </Card>
+          </Variant>
+          <Variant label="flat">
+            <Card variant="flat" padding={16}>
+              <Text style={{ color: theme.colors.text.secondary }}>Flat — semi-transparent, lowest hierarchy</Text>
+            </Card>
+          </Variant>
+        </Section>
+
+        {/* ── BALANCE SUMMARY CARD ─────────────────────────────────────── */}
+        <Section title="BalanceSummaryCard">
+          <Variant label="Net positive (you are owed)">
+            <BalanceSummaryCard netCents={12500} owedCents={18000} owingCents={5500} owedCount={3} owingCount={1} />
+          </Variant>
+          <Variant label="Net negative (you owe)">
+            <BalanceSummaryCard netCents={-8200} owedCents={2000} owingCents={10200} owedCount={1} owingCount={2} />
+          </Variant>
+          <Variant label="All settled">
+            <BalanceSummaryCard netCents={0} owedCents={0} owingCents={0} />
+          </Variant>
+        </Section>
+
+        {/* ── ACTIVITY LIST ────────────────────────────────────────────── */}
+        <Section title="ActivityList">
+          <Variant label="Loading skeleton">
+            <ActivityList items={[]} loading />
+          </Variant>
+          <Variant label="With items">
+            <ActivityList
+              items={[
+                { id: '1', actorName: 'Sarah', actionText: 'added', targetName: 'Sushi Night', amountCents: 4500, timestamp: '2h ago' },
+                { id: '2', actorName: 'Josh', actionText: 'settled up with', targetName: 'you', amountCents: 3000, timestamp: 'Yesterday' },
+                { id: '3', actorName: 'Riya', actionText: 'joined', targetName: 'Weekend Trip', timestamp: '3 days ago' },
+              ]}
+            />
+          </Variant>
+          <Variant label="Empty state">
+            <ActivityList items={[]} emptyTitle="No activity yet" emptyDescription="Changes will appear here." />
+          </Variant>
+        </Section>
+
+        {/* ── TRANSACTION LIST ─────────────────────────────────────────── */}
+        <Section title="TransactionList">
+          <Variant label="With date sections">
+            <TransactionList
+              items={[
+                { id: '1', title: 'Payment from Sarah', date: 'Today', amount: 3000, type: 'credit', section: 'Today', onPress: () => {} },
+                { id: '2', title: 'Split for Groceries', date: 'Today', amount: -1250, type: 'debit', section: 'Today' },
+                { id: '3', title: 'Cab share', date: 'Yesterday', amount: -800, type: 'debit', section: 'Yesterday' },
+                { id: '4', title: 'Group rebalance', date: 'Yesterday', amount: 0, type: 'neutral', section: 'Yesterday' },
+              ]}
+            />
+          </Variant>
+          <Variant label="Loading">
+            <TransactionList items={[]} loading />
+          </Variant>
+        </Section>
+
+        {/* ── NOTIFICATION LIST ────────────────────────────────────────── */}
+        <Section title="NotificationList">
+          <Variant label="Mixed read/unread + mark-all action">
+            <NotificationList
+              items={[
+                { id: '1', avatarFallback: 'Sa', text: 'Sarah added Sushi Night · $45.00', timestamp: '2h ago', read: false },
+                { id: '2', avatarFallback: 'Jo', text: 'Josh settled up $30.00 with you', timestamp: 'Yesterday', read: false },
+                { id: '3', avatarFallback: 'Ri', text: 'Riya invited you to Weekend Trip', timestamp: '3 days ago', read: true },
+              ]}
+              onMarkAllRead={() => {}}
+            />
+          </Variant>
+          <Variant label="Empty state">
+            <NotificationList items={[]} />
+          </Variant>
+        </Section>
+
+        {/* ── INSIGHTS CARD ────────────────────────────────────────────── */}
+        <Section title="InsightsCard">
+          <Row gap={12}>
+            <InsightsCard icon={DollarSign} label="Total Spent" value="$1,240" trend={12.5} />
+            <InsightsCard icon={TrendingUp} label="Avg / Month" value="$413" trend={-3.2} iconColor={theme.colors.brand.accent} />
+          </Row>
+          <Variant label="No trend">
+            <Row gap={12}>
+              <InsightsCard icon={Receipt} label="Expenses" value="34" />
+              <InsightsCard icon={Users} label="Groups" value="5" iconColor={theme.colors.brand.warning} />
+            </Row>
+          </Variant>
+        </Section>
+
+        {/* ── SPENDING CHART ───────────────────────────────────────────── */}
+        <Section title="SpendingChart">
+          <Variant label="6-month line chart">
+            <SpendingChart
+              data={[
+                { label: 'Oct', value: 9200 },
+                { label: 'Nov', value: 14500 },
+                { label: 'Dec', value: 21000 },
+                { label: 'Jan', value: 8400 },
+                { label: 'Feb', value: 16200 },
+                { label: 'Mar', value: 12800 },
+              ]}
+              height={160}
+            />
+          </Variant>
+        </Section>
+
+        {/* ── SPENDING DONUT CHART ─────────────────────────────────────── */}
+        <Section title="SpendingDonutChart">
+          <SpendingDonutChart
+            totalLabel="Spent Total"
+            totalAmount="$2,845"
+            segments={[
+              { label: 'Food & Dining', amount: '$1,138', color: '#3B82F6', percent: 40 },
+              { label: 'Transport',     amount: '$711',   color: '#8B5CF6', percent: 25 },
+              { label: 'Entertainment', amount: '$569',   color: '#EF4444', percent: 20 },
+              { label: 'Misc',          amount: '$427',   color: '#64748B', percent: 15 },
+            ]}
+          />
+        </Section>
+
+        {/* ── PAYMENT METHOD ROW ───────────────────────────────────────── */}
+        <Section title="PaymentMethodRow / PaymentMethodList">
+          <Variant label="All types">
+            <UIColumn gap={10}>
+              <PaymentMethodRow type="card" brand="Visa" last4="4242" isDefault onPress={() => {}} />
+              <PaymentMethodRow type="bank" label="Chase Checking" last4="6789" onPress={() => {}} />
+              <PaymentMethodRow type="wallet" label="PayPal" onPress={() => {}} />
+            </UIColumn>
+          </Variant>
+          <Variant label="PaymentMethodList">
+            <PaymentMethodList
+              methods={[
+                { id: '1', type: 'card', brand: 'Visa', last4: '4242', isDefault: true, onPress: () => {} },
+                { id: '2', type: 'bank', label: 'Chase Checking', last4: '6789', onPress: () => {} },
+              ]}
+              onAddMethod={() => {}}
+            />
+          </Variant>
+        </Section>
+
+        {/* ── METRIC CARD / METRICS GRID ───────────────────────────────── */}
+        <Section title="MetricCard / MetricsGrid">
+          <Variant label="MetricCard variants">
+            <Row gap={12}>
+              <View style={{ flex: 1 }}>
+                <MetricCard icon={Users} value="1,284" label="Total Users" trend={8.2} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <MetricCard icon={DollarSign} value="$42.8k" label="Settled" trend={-2.1} iconColor={theme.colors.brand.accent} />
+              </View>
+            </Row>
+          </Variant>
+          <Variant label="MetricsGrid (2-column)">
+            <MetricsGrid
+              metrics={[
+                { id: '1', icon: Users,      value: '1,284', label: 'Total Users',    trend: 8.2  },
+                { id: '2', icon: DollarSign, value: '$42.8k', label: 'Total Settled', trend: 15.3 },
+                { id: '3', icon: Activity,   value: '328',   label: 'Active Groups',  trend: -2.1 },
+                { id: '4', icon: Receipt,    value: '4,201', label: 'Expenses',        trend: 22.4 },
+              ]}
+            />
+          </Variant>
+        </Section>
+
+        {/* ── ADMIN ACTIONS ────────────────────────────────────────────── */}
+        <Section title="AdminActions">
+          <AdminActions
+            title="Admin Controls"
+            actions={[
+              { id: 'broadcast', icon: Bell,          label: 'Send Broadcast',   description: 'Push to all users',       onPress: () => {} },
+              { id: 'export',    icon: Download,       label: 'Export Data',      description: 'CSV of all transactions', severity: 'warning', onPress: () => {} },
+              { id: 'delete',    icon: AlertTriangle,  label: 'Wipe Test Data',   description: 'Irreversible action',     severity: 'danger',  onPress: () => {} },
+            ]}
+          />
+        </Section>
+
+        {/* ── QR SCANNER ───────────────────────────────────────────────── */}
+        <Section title="QRScannerView">
+          <Variant label="UI shell (expo-camera placeholder)">
+            <QRScannerView onRequestCamera={() => {}} />
+          </Variant>
+        </Section>
+
+        {/* ── ILLUSTRATIONS ────────────────────────────────────────────── */}
+        <Section title="Illustrations">
+          <Variant label="SuccessIllustration">
+            <View style={{ alignItems: 'center', paddingVertical: 16 }}>
+              <SuccessIllustration />
+            </View>
+          </Variant>
+          <Variant label="ErrorIllustration">
+            <View style={{ alignItems: 'center', paddingVertical: 16 }}>
+              <ErrorIllustration />
+            </View>
+          </Variant>
+          <Variant label="MaintenanceIllustration">
+            <View style={{ alignItems: 'center', paddingVertical: 16 }}>
+              <MaintenanceIllustration />
+            </View>
+          </Variant>
+          <Variant label="OfflineIllustration">
+            <View style={{ alignItems: 'center', paddingVertical: 16 }}>
+              <OfflineIllustration />
+            </View>
+          </Variant>
         </Section>
 
       </ScrollView>

@@ -1,4 +1,4 @@
-# Component Build Plan — Owe Design System
+ Component Build Plan — Owe Design System
 
 Reference: UI_COMPONENT_INVENTORY.md + SCREEN_COMPONENT_MAP.md
 Goal: Pixel-perfect implementation of all 80+ components mapped to Stitch screens.
