@@ -24,10 +24,6 @@
       },
       "package": "com.owe.app"
     },
-    "web": {
-      "favicon": "./assets/favicon.png",
-      "bundler": "metro"
-    },
     "experiments": {
       "typedRoutes": true
     },
