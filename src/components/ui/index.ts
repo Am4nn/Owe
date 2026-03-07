@@ -68,7 +68,38 @@
  *    ErrorIllustration      — Broken link / 404 motif
  *    MaintenanceIllustration — Wrench / gear maintenance motif
  *    OfflineIllustration    — Wifi-off / disconnected cloud
+ *
+ *  PRIMITIVES (foundation layer — compose into all other UI components)
+ *    Box           — universal View wrapper with layout shorthand props
+ *    Row           — horizontal flex container
+ *    Column        — explicit vertical flex container
+ *    Stack         — vertical children with consistent gap
+ *    Text          — theme-aware Text with variant / color / weight props
+ *    Spacer        — fixed vertical or horizontal whitespace
+ *    PressableBox  — Pressable with the same layout shorthand as Box
  */
+
+// ── Primitive layer ──────────────────────────────────────────────────────────
+export { Box }           from './primitives/Box'
+export type { BoxProps } from './primitives/Box'
+
+export { Row }           from './primitives/Row'
+export type { RowProps } from './primitives/Row'
+
+export { Column }           from './primitives/Column'
+export type { ColumnProps } from './primitives/Column'
+
+export { Stack }           from './primitives/Stack'
+export type { StackProps } from './primitives/Stack'
+
+export { Text as UIText }           from './primitives/Text'
+export type { TextProps as UITextProps, TextVariant, TextWeight, TextColorShorthand } from './primitives/Text'
+
+export { Spacer }           from './primitives/Spacer'
+export type { SpacerProps } from './primitives/Spacer'
+
+export { PressableBox }           from './primitives/PressableBox'
+export type { PressableBoxProps } from './primitives/PressableBox'
 
 // ── Layout ──────────────────────────────────────────────────────────────────
 export { ScreenContainer }  from './layout/ScreenContainer'
