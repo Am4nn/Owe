@@ -48,6 +48,7 @@
  *    NotificationList     — Grouped notification feed (unread/read)
  *    InsightsCard         — Analytics stat card (icon + value + trend)
  *    SpendingChart        — SVG line/area chart for spending over time
+ *    SpendingDonutChart   — SVG donut/ring chart for spending by category
  *    PaymentMethodRow     — Stored payment method row (card/bank/wallet)
  *    PaymentMethodList    — List of payment methods + add button
  *
@@ -138,6 +139,9 @@ export type { InsightsCardProps } from './finance/InsightsCard'
 
 export { SpendingChart }    from './finance/SpendingChart'
 export type { SpendingChartProps, SpendingDataPoint } from './finance/SpendingChart'
+
+export { SpendingDonutChart } from './finance/SpendingDonutChart'
+export type { SpendingDonutChartProps, DonutSegment } from './finance/SpendingDonutChart'
 
 export { PaymentMethodRow } from './finance/PaymentMethodRow'
 export type { PaymentMethodRowProps, PaymentMethodType } from './finance/PaymentMethodRow'

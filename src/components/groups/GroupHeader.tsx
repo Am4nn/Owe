@@ -1,44 +1,42 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import { LinearGradient } from 'expo-linear-gradient'
-import { ChevronLeft, MoreHorizontal, Users } from 'lucide-react-native'
-import { AvatarStack } from '@/components/ui/AvatarStack'
+import { ChevronLeft, MoreVertical, Users } from 'lucide-react-native'
+import { type LucideIcon } from 'lucide-react-native'
 import { theme } from '@/lib/theme'
 
 /**
  * GroupHeader
  *
- * Full-bleed gradient header for the Group Detail screen.
- * Shows the group name, member avatar stack, total balance chip,
- * and back/options navigation buttons.
+ * Compact dark-surface header section for the Group Detail screen.
+ * Sits below the screen's HeaderBar and shows the group icon, name,
+ * and member count.
+ *
+ * Design matches group_detail_dark_theme_refined:
+ * - Plain dark surface background (no gradient)
+ * - Centred 72×72 rounded-square group icon with tinted bg
+ * - Group name in bold white below icon
+ * - "X active members" caption row with Users icon
+ * - Optional balance chip (green / red pill)
+ * - Back chevron top-left + options dots top-right (for standalone header usage)
  *
  * Used in:
  * - group_detail_dark_theme_refined
  *
- * Design:
- * - Full-bleed gradient background (purple → deep purple)
- * - Group name in bold white, large text
- * - AvatarStack + member count below name
- * - Balance chip (green "you are owed" or red "you owe")
- * - Back chevron top-left, options dots top-right
- *
  * Usage:
  *   <GroupHeader
- *     name="Roommates"
- *     members={[{ name: 'Sarah' }, { name: 'John' }, { name: 'Mike' }]}
- *     netBalanceCents={4500}
+ *     name="Weekend Trip"
+ *     icon={Plane}
+ *     memberCount={6}
+ *     netBalanceCents={4250}
  *     onBack={() => router.back()}
  *     onOptions={() => setShowMenu(true)}
  *   />
  */
 
-export interface GroupHeaderMember {
-  name?: string
-  uri?: string | null
-}
-
 export interface GroupHeaderProps {
   name: string
-  members: GroupHeaderMember[]
+  /** Lucide icon to show in the group icon container */
+  icon?: LucideIcon
+  memberCount?: number
   /** Net balance in cents. Positive = owed to you, negative = you owe. Undefined = hidden. */
   netBalanceCents?: number
   currency?: string
@@ -48,7 +46,8 @@ export interface GroupHeaderProps {
 
 export function GroupHeader({
   name,
-  members,
+  icon: Icon,
+  memberCount = 0,
   netBalanceCents,
   currency = '$',
   onBack,
@@ -57,20 +56,15 @@ export function GroupHeader({
   const hasBalance = netBalanceCents !== undefined && netBalanceCents !== 0
   const isOwed = hasBalance && netBalanceCents! > 0
   const balanceColor = isOwed ? theme.colors.amount.positive : theme.colors.amount.negative
-  const balanceBg = isOwed ? 'rgba(34, 197, 94, 0.15)' : 'rgba(239, 68, 68, 0.15)'
-  const balanceBorder = isOwed ? 'rgba(34, 197, 94, 0.3)' : 'rgba(239, 68, 68, 0.3)'
+  const balanceBg = isOwed ? 'rgba(34, 197, 94, 0.12)' : 'rgba(239, 68, 68, 0.12)'
+  const balanceBorder = isOwed ? 'rgba(34, 197, 94, 0.28)' : 'rgba(239, 68, 68, 0.28)'
   const balanceLabel = isOwed ? 'You are owed' : 'You owe'
   const balanceAmount = netBalanceCents !== undefined
     ? `${currency}${(Math.abs(netBalanceCents) / 100).toFixed(2)}`
     : null
 
   return (
-    <LinearGradient
-      colors={['#7B5CF6', '#4C1D95']}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={{ paddingBottom: 28 }}
-    >
+    <View style={{ backgroundColor: theme.colors.dark.bg }}>
       {/* Navigation row */}
       <View
         style={{
@@ -79,73 +73,75 @@ export function GroupHeader({
           justifyContent: 'space-between',
           paddingHorizontal: theme.spacing.base,
           paddingTop: theme.spacing.base,
-          paddingBottom: theme.spacing.lg,
+          paddingBottom: theme.spacing.md,
         }}
       >
         {onBack ? (
           <TouchableOpacity onPress={onBack} activeOpacity={0.7} hitSlop={8}>
-            <View
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: 18,
-                backgroundColor: 'rgba(255,255,255,0.15)',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <ChevronLeft size={22} color="#fff" />
-            </View>
+            <ChevronLeft size={24} color={theme.colors.text.primary} />
           </TouchableOpacity>
         ) : (
-          <View style={{ width: 36 }} />
+          <View style={{ width: 24 }} />
         )}
 
-        {onOptions ? (
-          <TouchableOpacity onPress={onOptions} activeOpacity={0.7} hitSlop={8}>
-            <View
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: 18,
-                backgroundColor: 'rgba(255,255,255,0.15)',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <MoreHorizontal size={20} color="#fff" />
-            </View>
-          </TouchableOpacity>
-        ) : (
-          <View style={{ width: 36 }} />
-        )}
-      </View>
-
-      {/* Group info */}
-      <View style={{ paddingHorizontal: theme.spacing.xl, alignItems: 'flex-start' }}>
-        {/* Group name */}
         <Text
           style={{
-            fontSize: 28,
-            fontWeight: '800',
-            color: '#FFFFFF',
-            letterSpacing: -0.5,
-            marginBottom: theme.spacing.md,
+            fontSize: theme.typography.bodyLg,
+            fontWeight: '700',
+            color: theme.colors.text.primary,
+            flex: 1,
+            textAlign: 'center',
+            marginHorizontal: theme.spacing.md,
           }}
-          numberOfLines={2}
+          numberOfLines={1}
         >
           {name}
         </Text>
 
-        {/* Members row */}
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.md, marginBottom: theme.spacing.base }}>
-          <AvatarStack members={members} maxDisplay={4} size="sm" />
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-            <Users size={13} color="rgba(255,255,255,0.7)" />
-            <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: '500' }}>
-              {members.length} {members.length === 1 ? 'member' : 'members'}
-            </Text>
-          </View>
+        {onOptions ? (
+          <TouchableOpacity onPress={onOptions} activeOpacity={0.7} hitSlop={8}>
+            <MoreVertical size={22} color={theme.colors.text.secondary} />
+          </TouchableOpacity>
+        ) : (
+          <View style={{ width: 24 }} />
+        )}
+      </View>
+
+      {/* Group icon + member count */}
+      <View style={{ alignItems: 'center', paddingVertical: theme.spacing.lg }}>
+        {/* Icon container */}
+        <View
+          style={{
+            width: 72,
+            height: 72,
+            borderRadius: 20,
+            backgroundColor: 'rgba(123, 92, 246, 0.15)',
+            borderWidth: 1,
+            borderColor: 'rgba(123, 92, 246, 0.25)',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: theme.spacing.md,
+          }}
+        >
+          {Icon ? (
+            <Icon size={34} color={theme.colors.brand.primary} />
+          ) : (
+            <Users size={34} color={theme.colors.brand.primary} />
+          )}
+        </View>
+
+        {/* Member count */}
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+          <Users size={13} color={theme.colors.text.tertiary} />
+          <Text
+            style={{
+              fontSize: theme.typography.caption,
+              color: theme.colors.text.tertiary,
+              fontWeight: '500',
+            }}
+          >
+            {memberCount} {memberCount === 1 ? 'active member' : 'active members'}
+          </Text>
         </View>
 
         {/* Balance chip */}
@@ -154,24 +150,25 @@ export function GroupHeader({
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              gap: 6,
+              gap: 5,
               paddingHorizontal: 12,
-              paddingVertical: 6,
+              paddingVertical: 5,
               borderRadius: theme.radii.pill,
               backgroundColor: balanceBg,
               borderWidth: 1,
               borderColor: balanceBorder,
+              marginTop: theme.spacing.md,
             }}
           >
-            <Text style={{ fontSize: 12, fontWeight: '600', color: balanceColor }}>
+            <Text style={{ fontSize: 12, fontWeight: '500', color: balanceColor }}>
               {balanceLabel}
             </Text>
-            <Text style={{ fontSize: 13, fontWeight: '800', color: balanceColor }}>
+            <Text style={{ fontSize: 13, fontWeight: '700', color: balanceColor }}>
               {balanceAmount}
             </Text>
           </View>
         )}
       </View>
-    </LinearGradient>
+    </View>
   )
 }
