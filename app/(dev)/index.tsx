@@ -78,7 +78,6 @@ import {
   SpendingChart,
   SpendingDonutChart,
   PaymentMethodRow,
-  PaymentMethodList,
   // Overlays
   QRScannerView,
   // Admin
@@ -1036,31 +1035,24 @@ export default function ComponentShowcase() {
           <Variant label="Loading skeleton">
             <ActivityList items={[]} loading />
           </Variant>
-          <Variant label="With items">
-            <ActivityList
-              items={[
-                { id: '1', actorName: 'Sarah', actionText: 'added', targetName: 'Sushi Night', amountCents: 4500, timestamp: '2h ago' },
-                { id: '2', actorName: 'Josh', actionText: 'settled up with', targetName: 'you', amountCents: 3000, timestamp: 'Yesterday' },
-                { id: '3', actorName: 'Riya', actionText: 'joined', targetName: 'Weekend Trip', timestamp: '3 days ago' },
-              ]}
-            />
-          </Variant>
-          <Variant label="Empty state">
-            <ActivityList items={[]} emptyTitle="No activity yet" emptyDescription="Changes will appear here." />
+          <Variant label="With items (ActivityItem rows)">
+            <View style={{ borderRadius: theme.radii.card, overflow: 'hidden', backgroundColor: theme.colors.dark.elevated }}>
+              <ActivityItem id="1" actorName="Sarah" actionText="added" targetName="Sushi Night" amountCents={4500} timestamp="2h ago" onPress={() => {}} />
+              <ActivityItem id="2" actorName="Josh" actionText="settled up with" targetName="you" amountCents={3000} timestamp="Yesterday" onPress={() => {}} />
+              <ActivityItem id="3" actorName="Riya" actionText="joined" targetName="Weekend Trip" timestamp="3 days ago" onPress={() => {}} />
+            </View>
           </Variant>
         </Section>
 
         {/* ── TRANSACTION LIST ─────────────────────────────────────────── */}
         <Section title="TransactionList">
-          <Variant label="With date sections">
-            <TransactionList
-              items={[
-                { id: '1', title: 'Payment from Sarah', date: 'Today', amount: 3000, type: 'credit', section: 'Today', onPress: () => {} },
-                { id: '2', title: 'Split for Groceries', date: 'Today', amount: -1250, type: 'debit', section: 'Today' },
-                { id: '3', title: 'Cab share', date: 'Yesterday', amount: -800, type: 'debit', section: 'Yesterday' },
-                { id: '4', title: 'Group rebalance', date: 'Yesterday', amount: 0, type: 'neutral', section: 'Yesterday' },
-              ]}
-            />
+          <Variant label="With items (TransactionRow rows)">
+            <View style={{ borderRadius: theme.radii.card, overflow: 'hidden', gap: 1 }}>
+              <TransactionRow title="Payment from Sarah" date="Today" amount={3000} type="credit" onPress={() => {}} />
+              <TransactionRow title="Split for Groceries" date="Today" amount={-1250} type="debit" />
+              <TransactionRow title="Cab share" date="Yesterday" amount={-800} type="debit" />
+              <TransactionRow title="Group rebalance" date="Yesterday" amount={0} type="neutral" />
+            </View>
           </Variant>
           <Variant label="Loading">
             <TransactionList items={[]} loading />
@@ -1069,18 +1061,8 @@ export default function ComponentShowcase() {
 
         {/* ── NOTIFICATION LIST ────────────────────────────────────────── */}
         <Section title="NotificationList">
-          <Variant label="Mixed read/unread + mark-all action">
-            <NotificationList
-              items={[
-                { id: '1', avatarFallback: 'Sa', text: 'Sarah added Sushi Night · $45.00', timestamp: '2h ago', read: false },
-                { id: '2', avatarFallback: 'Jo', text: 'Josh settled up $30.00 with you', timestamp: 'Yesterday', read: false },
-                { id: '3', avatarFallback: 'Ri', text: 'Riya invited you to Weekend Trip', timestamp: '3 days ago', read: true },
-              ]}
-              onMarkAllRead={() => {}}
-            />
-          </Variant>
-          <Variant label="Empty state">
-            <NotificationList items={[]} />
+          <Variant label="Loading skeleton">
+            <NotificationList items={[]} loading />
           </Variant>
         </Section>
 
@@ -1137,15 +1119,6 @@ export default function ComponentShowcase() {
               <PaymentMethodRow type="bank" label="Chase Checking" last4="6789" onPress={() => {}} />
               <PaymentMethodRow type="wallet" label="PayPal" onPress={() => {}} />
             </UIColumn>
-          </Variant>
-          <Variant label="PaymentMethodList">
-            <PaymentMethodList
-              methods={[
-                { id: '1', type: 'card', brand: 'Visa', last4: '4242', isDefault: true, onPress: () => {} },
-                { id: '2', type: 'bank', label: 'Chase Checking', last4: '6789', onPress: () => {} },
-              ]}
-              onAddMethod={() => {}}
-            />
           </Variant>
         </Section>
 
