@@ -332,12 +332,12 @@ export default function ComponentShowcase() {
           </Variant>
           <Variant label="With online dot">
             <Row>
-              <Avatar size="md" fallback="Jo" online />
-              <Avatar size="lg" fallback="Sa" online />
+              <Avatar size="md" fallback="Jo" showOnline />
+              <Avatar size="lg" fallback="Sa" showOnline />
             </Row>
           </Variant>
           <Variant label="Edit overlay">
-            <Avatar size="xl" fallback="Me" showEditOverlay onEditPress={() => {}} />
+            <Avatar size="xl" fallback="Me" showEdit="camera" />
           </Variant>
         </Section>
 
@@ -458,16 +458,16 @@ export default function ComponentShowcase() {
         <Section title="SegmentedControl">
           <Variant label="2 options">
             <SegmentedControl
-              options={['You Owe', 'You Are Owed']}
-              selected={segSelected}
-              onSelect={setSegSelected}
+              segments={['You Owe', 'You Are Owed']}
+              selectedIndex={segSelected}
+              onChange={setSegSelected}
             />
           </Variant>
           <Variant label="3 options">
             <SegmentedControl
-              options={['All', 'Active', 'Settled']}
-              selected={seg3Selected}
-              onSelect={setSeg3Selected}
+              segments={['All', 'Active', 'Settled']}
+              selectedIndex={seg3Selected}
+              onChange={setSeg3Selected}
             />
           </Variant>
         </Section>
