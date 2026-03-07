@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, ScrollView, LayoutChangeEvent } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
-import { useState, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 interface SegmentedControlProps {
   segments: string[]
@@ -22,31 +22,22 @@ export function SegmentedControl({ segments, selectedIndex, onChange }: Segmente
     })
   }, [])
 
-  // Calculate indicator position when sizes or selection changes
-  // In a real app we'd use a useEffect to update shared values, but for a simple UI component
-  // doing it before render is fine as a heuristic, though properly it's an effect.
-  const calculatePosition = useCallback((index: number) => {
+  // Calculate position on the JS thread via useEffect, then animate shared values.
+  // This avoids calling a non-worklet function inside useAnimatedStyle.
+  useEffect(() => {
     let x = 0
-    for (let i = 0; i < index; i++) {
+    for (let i = 0; i < selectedIndex; i++) {
       x += segmentWidths[i] || 0
     }
-    return x
-  }, [segmentWidths])
+    indicatorWidth.value = withSpring(segmentWidths[selectedIndex] || 0, { stiffness: 300, damping: 25 })
+    translateX.value = withSpring(x, { stiffness: 300, damping: 25 })
+  }, [selectedIndex, segmentWidths])
 
-  const indicatorStyle = useAnimatedStyle(() => {
-    // If we have sizes, animate to the current selected index
-    const targetWidth = segmentWidths[selectedIndex] || 0
-    const targetX = calculatePosition(selectedIndex)
-
-    // Using spring for smooth sliding effect
-    indicatorWidth.value = withSpring(targetWidth, { stiffness: 300, damping: 25 })
-    translateX.value = withSpring(targetX, { stiffness: 300, damping: 25 })
-
-    return {
-      width: indicatorWidth.value,
-      transform: [{ translateX: translateX.value }]
-    }
-  })
+  // useAnimatedStyle only reads shared values — no non-worklet calls allowed here.
+  const indicatorStyle = useAnimatedStyle(() => ({
+    width: indicatorWidth.value,
+    transform: [{ translateX: translateX.value }],
+  }))
 
   return (
     <View className="flex-row">
