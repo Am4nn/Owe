@@ -70,6 +70,9 @@ function RootNavigator() {
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
+      {/* Dev component showcase — always accessible regardless of auth */}
+      <Stack.Screen name="(dev)" />
+
       {/* Unauthenticated flow always starts with onboarding */}
       <Stack.Protected guard={!isAuthenticated}>
         <Stack.Screen name="onboarding" />
