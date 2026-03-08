@@ -2,6 +2,7 @@ import { TouchableOpacity, Text, TouchableOpacityProps, ActivityIndicator, View,
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { LinearGradient } from 'expo-linear-gradient'
 import { LucideIcon } from 'lucide-react-native'
+import { theme } from '@/lib/theme'
 
 interface ButtonProps extends TouchableOpacityProps {
   title: string
@@ -87,11 +88,7 @@ export function Button({
           animatedStyle,
           {
             borderRadius,
-            shadowColor: '#7B5CF6',
-            shadowOffset: { width: 0, height: 12 },
-            shadowOpacity: 0.28,
-            shadowRadius: 24,
-            elevation: 9,
+            ...theme.rnShadows.ctaButton,
           },
         ]}
         className={`${widthClass} ${opacityClass}`}

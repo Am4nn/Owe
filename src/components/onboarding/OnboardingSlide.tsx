@@ -1,7 +1,7 @@
 import { View, Text, Dimensions } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { type LucideIcon } from 'lucide-react-native'
-import { theme } from '@/lib/theme'
+import { theme, rnGlow } from '@/lib/theme'
 
 /**
  * OnboardingSlide
@@ -98,11 +98,7 @@ export function OnboardingSlide({
             borderColor: `${iconColor}35`,
             alignItems: 'center',
             justifyContent: 'center',
-            shadowColor: iconColor,
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 0.5,
-            shadowRadius: 40,
-            elevation: 12,
+            ...rnGlow(iconColor, 40, 0.5, 12),
           }}
         >
           <Icon size={56} color={iconColor} />

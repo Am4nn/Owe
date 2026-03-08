@@ -107,7 +107,7 @@ export function ExpandableFAB() {
 
         <TouchableOpacity
           onPress={toggle}
-          className="gradient-cta w-[56px] h-[56px] rounded-full items-center justify-center shadow-[0_0_24px_rgba(123,92,246,0.30)]"
+          className="gradient-cta w-[56px] h-[56px] rounded-full items-center justify-center shadow-fab"
           style={{ elevation: 8, zIndex: 1001 }}
         >
           <Animated.View style={mainIconStyle}>
@@ -164,7 +164,7 @@ function RadialChildButton({ label, icon: Icon, color, angle, radius, delay, isO
     >
       <TouchableOpacity onPress={onPress} className="items-center">
         <View
-          className="w-12 h-12 rounded-full items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.25)]"
+          className="w-12 h-12 rounded-full items-center justify-center shadow-card"
           style={{ backgroundColor: color }}
         >
           <Icon size={20} color="white" />

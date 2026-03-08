@@ -22,7 +22,7 @@ export function EmptyState({ icon: Icon, title, description, primaryAction, seco
     <View className="flex-1 items-center justify-center py-8">
       <GlassCard padding={32} className="w-full max-w-sm items-center">
         <View
-          className="w-16 h-16 rounded-full bg-brand-primary border-[rgba(255,255,255,0.08)] items-center justify-center mb-6 shadow-[0_0_40px_rgba(123,92,246,0.25)]"
+          className="w-16 h-16 rounded-full bg-brand-primary border-[rgba(255,255,255,0.08)] items-center justify-center mb-6 shadow-glow-lg"
         >
           <Icon size={32} color="white" />
         </View>

@@ -46,7 +46,7 @@ export function OTPInput({ length = 6, value, onChangeText }: OTPInputProps) {
       {Array(length).fill(0).map((_, index) => {
         const isFocused = focusedIndex === index
         const char = value[index] || ''
-        const borderClass = isFocused ? 'border-brand-primary shadow-[0_0_12px_rgba(123,92,246,0.15)]' : 'border-[rgba(255,255,255,0.08)]'
+        const borderClass = isFocused ? 'border-brand-primary shadow-glow-sm' : 'border-[rgba(255,255,255,0.08)]'
 
         return (
           <View

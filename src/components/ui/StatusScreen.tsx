@@ -34,7 +34,7 @@ export function StatusScreen({
       <View className="flex-1 items-center justify-center">
         <GlassCard variant="elevated" padding={40} className="w-full max-w-sm items-center">
           <View
-            className="w-24 h-24 rounded-full bg-brand-primary border-[rgba(255,255,255,0.08)] items-center justify-center mb-8 shadow-[0_0_40px_rgba(123,92,246,0.25)]"
+            className="w-24 h-24 rounded-full bg-brand-primary border-[rgba(255,255,255,0.08)] items-center justify-center mb-8 shadow-glow-lg"
           >
             <Icon size={48} color="white" />
           </View>

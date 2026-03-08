@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, Easing } from 'react-native-reanimated'
 import { useEffect } from 'react'
 import { ScanLine, Camera } from 'lucide-react-native'
-import { theme } from '@/lib/theme'
+import { theme, rnGlow } from '@/lib/theme'
 
 /**
  * QRScannerView
@@ -101,10 +101,7 @@ export function QRScannerView({
                 right: 0,
                 height: 2,
                 backgroundColor: cornerColor,
-                shadowColor: cornerColor,
-                shadowOffset: { width: 0, height: 0 },
-                shadowOpacity: 0.8,
-                shadowRadius: 6,
+                ...rnGlow(cornerColor, 6, 0.8, 4),
               },
             ]}
           />

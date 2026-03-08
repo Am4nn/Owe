@@ -86,7 +86,7 @@ export default function ForgotPasswordScreen() {
 
       <View className="flex-1 mt-6">
         <View className="items-center mb-10">
-          <View className="w-16 h-16 rounded-2xl bg-dark-elevated border border-[rgba(255,255,255,0.08)] items-center justify-center mb-6 shadow-[0_0_24px_rgba(123,92,246,0.15)]">
+          <View className="w-16 h-16 rounded-2xl bg-dark-elevated border border-[rgba(255,255,255,0.08)] items-center justify-center mb-6 shadow-glow-sm">
             <Mail size={32} color="#7B5CF6" />
           </View>
           <Text className="text-[28px] text-white font-bold mb-2 text-center">

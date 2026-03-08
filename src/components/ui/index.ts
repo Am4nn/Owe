@@ -113,7 +113,10 @@ export type { BottomNavigationProps, TabName } from './layout/BottomNavigation'
 
 // ── Primitives ──────────────────────────────────────────────────────────────
 export { Card }             from './Card'
-export { GlassCard, variantStyles as glassCardVariants, shadows } from './GlassCard'
+export { GlassCard, variantStyles as glassCardVariants } from './GlassCard'
+// Design tokens — re-exported for convenience; canonical source is src/lib/theme.ts
+export { theme as designTheme, rnGlow } from '@/lib/theme'
+export type { Theme } from '@/lib/theme'
 export { Button }           from './Button'
 export { Avatar }           from './Avatar'
 export { AvatarStack }      from './AvatarStack'
